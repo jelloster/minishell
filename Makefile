@@ -10,19 +10,25 @@ CC				:=	cc
 
 # ------ SOURCE FILES -------
 
-SRC_FILES		:=	main.c
+SRC_FILES		:=	main.c \
+				parsing.c \
+				envp_utils.c \
+				cmd_line.c \
+				cmd_split.c \
+				str_utils.c \
+
 OBJ_FILES		:=	$(SRC_FILES:.c=.o)
-NAME			:=	fdf
+NAME			:=	minishell
 LIBFT			:=	libft/libft.a
 
 # ---------- MLX42 ----------
 
-HEADERS			:=	-I $(MLX)/include -I libft/inc
+HEADERS			:=	-I $(MLX)/include -I libft/inc -I/usr/include/readline
 
 # -------------RULES--------------
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	$(CC) $(FLAGS) $(OBJ_FILES) $(LIBFT) $(LIBS) -o $@
+	$(CC) $(FLAGS) $(OBJ_FILES) $(LIBFT) -lreadline $(LIBS) -o $@  
 
 $(OBJ_FILES): %.o : %.c
 	$(CC) $(FLAGS) -c $< -o $@ $(HEADERS)
