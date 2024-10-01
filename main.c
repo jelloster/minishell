@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-void	exe_cmd(t_cmd cmd, char *envp[]);
 
 int	main(int ac, char *av[], char *envp[])
 {
@@ -20,10 +19,9 @@ int	main(int ac, char *av[], char *envp[])
 	t_cmd	cmd;
 	char	*cmd_line;
 
-	if (!parse(ac, av, envp, &ms))
-		return (1);
-	printf("\033[H\033[J");
-	printf(BLUE "\n ✧.* Welcome to MINISHELL! ✧.*\n\n" RESET);
+	init_ms(ac, av, envp, &ms);
+
+	// Command line loop
 	while (1)
 	{
 		waitpid(-1, NULL, 0);
@@ -34,18 +32,4 @@ int	main(int ac, char *av[], char *envp[])
 		free(cmd_line);
 	}
 	return (0);
-}
-
-void	exe_cmd(t_cmd cmd, char *envp[])
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		exit(1);
-	if (pid == 0)
-	{
-		if (access(cmd.pathed_cmd, X_OK) == 0)
-			execve(cmd.pathed_cmd, cmd.args, envp);
-	}
 }

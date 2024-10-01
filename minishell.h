@@ -21,37 +21,72 @@
 
 // --- TYPEDEFS ---
 
+typedef enum e_operator
+{
+	NONE,
+	PIPE,
+	REPLACE,
+	ADD,
+	INPUT,
+	STD_IN,
+}	t_operator;
+
 typedef struct s_cmd
 {
 	char	**args;
 	char	*pathed_cmd;
 }	t_cmd;
 
+typedef struct s_ast
+{
+	void		*content; // t_cmd or operator
+	t_operator	operator;
+	t_cmd		*cmd;
+	struct s_ast	*left;
+	struct s_ast	*right;
+	struct s_ast	*next;
+}	t_ast;
+
 typedef struct s_ms
 {
-	int	ac;
-	char	**av;
+	char	*program_name;
 	char	**envp;
 	char	**paths;
 	char	**history;
 }	t_ms;
 
+typedef enum e_color
+{
+	RED,
+	GREEN,
+	YELLOW,
+	BLUE,
+	MAGENTA,
+	CYAN,
+	RESET
+}	t_color;
+
 // --- MACROS ---
 
-// Colors codes
-# define RESET	"\033[0m"
-# define RED	"\033[31m"
-# define GREEN	"\033[32m"
-# define YELLOW	"\033[33m"
-# define BLUE	"\033[34m"
+# define WELCOME_MSG "\n ✧.* Welcome to MINISHELL! ✧.*\n\n"
 
 // --- FUNCTION PROTOTYPES ---
+
+//	init_ms.c
+int	init_ms(int ac, char *av[], char *envp[], t_ms *ms);
+
+//	exe_cmd.c
+void	exe_cmd(t_cmd cmd, char *envp[]);
+
+//	print_utils.c
+void	print_in_color(const char *str, t_color color);
+void	clear_terminal(void);
 
 //	envp_utils.c
 char	**extract_paths(char *envp[]);
 
 //	parsing.c
-int	parse(int ac, char *av[], char *envp[], t_ms *ms);
+int	parse(char *cmd_line, t_ms *ms);
 
 //	cmd_split.c
 char	**cmd_split(char const *s);
