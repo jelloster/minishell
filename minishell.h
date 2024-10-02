@@ -63,7 +63,7 @@ typedef enum e_color
 	BLUE,
 	MAGENTA,
 	CYAN,
-	RESET
+	RESET,
 }	t_color;
 
 // --- MACROS ---
@@ -74,6 +74,13 @@ typedef enum e_color
 
 //	init_ms.c
 int	init_ms(int ac, char *av[], char *envp[], t_ms *ms);
+
+//	Builtin functions
+//	ms_echo.c
+void	ms_echo(char *str, int flag, int fd);
+
+// move to libft
+size_t	count_strs(char **strs);
 
 //	exe_cmd.c
 void	exe_cmd(t_cmd cmd, char *envp[]);

@@ -1,6 +1,7 @@
 # ----------FLAGS------------
 
 FLAGS			:=	-Wall -Wextra -Werror
+#FLAGS			:=
 DEBUG_FLAGS		:=	-g
 SANITIZE_FLAGS	:=	-g -fsanitize=address
 
@@ -18,7 +19,8 @@ SRC_FILES		:=	main.c		\
 				str_utils.c	\
 				print_utils.c	\
 				init_ms.c	\
-				exe_cmd.c
+				exe_cmd.c	\
+				count_strs.c
 
 
 OBJ_FILES		:=	$(SRC_FILES:.c=.o)
