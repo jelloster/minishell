@@ -16,8 +16,8 @@
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
-	//t_cmd	cmd;
 	char	*cmd_line;
+	t_cmd	*cmds;
 
 	init_ms(ac, av, envp, &ms);
 
@@ -26,7 +26,10 @@ int	main(int ac, char *av[], char *envp[])
 	{
 		waitpid(-1, NULL, 0);
 		cmd_line = readline("> "); // malloc // add to history
-		parse(cmd_line, &ms);
+		cmds = parse(cmd_line, &ms);
+		if (!cmds || !pipex(cmds)) // what about just 1 cmd
+			return (1);
+		// free cmds;
 		/*
 		if(extract_command(cmd_line, &ms, &cmd) == -1)
 			return (1); // free mallocs
