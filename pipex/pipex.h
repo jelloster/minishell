@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:01:01 by motuomin          #+#    #+#             */
-/*   Updated: 2024/06/18 16:15:13 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:09:01 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <sys/wait.h>
 # include "../libft/inc/libft.h"
 # include <errno.h>
+
+# include "../minishell.h"
 
 typedef enum e_error_code
 {
@@ -38,6 +40,7 @@ typedef struct s_aae
 	char	**paths;
 }			t_aae;
 
+/*
 typedef struct s_cmd
 {
 	char	*av_str;
@@ -45,20 +48,18 @@ typedef struct s_cmd
 	char	**args;
 	t_aae	*aae;
 }			t_cmd;
+*/
 
 // FUNCTION PROTOTYPES
 
-//	pipex.c
-int		pipex(t_cmd *cmds, t_aae *aae);
-
 //	command_extraction.c
 int		extract_command(t_cmd *cmd);
-int		exe_cmd(t_cmd cmd);
+//int		exe_cmd(t_cmd cmd);
 
 //	pipe_utils.c
-int		write_to_pipe(char *infile, t_cmd cmd, int *fd);
+int		write_to_pipe(t_cmd cmd, int *fd);
 int		read_and_write(t_cmd cmd, int fd_r, int fd_w);
-int		read_from_pipe(char *outfile, t_cmd cmd, int fd);
+int		read_from_pipe(t_cmd cmd, int fd);
 
 //	str_utils.c
 int		free_array_of_arrays(char **arr);

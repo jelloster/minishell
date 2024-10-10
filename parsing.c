@@ -25,14 +25,14 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		return (NULL);
 
 	// Allocate memory for x num of commands
-	mc->cmd_n = count_cmds(split_cmd_line);
-	cmds = malloc (mc->cmd_n * sizeof(t_cmd)); // malloc
+	ms->cmd_n = count_cmds(split_cmd_line);
+	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc
 	if (!cmds)
 	{
 		free_array_of_arrays(split_cmd_line);
 		return (NULL);
 	}
-	init_cmds(cmds, split, ms);
+	init_cmds(cmds, split_cmd_line, ms);
 	return (cmds);
 }
 
@@ -87,6 +87,8 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (!cmd->args)
 		return (0);
 
+	cmd->envp = ms->envp;
+
 	// Assign the appropriate pointers to args
 	i = -1;
 	while (i++ < (int)size)
@@ -94,7 +96,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 
 	
 	// Check for redirections
-	if (check_fork_redirections(cmd)
+	if (check_fork_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
 	// If not, check if the command was pathed
 	else if (access(cmd->args[0], X_OK) == 0)

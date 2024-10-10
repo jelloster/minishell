@@ -37,6 +37,7 @@ typedef struct s_cmd
 	char	*pathed_cmd;
 	char	*infile;
 	char	*outfile;
+	char	**envp;
 	t_redir	redir;
 
 }	t_cmd;
@@ -117,7 +118,7 @@ char	**cmd_split(char const *s);
 /* - Miscellaneous - */
 
 //	exe_cmd.c
-void	exe_cmd(t_cmd cmd, char *envp[]);
+int	exe_cmd(t_cmd *cmd);
 
 //	print_utils.c
 void	print_in_color(const char *str, t_color color);

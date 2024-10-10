@@ -6,32 +6,18 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:35 by motuomin          #+#    #+#             */
-/*   Updated: 2024/06/18 13:31:05 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:25:32 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-    ╔══════════════════════════════════════════╗
-    ║                - PIPEX -                 ║
-    ║                                          ║
-    ║     Replicates the Shell function :      ║
-    ║                                          ║
-    ║     " < file1 cmd1 | cmd2 > file2 "      ║
-    ║                                          ║
-    ║          Executed followingly :          ║ 
-    ║                                          ║
-    ║      ./pipex file1 cmd1 cmd2 file2       ║
-    ╚══════════════════════════════════════════╝
-*/
-
 #include "pipex.h"
 
-static int	fork_and_exe(t_cmd *cmds, t_aae *aae, int **fds, int cmd_n);
-static void	child_process(t_cmd cmd, t_aae *aae, int **fds, int i);
+static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n);
+static void	child_process(t_cmd cmd, int **fds, int i, int amount);
 static int	wait_and_close(pid_t *pids, int cmd_n);
 static int	free_fds(int **fds, int amount);
 
-int	pipex(t_cmd *cmds, t_aae *aae)
+int	pipex(t_cmd *cmds, int amount)
 {
 	int	**fds;
 	int	i;
@@ -46,12 +32,12 @@ int	pipex(t_cmd *cmds, t_aae *aae)
 		fds[i] = malloc(2 * sizeof(int));
 		if (!fds[i])
 			return (free_fds(fds, i));
-		if (pipe(fds[i++]) == -1)
+		if (pipe(fds[i]) == -1)
 			return (free_fds(fds, i)); // join pipes?
+		i++;
 	}
-	exit_status = fork_and_exe(cmds, fds, amount + 1); // ?
+	exit_status = fork_and_exe(cmds, fds, amount + 1);
 	free_fds(fds, amount);
-	free_memory(cmds);
 	return (exit_status);
 }
 
@@ -74,7 +60,7 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 			return (0);
 		}
 		if (pid == 0)
-			child_process(cmds[i], aae, fds, i);
+			child_process(cmds[i], fds, i, cmd_n);
 		pids[i] = pid;
 		if (i > 0)
 			close(fds[i - 1][0]);
@@ -84,12 +70,12 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 	return (wait_and_close(pids, cmd_n));
 }
 
-static void	child_process(t_cmd cmd, t_aae *aae, int **fds, int i)
+static void	child_process(t_cmd cmd, int **fds, int i, int amount)
 {
 	if (i == 0)
-		write_to_pipe(aae->av[1], cmd, fds[i]);
-	else if (i == aae->ac - 4)
-		read_from_pipe(aae->av[aae->ac - 1], cmd, fds[i - 1][0]);
+		write_to_pipe(cmd, fds[i]); // no input file always
+	else if (i == amount)
+		read_from_pipe(cmd, fds[i - 1][0]); // no  output file always
 	else
 		read_and_write(cmd, fds[i - 1][0], fds[i][1]);
 }

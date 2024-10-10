@@ -1,12 +1,14 @@
 #include "minishell.h"
 
+/*
 static void	redirect_input(char *file);
-static void	redirect_output(char *file, t_aae aae);
-
+static void	redirect_output(char *file);
+*/
 /*
 	Executes a command with a fork.
 */
-void	exe_cmd(t_cmd cmd, char *envp[])
+
+int	exe_cmd(t_cmd *cmd)
 {
 	pid_t	pid;
 
@@ -15,20 +17,25 @@ void	exe_cmd(t_cmd cmd, char *envp[])
 		exit(1);
 	if (pid == 0)
 	{
+		/*
 		if (cmd->redir != NONE)
 		{
 			if (cmd->redir == INPUT)
-				redirect_input(cmd->file);
+				redirect_input(cmd->infile);
 			// redirect output / input
+		}*/
+		if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
+		{
+			execve(cmd->pathed_cmd, cmd->args, cmd->envp);
+			return (2);
 		}
-		if (access(cmd.pathed_cmd, X_OK) == 0) // needed?
-			execve(cmd.pathed_cmd, cmd.args, envp);
 		// reset output / input
 
 	}
+	return (0);
 }
 
-
+/*
 static void	redirect_input(char *file)
 {
 	int	fd;
@@ -52,4 +59,4 @@ static void	redirect_output(char *file, t_aae aae)
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-}
+} */
