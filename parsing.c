@@ -52,17 +52,23 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 	size_t	i;
 	size_t	j;
 	size_t	cmd_i;
+	int	size;
 
 	i = 0;
 	j = 0;
 	cmd_i = 0;
 	while (split[i])
 	{
-		if (ft_strncmp(split[i], "|", ft_strlen(split[i])) == 0)
+		if (ft_strncmp(split[i], "|", ft_strlen(split[i])) == 0
+			|| split[i + 1] == NULL)
 		{
-			i++;
-			if(!cmd_block(&cmds[cmd_i++], &split[j], i - j - 1, ms))
+			if (split[i + 1] == NULL)
+				size = i - j + 1;
+			else
+				size = i - j;
+			if(!cmd_block(&cmds[cmd_i++], &split[j], size, ms))
 				return (0);
+			i++;
 			j = i;
 		}
 		else
@@ -83,20 +89,26 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	int	i;
 
 	// Allocate memory for the command's args
-	cmd->args = malloc((size) * sizeof(char *)); // malloc
+	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc
+	cmd->args[size] = NULL;
 	if (!cmd->args)
 		return (0);
 
 	cmd->envp = ms->envp;
+	cmd->redir = NONE;
+	cmd->file = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->pathed_cmd = NULL;
 
 	// Assign the appropriate pointers to args
 	i = -1;
-	while (i++ < (int)size)
+	while (++i < (int)size)
 		cmd->args[i] = split[i];
 
 	
 	// Check for redirections
-	if (check_fork_redirections(cmd))
+	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
 	// If not, check if the command was pathed
 	else if (access(cmd->args[0], X_OK) == 0)

@@ -9,6 +9,8 @@ static void	handle_escape_sequence(char **str, int fd);
  * - fd (where the string is echoed)
  */
 
+// IT IS THE -n FLAG
+
 void	ms_echo(char *str, int flag, int fd)
 {
 	if (flag) // could wigure out within function. take t_cmd.

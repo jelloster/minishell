@@ -10,18 +10,34 @@ CC				:=	cc
 
 # ------ SOURCE FILES -------
 
-SRC_FILES		:=	main.c		\
-				parsing.c	\
-				envp_utils.c	\
-				cmd_line.c	\
-				cmd_split.c	\
+SRC_FILES		:=	main.c			\
+				parsing.c		\
+				envp_utils.c		\
+				cmd_split.c		\
+				str_utils.c		\
+				print_utils.c		\
+				init_ms.c		\
+				exe_cmd.c		\
+				parsing_utils.c		\
+				redirection_utils.c	\
+				memory_functions.c	\
+# ms_echo.c
+
+# ------- PIPEX --------
+
+PIPEX_PATH		:=	./pipex/
+PIPEX_FILES		:=	awk_split.c	\
+				error_utils.c	\
+				pipex.c		\
+				pipe_utils.c	\
 				str_utils.c	\
-				print_utils.c	\
-				init_ms.c	\
-				exe_cmd.c	\
+				cmd_utils.c	\
+
+PIPEX_SRC		:=	$(addprefix $(PIPEX_PATH), $(PIPEX_FILES))
+PIPEX_OBJ		:=	$(PIPEX_SRC:.c=.o)
 
 
-OBJ_FILES		:=	$(SRC_FILES:.c=.o)
+OBJ_FILES		:=	$(SRC_FILES:.c=.o) $(PIPEX_OBJ)
 NAME			:=	minishell
 LIBFT			:=	libft/libft.a
 

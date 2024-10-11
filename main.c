@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-
+// if threads duplicate memory, they need to be freed there too!!!
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
@@ -20,22 +20,20 @@ int	main(int ac, char *av[], char *envp[])
 	t_cmd	*cmds;
 
 	init_ms(ac, av, envp, &ms);
-
-	// Command line loop
 	while (1)
 	{
 		waitpid(-1, NULL, 0);
 		cmd_line = readline("> "); // malloc // add to history
 		cmds = parse(cmd_line, &ms);
-		if (!cmds || !pipex(cmds)) // what about just 1 cmd
+		if (! cmds)
 			return (1);
-		// free cmds;
-		/*
-		if(extract_command(cmd_line, &ms, &cmd) == -1)
-			return (1); // free mallocs
-		exe_cmd(cmd, envp);
-		*/
-		free(cmd_line);
+		if (ms.cmd_n == 1)
+			exe_cmd(cmds);
+		else if (ms.cmd_n != 0 && !pipex(cmds, ms.cmd_n))
+			return (1);
+		free_cmds(cmds, ms.cmd_n);
 	}
+	// free ms
+	free_array_of_arrays(ms.paths);
 	return (0);
 }

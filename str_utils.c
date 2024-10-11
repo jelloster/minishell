@@ -32,7 +32,7 @@ size_t	strlen_mod(char const *s, char c)
 	return (i);
 }
 
-int	str_in_array_of_strs(void *str, void **strs)
+int	str_in_array_of_strs(char *str, char **strs)
 {
 	int	i;
 	int	len;
@@ -41,10 +41,11 @@ int	str_in_array_of_strs(void *str, void **strs)
 	while (strs[i])
 	{
 		len = ft_strlen(strs[i]);
-		if (ft_stlen(str) > len)
+		if ((int)ft_strlen(str) > len)
 			len = ft_strlen(str);
 		if (ft_strncmp(str, strs[i], len) == 0)
 			return (1);
+		i++;
 	}
 	return (0);
 }

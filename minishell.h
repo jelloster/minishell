@@ -35,7 +35,8 @@ typedef struct s_cmd
 {
 	char	**args;
 	char	*pathed_cmd;
-	char	*infile;
+	char	*file;
+	char	*infile; // < infile cat > outfile
 	char	*outfile;
 	char	**envp;
 	t_redir	redir;
@@ -92,6 +93,9 @@ typedef enum e_operator
 
 /* - Minishell initialization - */
 
+//	pipex/pipex.c
+int	pipex(t_cmd *cmds, int cmd_n);
+
 //	init_ms.c
 int	init_ms(int ac, char *av[], char *envp[], t_ms *ms);
 
@@ -103,7 +107,7 @@ void	ms_echo(char *str, int flag, int fd);
 /* - Command line parsing - */
 
 //	parsing.c
-int	parse(char *cmd_line, t_ms *ms);
+t_cmd	*parse(char *cmd_line, t_ms *ms);
 int	extract_pathed_cmd(t_cmd *cmd, char **paths);
 
 //	parsing_utils.c
@@ -112,10 +116,16 @@ int	free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
 int	check_for_redirections(t_cmd *cmd);
 int	is_redirection(char *str, size_t len);
 
+//	memory_functions.c
+int	free_cmds(t_cmd *cmds, int cmd_n);
+
 //	cmd_split.c
 char	**cmd_split(char const *s);
 
 /* - Miscellaneous - */
+
+//	redirection_utils.c
+int	handle_redirected_cmd(t_cmd *cmd, char **paths);
 
 //	exe_cmd.c
 int	exe_cmd(t_cmd *cmd);
@@ -130,6 +140,6 @@ char	**extract_paths(char *envp[]);
 //	str_utils.c
 size_t	strlen_mod(char const *s, char c);
 int	free_array_of_arrays(char **arr);
-int	str_in_array_of_strs(void *str, void **strs);
+int	str_in_array_of_strs(char *str, char **strs);
 
 #endif

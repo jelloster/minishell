@@ -30,8 +30,8 @@ int	write_to_pipe(t_cmd cmd, int *fd)
 			return (0);
 		}
 		redirect_input(cmd.infile);
-		dup2(fd[1], STDOUT_FILENO);
 	}
+	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
 	return (exe_cmd(&cmd));

@@ -12,6 +12,7 @@
 
 #include "pipex.h"
 
+/*
 int	free_array_of_arrays(char **arr)
 {
 	size_t	i;
@@ -43,3 +44,4 @@ size_t	strlen_mod(char const *s, char c)
 		i++;
 	return (i);
 }
+*/

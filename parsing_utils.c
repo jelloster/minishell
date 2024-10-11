@@ -5,8 +5,8 @@ int	free_n_exit(char *t_cmd, char *s_cmd, char **args, int ret)
 	size_t	i;
 
 	i = 0;
-	if (p_cmd)
-		free(p_cmd);
+	if (t_cmd)
+		free(t_cmd);
 	if (s_cmd)
 		free(s_cmd);
 	if (args)

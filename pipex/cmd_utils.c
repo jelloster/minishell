@@ -12,6 +12,7 @@
 
 #include "pipex.h"
 
+/*
 static int	free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
 
 int	extract_command(t_cmd *cmd)
@@ -48,7 +49,7 @@ static int	free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret)
 	}
 	return (ret);
 }
-
+*/
 /*
 int	exe_cmd(t_cmd cmd)
 {

@@ -12,7 +12,7 @@ char	**extract_paths(char *envp[])
 	if (envp[i] == NULL)
 		return (NULL);
 	path_env = envp[i] + 5;
-	paths = ft_split(path_env, ':');
+	paths = ft_split(path_env, ':'); // malloc
 	if (!paths)
 		return (NULL);
 	return (paths);
