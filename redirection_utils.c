@@ -15,13 +15,13 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 	while (!is_redirection(cmd->args[i], ft_strlen(cmd->args[i])))
 		i++;
 	len = ft_strlen(cmd->args[i]);
-	if (ft_strncmp(">", cmd->args[i], len))
+	if (!ft_strncmp(">", cmd->args[i], len))
 		cmd->redir = REPLACE;
-	else if (ft_strncmp("<", cmd->args[i], len))
+	else if (!ft_strncmp("<", cmd->args[i], len))
 		cmd->redir = INPUT;
-	else if (ft_strncmp(">>", cmd->args[i], len))
+	else if (!ft_strncmp(">>", cmd->args[i], len))
 		cmd->redir = ADD;
-	else if (ft_strncmp("<<", cmd->args[i], len))
+	else if (!ft_strncmp("<<", cmd->args[i], len))
 		cmd->redir = STD_IN;
 	//cmd->file = cmd->args[i + 1];
 	if (i == 0)
@@ -60,7 +60,7 @@ static int	command_first(t_cmd *cmd, int red, char **paths)
 	new_args = malloc((red + 1) * sizeof(char *));
 	if (!new_args)
 		return (0);
-	new_args[red + 1] = NULL;
+	new_args[red] = NULL; // heap buffer overflow
 	cmd->file = ft_strdup(cmd->args[red + 1]);
 	if (!cmd->file)
 	{
@@ -68,9 +68,9 @@ static int	command_first(t_cmd *cmd, int red, char **paths)
 		return (0);
 	}
 	i = -1;
-	while (new_args[++i])
+	while (++i < red)
 		new_args[i] = cmd->args[i];
-	free_array_of_arrays(cmd->args);
+	free(cmd->args);
 	cmd->args = new_args;
 	return (extract_pathed_cmd(cmd, paths));
 }

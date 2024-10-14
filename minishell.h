@@ -49,6 +49,7 @@ typedef struct s_ms
 	char	**envp;
 	char	**paths;
 	char	**history;
+	int	his_n;
 	int	cmd_n;
 }	t_ms;
 
@@ -104,6 +105,8 @@ int	init_ms(int ac, char *av[], char *envp[], t_ms *ms);
 //	ms_echo.c
 void	ms_echo(char *str, int flag, int fd);
 
+//	history.c
+int	update_history(t_ms *ms, char *cmd_line);
 /* - Command line parsing - */
 
 //	parsing.c

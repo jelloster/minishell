@@ -54,13 +54,13 @@ int	check_for_redirections(t_cmd *cmd)
 
 int	is_redirection(char *str, size_t len)
 {
-	if (ft_strncmp(">", str, len))
+	if (!ft_strncmp(">", str, len))
 		return (1);
-	else if (ft_strncmp("<", str, len))
+	else if (!ft_strncmp("<", str, len))
 		return (1);
-	else if (ft_strncmp(">>", str, len))
+	else if (!ft_strncmp(">>", str, len))
 		return (1);
-	else if (ft_strncmp("<<", str, len))
+	else if (!ft_strncmp("<<", str, len))
 		return (1);
 	return (0);
 }

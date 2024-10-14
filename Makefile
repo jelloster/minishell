@@ -21,6 +21,7 @@ SRC_FILES		:=	main.c			\
 				parsing_utils.c		\
 				redirection_utils.c	\
 				memory_functions.c	\
+				history.c		\
 # ms_echo.c
 
 # ------- PIPEX --------

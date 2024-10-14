@@ -11,7 +11,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms);
  *
  * Return values:
  * - A filled out array of cmds 
- * - NULL (something went wrong)
+ * - NULL (if something went wrong)
 */
 
 t_cmd	*parse(char *cmd_line, t_ms *ms)
@@ -20,7 +20,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	char	**split_cmd_line;
 
 	// Split the command line into separate strings
-	split_cmd_line = cmd_split(cmd_line);
+	split_cmd_line = cmd_split(cmd_line); // malloc 3
 	if (!split_cmd_line)
 		return (NULL);
 
