@@ -1,62 +1,34 @@
 #include "minishell.h"
 
 /*
-static void	redirect_input(char *file);
-static void	redirect_output(char *file);
-*/
-/*
 	Executes a command with a fork.
 */
 
 int	exe_cmd(t_cmd *cmd)
 {
-	pid_t	pid;
+	//pid_t	pid;
 
-	pid = fork();
-	if (pid == -1)
-		exit(1);
-	if (pid == 0)
-	{
-		/*
+	//pid = fork(); // this fork fucks with waitpid probably
+	//printf("Process forked. Pid: %d.\n", pid);
+	//if (pid == -1)
+		//exit(1);
+	//if (pid == 0)
+	//{
 		if (cmd->redir != NONE)
 		{
 			if (cmd->redir == INPUT)
-				redirect_input(cmd->infile);
-			// redirect output / input
-		}*/
+				redirect_input(cmd->file);
+			else if (cmd->redir == REPLACE)
+				redirect_output(cmd->file);
+		}
 		if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
 		{
 			execve(cmd->pathed_cmd, cmd->args, cmd->envp);
 			return (2);
 		}
-		// reset output / input
+		// reset output / input ? 
 
-	}
+	//}
+	//printf("pid %d exit exe cmd\n", pid);
 	return (0);
 }
-
-/*
-static void	redirect_input(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		exit(0); // ?
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-}
-
-static void	redirect_output(char *file, t_aae aae)
-{
-	int	fd;
-
-	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	if (fd == -1)
-	{
-		error_msg(PERMISSION_DENIED, file, aae.av[0]);
-		exit(EXIT_FAILURE);
-	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-} */

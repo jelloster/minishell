@@ -2,6 +2,7 @@
 
 static int	command_first(t_cmd *cmd, int red, char **paths);
 static int	command_last(t_cmd *cmd, char **paths);
+static int	is_redirection(char *str, size_t len);
 
 
 // WHAT IF THERE ARE MANY REDIRECTION IN A PIPE
@@ -23,7 +24,6 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 		cmd->redir = ADD;
 	else if (!ft_strncmp("<<", cmd->args[i], len))
 		cmd->redir = STD_IN;
-	//cmd->file = cmd->args[i + 1];
 	if (i == 0)
 		return (command_last(cmd, paths));
 	else
@@ -60,7 +60,7 @@ static int	command_first(t_cmd *cmd, int red, char **paths)
 	new_args = malloc((red + 1) * sizeof(char *));
 	if (!new_args)
 		return (0);
-	new_args[red] = NULL; // heap buffer overflow
+	new_args[red] = NULL;
 	cmd->file = ft_strdup(cmd->args[red + 1]);
 	if (!cmd->file)
 	{
@@ -116,4 +116,30 @@ static int	command_last(t_cmd *cmd, char **paths)
 	while (new_args[++i])
 		new_args[i] = cmd->args[2 + i];
 	return (extract_pathed_cmd(cmd, paths));
+}
+
+int	check_for_redirections(t_cmd *cmd)
+{
+	if (str_in_array_of_strs(">", cmd->args))
+		return (1);
+	else if (str_in_array_of_strs("<", cmd->args))
+		return (1);
+	else if (str_in_array_of_strs(">>", cmd->args))
+		return (1);
+	else if (str_in_array_of_strs("<<", cmd->args))
+		return (1);
+	return (0);
+}
+
+static int	is_redirection(char *str, size_t len)
+{
+	if (!ft_strncmp(">", str, len))
+		return (1);
+	else if (!ft_strncmp("<", str, len))
+		return (1);
+	else if (!ft_strncmp(">>", str, len))
+		return (1);
+	else if (!ft_strncmp("<<", str, len))
+		return (1);
+	return (0);
 }

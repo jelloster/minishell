@@ -23,9 +23,12 @@ int	pipex(t_cmd *cmds, int cmd_n)
 	int	i;
 	int	exit_status;
 
+	// Allocate a list of fds[2] for pipes
 	fds = malloc((cmd_n - 1) * sizeof(int *));
 	if (!fds)
 		return (0);
+
+	// Create the pipes with pipe() ONLY 1 PIPE OPEN
 	i = 0;
 	while (i < cmd_n - 1)
 	{
@@ -33,7 +36,7 @@ int	pipex(t_cmd *cmds, int cmd_n)
 		if (!fds[i])
 			return (free_fds(fds, i));
 		if (pipe(fds[i]) == -1)
-			return (free_fds(fds, i)); // join pipes?
+			return (free_fds(fds, i));
 		i++;
 	}
 	exit_status = fork_and_exe(cmds, fds, cmd_n);
@@ -47,9 +50,12 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 	pid_t	pid;
 	pid_t	*pids;
 
+	// Allocate for fork process ids
 	pids = malloc(sizeof(pid_t) * cmd_n);
 	if (!pids)
 		return (0);
+
+	// Fork and execute
 	i = 0;
 	while (i < cmd_n)
 	{
@@ -60,7 +66,15 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 			return (0);
 		}
 		if (pid == 0)
+		{
 			child_process(cmds[i], fds, i, cmd_n);
+			printf("Poopoo.\n");
+			//exit(0); // chatgpt // exits at exe_cmd
+		}
+		if (i == 0)
+		{
+			waitpid(pids[i], NULL, 0);
+		}
 		pids[i] = pid;
 		if (i > 0)
 			close(fds[i - 1][0]);
@@ -72,13 +86,12 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 
 static void	child_process(t_cmd cmd, int **fds, int i, int amount)
 {
-	printf("i : %d, amount: %d\n", i, amount);
 	if (i == 0)
-		write_to_pipe(cmd, fds[i]); // no input file always
+		write_to_pipe(cmd, fds[i]);
 	else if (i == amount - 1)
-		read_from_pipe(cmd, fds[i - 1][0]); // no  output file always
+		read_from_pipe(cmd, fds[i - 1][0]);
 	else
-		read_and_write(cmd, fds[i - 1][0], fds[i][1]); // heap buffer overflow
+		read_and_write(cmd, fds[i - 1][0], fds[i][1]);
 }
 
 static int	wait_and_close(pid_t *pids, int cmd_n)
@@ -92,7 +105,6 @@ static int	wait_and_close(pid_t *pids, int cmd_n)
 	while (i < cmd_n)
 	{
 		waitpid(pids[i], &exit_status, 0);
-		printf("%d done.\n", i);
 		if (WIFEXITED(exit_status))
 			last_status = WEXITSTATUS(exit_status);
 		i++;

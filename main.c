@@ -20,6 +20,7 @@ int	main(int ac, char *av[], char *envp[])
 	t_ms	ms;
 	char	*cmd_line;
 	t_cmd	*cmds;
+	pid_t	pid;
 
 	if (!init_ms(ac, av, envp, &ms)) // malloc ms->paths
 		return (1);
@@ -35,10 +36,18 @@ int	main(int ac, char *av[], char *envp[])
 		cmds = parse(cmd_line, &ms); // malloc 3 (cmds)
 		if (!cmds)
 			return (free_ms(&ms, cmd_line, 1));
-		if (ms.cmd_n == 1)
-			exe_cmd(cmds);
-		else if (ms.cmd_n != 0 && !pipex(cmds, ms.cmd_n))
-			return (1);
+
+		// FORK PROCESS
+		pid = fork();
+		if (pid == -1)
+			exit(0);
+		if (pid == 0)
+		{
+			if (ms.cmd_n == 1)
+				exe_cmd(cmds);
+			else if (ms.cmd_n != 0 && !pipex(cmds, ms.cmd_n))
+				return (1);
+		}
 		free_cmds(cmds, ms.cmd_n);
 		update_history(&ms, cmd_line);
 		free(cmd_line);

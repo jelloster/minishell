@@ -12,14 +12,14 @@
 
 #include "pipex.h"
 
-static void	redirect_input(char *file);
-static void	redirect_output(char *file);
+void	redirect_input(char *file);
+void	redirect_output(char *file);
 
 int	write_to_pipe(t_cmd cmd, int *fd)
 {
 	if (cmd.redir == INPUT)
 	{
-		if (access(cmd.infile, R_OK) != 0)
+		if (access(cmd.file, R_OK) != 0)
 		{
 			/*
 			if (errno == ENOENT)
@@ -29,7 +29,7 @@ int	write_to_pipe(t_cmd cmd, int *fd)
 			*/
 			return (0);
 		}
-		redirect_input(cmd.infile);
+		redirect_input(cmd.file);
 	}
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
@@ -49,13 +49,13 @@ int	read_and_write(t_cmd cmd, int fd_r, int fd_w)
 int	read_from_pipe(t_cmd cmd, int fd)
 {
 	dup2(fd, STDIN_FILENO);
-	if (cmd.outfile)
-		redirect_output(cmd.outfile);
+	if (cmd.file)
+		redirect_output(cmd.file);
 	close(fd);
 	return (exe_cmd(&cmd));
 }
 
-static void	redirect_input(char *file)
+void	redirect_input(char *file)
 {
 	int	fd;
 
@@ -66,7 +66,7 @@ static void	redirect_input(char *file)
 	close(fd);
 }
 
-static void	redirect_output(char *file)
+void	redirect_output(char *file)
 {
 	int	fd;
 

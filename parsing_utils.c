@@ -39,28 +39,12 @@ size_t	count_cmds(char **split)
 		return (1);
 }
 
-int	check_for_redirections(t_cmd *cmd)
+void	init_cmd(t_cmd *cmd, t_ms *ms)
 {
-	if (str_in_array_of_strs(">", cmd->args))
-		return (1);
-	else if (str_in_array_of_strs("<", cmd->args))
-		return (1);
-	else if (str_in_array_of_strs(">>", cmd->args))
-		return (1);
-	else if (str_in_array_of_strs("<<", cmd->args))
-		return (1);
-	return (0);
-}
-
-int	is_redirection(char *str, size_t len)
-{
-	if (!ft_strncmp(">", str, len))
-		return (1);
-	else if (!ft_strncmp("<", str, len))
-		return (1);
-	else if (!ft_strncmp(">>", str, len))
-		return (1);
-	else if (!ft_strncmp("<<", str, len))
-		return (1);
-	return (0);
+	cmd->envp = ms->envp;
+	cmd->redir = NONE;
+	cmd->file = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->pathed_cmd = NULL;
 }

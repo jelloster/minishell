@@ -8,10 +8,6 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms);
  *
  * Description: Takes user input from command line and sorts it into an array
  * of executable commands (t_cmd *cmds).
- *
- * Return values:
- * - A filled out array of cmds 
- * - NULL (if something went wrong)
 */
 
 t_cmd	*parse(char *cmd_line, t_ms *ms)
@@ -41,10 +37,6 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
  *
  * Description: Takes a split command line and distributes the info to the
  * cmds in the array of commands.
- *
- * Return values:
- * 1: Everything worked
- * 0: Something went wrong
 */
 
 static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
@@ -80,7 +72,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 /*
  * Function: cmd_block
  *
- * Description: 
+ * Description: Takes a size long command and distributes the info to *cmd
 */
 
 static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
@@ -94,12 +86,8 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (!cmd->args)
 		return (0);
 
-	cmd->envp = ms->envp;
-	cmd->redir = NONE;
-	cmd->file = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->pathed_cmd = NULL;
+	// Give the command basic info
+	init_cmd(cmd, ms);
 
 	// Assign the appropriate pointers to args
 	i = -1;
@@ -110,6 +98,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	// Check for redirections
 	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
+
 	// If not, check if the command was pathed
 	else if (access(cmd->args[0], X_OK) == 0)
 	{

@@ -96,6 +96,9 @@ typedef enum e_operator
 
 //	pipex/pipex.c
 int	pipex(t_cmd *cmds, int cmd_n);
+//	pipex/pipe_utils.c
+void	redirect_input(char *file);
+void	redirect_output(char *file);
 
 //	init_ms.c
 int	init_ms(int ac, char *av[], char *envp[], t_ms *ms);
@@ -116,19 +119,20 @@ int	extract_pathed_cmd(t_cmd *cmd, char **paths);
 //	parsing_utils.c
 size_t	count_cmds(char **split);
 int	free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
-int	check_for_redirections(t_cmd *cmd);
-int	is_redirection(char *str, size_t len);
+void	init_cmd(t_cmd *cmd, t_ms *ms);
 
-//	memory_functions.c
-int	free_cmds(t_cmd *cmds, int cmd_n);
+//	redirection_utils.c
+int	handle_redirected_cmd(t_cmd *cmd, char **paths);
+int	check_for_redirections(t_cmd *cmd);
 
 //	cmd_split.c
 char	**cmd_split(char const *s);
 
-/* - Miscellaneous - */
 
-//	redirection_utils.c
-int	handle_redirected_cmd(t_cmd *cmd, char **paths);
+//	memory_functions.c
+int	free_cmds(t_cmd *cmds, int cmd_n);
+
+/* - Miscellaneous - */
 
 //	exe_cmd.c
 int	exe_cmd(t_cmd *cmd);
