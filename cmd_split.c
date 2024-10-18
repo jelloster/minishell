@@ -9,8 +9,12 @@ char	**cmd_split(char const *s)
 {
 	char	**res;
 	char	**res_start;
+	int	count;
 
-	res = malloc((cmd_count_words(s) + 1) * sizeof(char *));
+	count = cmd_count_words(s);
+	if (count == -1)
+		return (NULL);
+	res = malloc((count + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	res_start = res;
@@ -73,18 +77,32 @@ static int	cmd_count_words(char const *s)
 
 	i = 0;
 	count = 1;
-	while (s[i] != '\0')
+	while (s[i] != '\0') // invalid read size
 	{
-		if (s[i] == '\'')
+		// If we find a single quote
+		if (s[i] == '\'') // What about double quote?
 		{
+			// Add 1 to count if it's not the first word
 			if (i > 0)
 				count++;
+
+			// Move past the single quote
 			i++;
+
+			// Iterate to the single quote pair
 			while (s[i] != '\'' && s[i])
 				i++;
-			i++;
+
+			if (!s[i])
+				return (-1);
+
+			/*
+			// Iterate past the single quote (it's done later too)
+			if (s[i] == '\'')
+				i++;
+			*/
 		}
-		if (i > 0 && s[i] != ' ' && s[i - 1] == ' ')
+		else if (i > 0 && s[i] != ' ' && s[i - 1] == ' ') // invalid readsize when cat test.txt '
 			count++;
 		i++;
 	}

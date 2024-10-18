@@ -30,7 +30,6 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 		return (command_first(cmd, i, paths));
 }
 
-
 /* Function : command_first
  *
  * Description : Fills in the t_cmd struct for commands in 
@@ -47,7 +46,6 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
  * redirection = ADD;
  * 
 */
-
 
 // IF NOT IN A PIPE THERE COULD BE 2 REDIRECTIONS
 // file < cmd > file
@@ -99,10 +97,11 @@ static int	command_last(t_cmd *cmd, char **paths)
 	int	len;
 
 	len = 0;
-	while (cmd->args[len++]) ;
+	while (cmd->args[len])
+		len++;
 	if (len < 3)
-		return (0); // handle
-	cmd->file = ft_strdup(cmd->args[2]); // make sure no segfault
+		return (0); // handle // no command
+	cmd->file = ft_strdup(cmd->args[1]); // make sure no segfault
 	if (!cmd->file)
 		return (0);
 	new_args = malloc((len - 2 + 1) * sizeof(char *));
@@ -111,10 +110,12 @@ static int	command_last(t_cmd *cmd, char **paths)
 		free (cmd->file);
 		return (0);
 	}
-	new_args[len - 2 + 1] = NULL;
+	new_args[len - 2] = NULL;
 	i = -1;
-	while (new_args[++i])
+	while (++i < len - 2)
 		new_args[i] = cmd->args[2 + i];
+	free(cmd->args);
+	cmd->args = new_args;
 	return (extract_pathed_cmd(cmd, paths));
 }
 

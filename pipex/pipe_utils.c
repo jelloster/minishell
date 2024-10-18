@@ -61,7 +61,10 @@ void	redirect_input(char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
+	{
+		// free duplicated memory
 		exit(0);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
@@ -75,6 +78,7 @@ void	redirect_output(char *file)
 	if (fd == -1)
 	{
 		error_msg(PERMISSION_DENIED, file, aae.av[0]);
+		// free duplicated memory
 		exit(EXIT_FAILURE);
 	}
 	*/

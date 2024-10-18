@@ -16,13 +16,13 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	char	**split_cmd_line;
 
 	// Split the command line into separate strings
-	split_cmd_line = cmd_split(cmd_line); // malloc 3
+	split_cmd_line = cmd_split(cmd_line); // malloc 3 (leak?)
 	if (!split_cmd_line)
 		return (NULL);
 
 	// Allocate memory for x num of commands
 	ms->cmd_n = count_cmds(split_cmd_line);
-	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc
+	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc (leak?)
 	if (!cmds)
 	{
 		free_array_of_arrays(split_cmd_line);
@@ -66,6 +66,8 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 		else
 			i++;
 	}
+	free_array_of_arrays(split);
+	// free split cmd line (pipes etc. are not freed!)
 	return (1);
 }
 
@@ -92,8 +94,11 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	// Assign the appropriate pointers to args
 	i = -1;
 	while (++i < (int)size)
-		cmd->args[i] = split[i];
-
+	{
+		cmd->args[i] = ft_strdup(split[i]); // Leak?
+		if (!cmd->args[i])
+			return (0);
+	}
 	
 	// Check for redirections
 	if (check_for_redirections(cmd))
@@ -109,7 +114,6 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	// Or if we need to find the path for the command
 	else
 		return (extract_pathed_cmd(cmd, ms->paths));
-
 	return (1);
 }
 

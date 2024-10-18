@@ -49,7 +49,9 @@ typedef struct s_ms
 	char	**envp;
 	char	**paths;
 	char	**history;
+	char	*cmd_line;
 	int	his_n;
+	int	error;
 	int	cmd_n;
 }	t_ms;
 

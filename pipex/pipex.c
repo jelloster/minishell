@@ -41,6 +41,8 @@ int	pipex(t_cmd *cmds, int cmd_n)
 	}
 	exit_status = fork_and_exe(cmds, fds, cmd_n);
 	free_fds(fds, cmd_n - 1);
+	//free_cmds(cmds, cmd_n);
+	//exit (exit_status);
 	return (exit_status);
 }
 
@@ -66,15 +68,7 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 			return (0);
 		}
 		if (pid == 0)
-		{
 			child_process(cmds[i], fds, i, cmd_n);
-			printf("Poopoo.\n");
-			//exit(0); // chatgpt // exits at exe_cmd
-		}
-		if (i == 0)
-		{
-			waitpid(pids[i], NULL, 0);
-		}
 		pids[i] = pid;
 		if (i > 0)
 			close(fds[i - 1][0]);

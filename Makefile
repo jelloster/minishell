@@ -32,7 +32,6 @@ PIPEX_FILES		:=	awk_split.c	\
 				pipex.c		\
 				pipe_utils.c	\
 				str_utils.c	\
-				cmd_utils.c	\
 
 PIPEX_SRC		:=	$(addprefix $(PIPEX_PATH), $(PIPEX_FILES))
 PIPEX_OBJ		:=	$(PIPEX_SRC:.c=.o)
