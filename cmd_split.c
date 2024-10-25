@@ -23,7 +23,7 @@ char	**cmd_split(char const *s)
 		while (*s == ' ')
 			s++;
 		if (*s == '\'' || *s == '\"')
-			res = quoted_args(res, &s, res_start, *s);
+			res = quoted_args(res, &s, res_start, *s); // echo he"he"!!
 		if (*s != ' ' && *s != '\0')
 			res = normal_args(res, &s, res_start);
 		if (!res)
@@ -69,27 +69,31 @@ static char	**normal_args(char **res, char const **s, char **r_s)
 	return (res);
 }
 
-// doesnt work with "hel"lo
+// count is wrong echo "-n hello wassup"
 static int	cmd_count_words(char const *s)
 {
 	int		i;
 	int		count;
-	int		q_count;
+	char	quote;
 
 	i = 0;
 	count = 1;
-	while (s[i] != '\0')
+	if (!s[i])
+		return (0);
+	while (s[i])
 	{
 		if (s[i] == '\'' || s[i] == '\"')
 		{
-			q_count = count_quoted_words(s, &i);
-			if (q_count == -1)
+			if (i > 0)
+				count++;
+			quote = s[i];
+			i++;
+			while (s[i] != quote && s[i])
+				i++;
+			if (!s[i])
 				return (-1);
-			count += q_count;
 		}
-		else if ((i > 0 && s[i] != ' ' && s[i - 1] == ' ')
-			|| (i > 0 && s[i] != ' ' && s[i - 1] == '\'')
-			|| (i > 0 && s[i] != ' ' && s[i - 1] == '\"'))
+		else if (i > 0 && s[i] != ' ' && s[i - 1] == ' ')
 			count++;
 		if (s[i])
 			i++;

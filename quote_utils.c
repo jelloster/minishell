@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+/*
 int	count_quoted_words(char const *s, int *i)
 {
 	int	count;
@@ -30,6 +31,7 @@ int	count_quoted_words(char const *s, int *i)
 			(*i)++;
 	return (count);
 }
+*/
 
 int	strlen_quotes(char const *s, char q)
 {
