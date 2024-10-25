@@ -102,6 +102,11 @@ int	pipex(t_cmd *cmds, int cmd_n);
 void	redirect_input(char *file);
 void	redirect_output(char *file);
 
+//	quote_utils.c
+int	count_quoted_words(char const *s, int *i);
+int	strlen_quotes(char const *s, char q);
+char	*quoted_strcpy(const char *from, char *to, char q);
+
 //	init_ms.c
 int	init_ms(int ac, char *av[], char *envp[], t_ms *ms);
 

@@ -35,19 +35,18 @@ char	**cmd_split(char const *s)
 
 static char	**quoted_args(char **res, char const **s, char **r_s, char c)
 {
-	char	*split;
+	char	*res_str;
+	int	len;
 
 	(*s)++;
-	split = malloc(sizeof(char) * (strlen_mod(*s, c) + 1));
-	if (!split)
+	len = strlen_quotes(*s, c);
+	res_str = malloc(sizeof(char) * (len + 1));
+	if (!res_str)
 		return (cmd_free_memory(res, r_s));
-	if (!ft_strlcpy(split, *s, strlen_mod(*s, c) + 1))
-	{
-		free (split);
-		return (cmd_free_memory(res, r_s));
-	}
-	*s += strlen_mod(*s, c) + 1;
-	*(res++) = split;
+	quoted_strcpy(*s, res_str, c); // how can this fail?
+	if ((*s)[len] != '\0')
+		*s += ft_strlen(*s);
+	*(res++) = res_str;
 	return (res);
 }
 
@@ -70,42 +69,32 @@ static char	**normal_args(char **res, char const **s, char **r_s)
 	return (res);
 }
 
+// doesnt work with "hel"lo
 static int	cmd_count_words(char const *s)
 {
 	int		i;
 	int		count;
+	int		q_count;
 
 	i = 0;
 	count = 1;
-	while (s[i] != '\0') // invalid read size
+	while (s[i] != '\0')
 	{
-		// If we find a single quote
-		if (s[i] == '\'') // What about double quote?
+		if (s[i] == '\'' || s[i] == '\"')
 		{
-			// Add 1 to count if it's not the first word
-			if (i > 0)
-				count++;
-
-			// Move past the single quote
-			i++;
-
-			// Iterate to the single quote pair
-			while (s[i] != '\'' && s[i])
-				i++;
-
-			if (!s[i])
+			q_count = count_quoted_words(s, &i);
+			if (q_count == -1)
 				return (-1);
-
-			/*
-			// Iterate past the single quote (it's done later too)
-			if (s[i] == '\'')
-				i++;
-			*/
+			count += q_count;
 		}
-		else if (i > 0 && s[i] != ' ' && s[i - 1] == ' ') // invalid readsize when cat test.txt '
+		else if ((i > 0 && s[i] != ' ' && s[i - 1] == ' ')
+			|| (i > 0 && s[i] != ' ' && s[i - 1] == '\'')
+			|| (i > 0 && s[i] != ' ' && s[i - 1] == '\"'))
 			count++;
-		i++;
+		if (s[i])
+			i++;
 	}
+	printf("word count : %d\n.", count);
 	return (count);
 }
 
