@@ -128,6 +128,8 @@ int	extract_pathed_cmd(t_cmd *cmd, char **paths)
 		return (0);
 	if (cmd->args[0])
 		slashed_cmd = ft_strjoin("/", cmd->args[0]);
+	else
+		return (0);
 	if (!slashed_cmd)
 		return (-1);
 	while (paths[i] != NULL)

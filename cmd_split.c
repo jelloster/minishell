@@ -30,7 +30,7 @@ char	**cmd_split(char const *s)
 		while (*s == ' ')
 			s++;
 		if (*s)
-			*res = arg_cpy(res, &s, res_start);
+			arg_cpy(res, &s, res_start);
 		/*
 		if (*s == '\'' || *s == '\"')
 			res = quoted_args(res, &s, res_start, *s); // echo he"he"!!
@@ -38,6 +38,7 @@ char	**cmd_split(char const *s)
 			res = normal_args(res, &s, res_start); */
 		if (!*res)
 			return (NULL);
+		res++;
 	}
 	*res = NULL;
 	return (res_start);
@@ -54,7 +55,8 @@ char	*arg_cpy(char **res, char const **s, char **r_s)
 		return (cmd_free_memory(res, r_s));
 	arg_strcpy(*s, arg);
 	*s += arg_total_strlen((char *)*s); // ? 
-	*(res++) = arg;
+	*(res++) = arg; // doesnt move res in cmd_split?
+	printf("arg : %s.\n", arg);
 	return (arg);
 }
 
