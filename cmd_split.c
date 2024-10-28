@@ -2,8 +2,15 @@
 
 static int		cmd_count_words(char const *s);
 static void		*cmd_free_memory(char **res, char **r_s);
-static char		**normal_args(char **arg, char const **s, char **r_s);
-static char		**quoted_args(char **res, char const **s, char **r_s, char c);
+//static char		**normal_args(char **arg, char const **s, char **r_s);
+//static char		**quoted_args(char **res, char const **s, char **r_s, char c);
+//
+
+char	*arg_cpy(char **res, char const **s, char **r_s);
+int	arg_strcpy(const char *from, char *to);
+int	arg_strlen(char *s);
+int	arg_total_strlen(char *s);
+int	has_quote_pair(char *s, char quote, int len);
 
 char	**cmd_split(char const *s)
 {
@@ -22,17 +29,132 @@ char	**cmd_split(char const *s)
 	{
 		while (*s == ' ')
 			s++;
+		if (*s)
+			*res = arg_cpy(res, &s, res_start);
+		/*
 		if (*s == '\'' || *s == '\"')
 			res = quoted_args(res, &s, res_start, *s); // echo he"he"!!
 		if (*s != ' ' && *s != '\0')
-			res = normal_args(res, &s, res_start);
-		if (!res)
+			res = normal_args(res, &s, res_start); */
+		if (!*res)
 			return (NULL);
 	}
 	*res = NULL;
 	return (res_start);
 }
 
+char	*arg_cpy(char **res, char const **s, char **r_s)
+{
+	char	*arg;
+	int	len;
+
+	len = arg_strlen((char *)*s);
+	arg = malloc(sizeof(char) * (len + 1));
+	if (!arg)
+		return (cmd_free_memory(res, r_s));
+	arg_strcpy(*s, arg);
+	*s += arg_total_strlen((char *)*s); // ? 
+	*(res++) = arg;
+	return (arg);
+}
+
+int	arg_strcpy(const char *from, char *to)
+{
+	char	quote;
+
+	while (*from != ' ' && *from)
+	{
+		if (*from != '\'' && *from != '\"')
+			*to++ = *from++;
+		else
+		{
+			quote = *from;
+			if (has_quote_pair((char *)from, quote, 0))
+			{
+				from++;
+				while (*from != quote)
+					*to++ = *from++;
+				from++;
+			}
+			else
+				return (-1);
+		}
+	}
+	*to = '\0';
+	return (1);
+
+}
+
+int	arg_strlen(char *s)
+{
+	int	len;
+	int	quote_n;
+	char	quote;
+
+	len = 0;
+	quote_n = 0;
+	while (s[len] != ' ' && s[len])
+	{
+		if (s[len] != '\'' && s[len] != '\"')
+			len++;
+		else
+		{
+			quote = s[len];
+			if (has_quote_pair(s, quote, len))
+			{
+				len++;
+				while (s[len] != quote)
+					len++;
+				quote_n += 2;
+				len++;
+			}
+			else
+				return (-1); // ?
+		}
+	}
+	printf("arg_stlen : %d.\n", len - quote_n);
+	return (len - quote_n);
+}
+
+int	arg_total_strlen(char *s)
+{
+	int	len;
+	char	quote;
+
+	len = 0;
+	while (s[len] != ' ' && s[len])
+	{
+		if (s[len] != '\'' && s[len] != '\"')
+			len++;
+		else
+		{
+			quote = s[len];
+			if (has_quote_pair(s, quote, len))
+			{
+				len++;
+				while (s[len] != quote)
+					len++;
+				len++;
+			}
+			else
+				return (-1); // ?
+		}
+	}
+	return (len);
+}
+int	has_quote_pair(char *s, char quote, int len)
+{
+	len++;
+	while (s[len])
+	{
+		if (s[len] == quote)
+			return (len);
+		len++;
+	}
+	return (0);
+}
+
+/*
 static char	**quoted_args(char **res, char const **s, char **r_s, char c)
 {
 	char	*res_str;
@@ -68,7 +190,7 @@ static char	**normal_args(char **res, char const **s, char **r_s)
 	*s += strlen_mod(*s, c);
 	return (res);
 }
-
+*/
 // count is wrong echo "-n hello wassup"
 static int	cmd_count_words(char const *s)
 {
