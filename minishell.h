@@ -16,6 +16,7 @@
 # include <curses.h>      // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
 # include <sys/ioctl.h>   // ioctl
 # include <readline/readline.h>
+# include <readline/history.h>
 
 # include "libft/inc/libft.h"
 
@@ -118,6 +119,11 @@ void	ms_echo(char *str, int flag, int fd);
 //	history.c
 int	update_history(t_ms *ms, char *cmd_line);
 /* - Command line parsing - */
+
+int	arg_strcpy(const char *from, char *to);
+int	arg_strlen(char *s);
+int	arg_total_strlen(char *s);
+int	has_quote_pair(char *s, char quote, int len);
 
 //	parsing.c
 t_cmd	*parse(char *cmd_line, t_ms *ms);

@@ -23,6 +23,7 @@ SRC_FILES		:=	main.c			\
 				memory_functions.c	\
 				history.c		\
 				quote_utils.c		\
+				arg_cpy.c			\
 # ms_echo.c
 
 # ------- PIPEX --------

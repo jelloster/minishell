@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/09/11 15:46:54 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/10/28 14:47:22 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	main(int ac, char *av[], char *envp[])
 	{
 		waitpid(-1, NULL, 0);
 		ms.cmd_line = readline("> "); // malloc 2
+		if (ms.cmd_line)
+			add_history(ms.cmd_line);
 		if (!ms.cmd_line)
 			return (1);
 		cmds = parse(ms.cmd_line, &ms); // malloc 3 (cmds)

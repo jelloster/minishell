@@ -1,19 +1,4 @@
-/*
-char	*arg_cpy(char **res, char const **s, char **r_s)
-{
-	char	*arg;
-	char	quote;
-	int	len;
-
-	len = arg_strlen(*s);
-	arg = malloc(sizeof(char) * (len + 1));
-	if (!arg)
-		return (cmd_free_memory(res, r_s));
-	arg_strcpy(*s, arg);
-	*s += arg_total_strlen(*s); // ? 
-	*(res++) = arg;
-	return (arg);
-}
+#include "minishell.h"
 
 int	arg_strcpy(const char *from, char *to)
 {
@@ -26,25 +11,26 @@ int	arg_strcpy(const char *from, char *to)
 		else
 		{
 			quote = *from;
-			if (has_quote_pair(from, quote, 0))
+			if (has_quote_pair((char *)from, quote, 0))
 			{
-				*from++;
+				from++;
 				while (*from != quote)
 					*to++ = *from++;
-				*from++;
+				from++;
 			}
 			else
 				return (-1);
 		}
 	}
+	*to = '\0';
 	return (1);
 
 }
 
 int	arg_strlen(char *s)
 {
-	int	len;
-	int	quote_n;
+	int		len;
+	int		quote_n;
 	char	quote;
 
 	len = 0;
@@ -68,7 +54,6 @@ int	arg_strlen(char *s)
 				return (-1); // ?
 		}
 	}
-	printf("arg_stlen : %d.\n", len - quote_n);
 	return (len - quote_n);
 }
 
@@ -108,4 +93,4 @@ int	has_quote_pair(char *s, char quote, int len)
 		len++;
 	}
 	return (0);
-} */
+}
