@@ -1,14 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_split.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/28 15:28:56 by motuomin          #+#    #+#             */
+/*   Updated: 2024/10/28 15:55:47 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int		cmd_count_words(char const *s);
 static void		*cmd_free_memory(char **res, char **r_s);
-static char	*arg_cpy(char **res, char const **s, char **r_s);
+static char		*arg_cpy(char **res, char const **s, char **r_s);
+static int		iterate_quoted_word(char const *s, int *i, char quote);
 
 char	**cmd_split(char const *s)
 {
 	char	**res;
 	char	**res_start;
-	int	count;
+	int		count;
 
 	count = cmd_count_words(s);
 	if (count == -1)
@@ -34,7 +47,7 @@ char	**cmd_split(char const *s)
 static char	*arg_cpy(char **res, char const **s, char **r_s)
 {
 	char	*arg;
-	int	len;
+	int		len;
 
 	len = arg_strlen((char *)*s);
 	arg = malloc(sizeof(char) * (len + 1));
@@ -46,13 +59,10 @@ static char	*arg_cpy(char **res, char const **s, char **r_s)
 	return (arg);
 }
 
-
-
 static int	cmd_count_words(char const *s)
 {
 	int		i;
 	int		count;
-	char	quote;
 
 	i = 0;
 	count = 1;
@@ -64,12 +74,8 @@ static int	cmd_count_words(char const *s)
 		{
 			if (i > 0)
 				count++;
-			quote = s[i];
-			i++;
-			while (s[i] != quote && s[i])
-				i++;
-			if (!s[i])
-				return (-1);
+			if (!iterate_quoted_word(s, &i, s[i]))
+				return (0);
 		}
 		else if (i > 0 && s[i] != ' ' && s[i - 1] == ' ')
 			count++;
@@ -77,6 +83,16 @@ static int	cmd_count_words(char const *s)
 			i++;
 	}
 	return (count);
+}
+
+static int	iterate_quoted_word(char const *s, int *i, char quote)
+{
+	(*i)++;
+	while (s[*i] != quote && s[*i])
+		(*i)++;
+	if (!s[*i]) // checks quote here as well.. other ones useless?
+		return (-1);
+	return (1);
 }
 
 static void	*cmd_free_memory(char **res, char **res_start)

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/10/28 14:47:22 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:08:42 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,7 @@ int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 		free_array_of_arrays(ms->paths);
 		ms->paths = NULL;
 	}
-	if (ms->history)
-	{
-		free_array_of_arrays(ms->history);
-		ms->history = NULL;
-	}
+	// free history?
 	if (cmds)
 	{
 		free_cmds(cmds, ms->cmd_n);
