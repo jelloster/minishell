@@ -35,8 +35,9 @@ char	**cmd_split(char const *s)
 		while (*s == ' ')
 			s++;
 		if (*s)
-			arg_cpy(res, &s, res_start);
-		if (!*res)
+			if (!arg_cpy(res, &s, res_start))
+				return (NULL); // free res
+		if (!*res) // heap buffer overflow
 			return (NULL);
 		res++;
 	}
@@ -75,7 +76,7 @@ static int	cmd_count_words(char const *s)
 			if (i > 0)
 				count++;
 			if (!iterate_quoted_word(s, &i, s[i]))
-				return (0);
+				return (-1);
 		}
 		else if (i > 0 && s[i] != ' ' && s[i - 1] == ' ')
 			count++;
@@ -91,7 +92,7 @@ static int	iterate_quoted_word(char const *s, int *i, char quote)
 	while (s[*i] != quote && s[*i])
 		(*i)++;
 	if (!s[*i]) // checks quote here as well.. other ones useless?
-		return (-1);
+		return (0);
 	return (1);
 }
 

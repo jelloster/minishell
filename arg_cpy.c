@@ -35,9 +35,10 @@ void	arg_strcpy(const char *from, char *to)
 		{
 			quote = *from;
 			from++;
-			while (*from != quote)
+			while (*from != quote && *from)
 				*to++ = *from++;
-			from++;
+			if (*from)
+				from++;
 		}
 	}
 	*to = '\0';
