@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:28:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/10/28 15:55:47 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:11:28 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**cmd_split(char const *s)
 	count = cmd_count_words(s);
 	if (count == -1)
 		return (NULL);
-	res = malloc((count + 1) * sizeof(char *));
+	res = malloc((count + 1) * sizeof(char *)); // memleak if redir fail
 	if (!res)
 		return (NULL);
 	res_start = res;
@@ -37,7 +37,7 @@ char	**cmd_split(char const *s)
 		if (*s)
 			if (!arg_cpy(res, &s, res_start))
 				return (NULL); // free res
-		if (!*res) // heap buffer overflow
+		if (!*res)
 			return (NULL);
 		res++;
 	}
@@ -51,7 +51,7 @@ static char	*arg_cpy(char **res, char const **s, char **r_s)
 	int		len;
 
 	len = arg_strlen((char *)*s);
-	arg = malloc(sizeof(char) * (len + 1));
+	arg = malloc(sizeof(char) * (len + 1)); // memleak
 	if (!arg)
 		return (cmd_free_memory(res, r_s));
 	arg_strcpy(*s, arg);

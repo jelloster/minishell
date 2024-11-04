@@ -6,13 +6,10 @@
 
 int	exe_cmd(t_cmd *cmd)
 {
-	if (cmd->redir != NONE)
-	{
-		if (cmd->redir == INPUT)
-			redirect_input(cmd->file);
-		else if (cmd->redir == REPLACE)
-			redirect_output(cmd->file);
-	}
+	if (cmd->inredir == INPUT && cmd->infile)
+		redirect_input(cmd->infile);
+	if (cmd->outredir == REPLACE && cmd->outfile)
+		redirect_output(cmd->outfile);
 	if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
 	{
 		execve(cmd->pathed_cmd, cmd->args, cmd->envp);

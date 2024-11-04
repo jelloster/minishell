@@ -43,13 +43,13 @@ typedef struct s_cmd
 {
 	char	**args;
 	char	*pathed_cmd;
-	char	*file;
+	// char	*file;
 	char	*infile; // < infile cat > outfile
 	char	*outfile;
 	char	**envp;
 	//t_redir	redir; // what if 2 ? not allowd in pipe!
 	t_redir outredir;
-	t_redit inredit;
+	t_redir inredir;
 }	t_cmd;
 
 typedef struct s_ms
@@ -60,6 +60,7 @@ typedef struct s_ms
 	char	*cmd_line;
 	int		error;
 	int		cmd_n;
+	int		parsed_cmds;
 }	t_ms;
 
 typedef enum e_color
@@ -143,5 +144,6 @@ void	clear_terminal(void);
 size_t	strlen_mod(char const *s, char c);
 int		free_array_of_arrays(char **arr);
 int		str_in_array_of_strs(char *str, char **strs);
+int		strstrlen(char **strs);
 
 #endif

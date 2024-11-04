@@ -42,8 +42,10 @@ size_t	count_cmds(char **split)
 void	init_cmd(t_cmd *cmd, t_ms *ms)
 {
 	cmd->envp = ms->envp;
-	cmd->redir = NONE;
-	cmd->file = NULL;
+	cmd->inredir = NONE;
+	cmd->outredir = NONE;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->pathed_cmd = NULL;

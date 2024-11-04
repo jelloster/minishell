@@ -21,6 +21,7 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 	ms->envp = envp;
 	ms->cmd_n = 0;
 	ms->error = 0;
+	ms->parsed_cmds = 0;
 	ms->paths = extract_paths(envp); // malloc 1
 	if (!ms->paths)
 		return (0);

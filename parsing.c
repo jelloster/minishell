@@ -28,7 +28,12 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		free_array_of_arrays(split_cmd_line);
 		return (NULL);
 	}
-	init_cmds(cmds, split_cmd_line, ms);
+	if (!init_cmds(cmds, split_cmd_line, ms))
+	{
+		free_array_of_arrays(split_cmd_line);
+		free_cmds(cmds, ms->parsed_cmds); // is it always cmd_n
+		return (NULL);
+	}
 	return (cmds);
 }
 
@@ -83,7 +88,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	int	i;
 
 	// Allocate memory for the command's args
-	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc
+	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc // leak when "q"
 	cmd->args[size] = NULL;
 	if (!cmd->args)
 		return (0);
@@ -95,11 +100,12 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	i = -1;
 	while (++i < (int)size)
 	{
-		cmd->args[i] = ft_strdup(split[i]); // Leak?
+		cmd->args[i] = ft_strdup(split[i]); // Leak when "q"
 		if (!cmd->args[i])
 			return (0);
 	}
 	
+	ms->parsed_cmds++;
 	// Check for redirections
 	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));

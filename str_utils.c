@@ -49,3 +49,14 @@ int	str_in_array_of_strs(char *str, char **strs)
 	}
 	return (0);
 }
+
+int	strstrlen(char **strs)
+{
+	int	len;
+
+	len = 0;
+	if (strs)
+		while (strs[len])
+			len++;
+	return (len);
+}
