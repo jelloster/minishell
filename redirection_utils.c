@@ -11,24 +11,70 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 {
 	int	i;
 	int	len;
+	int	redirs;
 
 	i = 0;
-	while (!is_redirection(cmd->args[i], ft_strlen(cmd->args[i])))
+	redirs = 0;
+	while (cmd->args[i])
+	{
+		len = ft_strlen(cmd->args[i]);
+		if (is_redirection(cmd->args[i], len)
+		{ 
+			// redir not last, (has file after), no 2 redirs behind each other
+			if (!ft_strncmp(">", cmd->args[i], len)
+				&& cmd->outredir == NONE && cmd->args[i + 1])
+				cmd->outredir = REPLACE;
+			else if (!ft_strncmp("<", cmd->args[i], len)
+				&& cmd->inredir == NONE && cmd->args[i + 1])
+				cmd->inredir = INPUT;
+			else if (!ft_strncmp(">>", cmd->args[i], len)
+				&& cmd->outredir == NONE && cmd->args[i + 1])
+				cmd->outredir = ADD;
+			else if (!ft_strncmp("<<", cmd->args[i], len)
+				&& cmd->inredir == NONE && cmd->args[i + 1])
+				cmd->inredir = STD_IN;
+			else
+				return (0);
+			redirs++;
+		}
 		i++;
-	len = ft_strlen(cmd->args[i]);
-	if (!ft_strncmp(">", cmd->args[i], len))
-		cmd->redir = REPLACE;
-	else if (!ft_strncmp("<", cmd->args[i], len))
-		cmd->redir = INPUT;
-	else if (!ft_strncmp(">>", cmd->args[i], len))
-		cmd->redir = ADD;
-	else if (!ft_strncmp("<<", cmd->args[i], len))
-		cmd->redir = STD_IN;
+	}
+	if (redirs > 2)
+		return (0);
 	if (i == 0)
 		return (command_last(cmd, paths));
 	else
 		return (command_first(cmd, i, paths));
 }
+
+// file always comes after the redir (unless std int??)
+static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
+{
+	int	len;
+	char	**new_args;
+	int	i;
+
+	len = 0;
+	i = 0;
+	while (cmd->args[len])
+		len++;
+	new_args = malloc((len - redirs * 2) * sizeof(char *));
+	while (cmd->args[i])
+	{
+		len = ft_strlen(cmd->args[i]);
+		if (is_redirection(cmd->args[i], len)
+		{
+			
+		}
+		i++;
+	}
+
+
+
+	
+
+}
+
 
 /* Function : command_first
  *

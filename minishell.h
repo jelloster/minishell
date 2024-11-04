@@ -47,9 +47,9 @@ typedef struct s_cmd
 	char	*infile; // < infile cat > outfile
 	char	*outfile;
 	char	**envp;
-	t_redir	redir; // what if 2 ? not allowd in pipe!
-	//t_redir outredir;
-	//t_redit inredit;
+	//t_redir	redir; // what if 2 ? not allowd in pipe!
+	t_redir outredir;
+	t_redit inredit;
 }	t_cmd;
 
 typedef struct s_ms
