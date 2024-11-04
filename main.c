@@ -6,82 +6,78 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/10/28 15:08:42 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
-int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
-void	err(t_ms *ms);
+static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
-// if threads duplicate memory, they need to be freed there too!!!
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
 	t_cmd	*cmds;
 
+	// Give ms struct basic info
 	if (!init_ms(ac, av, envp, &ms))
 		return (1);
 	while (1)
 	{
+		// Wait for execution threads to finish
 		waitpid(-1, NULL, 0);
-		ms.cmd_line = readline("> "); // malloc 2
+
+		// Prompt
+		ms.cmd_line = readline("> ");
+
+		// Add to history
 		if (ms.cmd_line)
 			add_history(ms.cmd_line);
-		if (!ms.cmd_line)
-			return (1);
-		cmds = parse(ms.cmd_line, &ms); // malloc 3 (cmds)
+		else
+			return (free_ms(&ms, ms.cmd_line, NULL, 1));
+
+		// Parse command line into an array of t_cmd structs.
+		cmds = parse(ms.cmd_line, &ms);
 		if (!cmds)
 			err(&ms);
+
+		// Execute commands if there was no error in parsing
 		if (!ms.error)
-			exe_or_pipe(&ms, cmds);
+			if(!exe_or_pipe(&ms, cmds))
+				return (free_ms(&ms, ms.cmd_line, cmds, 1));
+
+		// Reset
 		free(ms.cmd_line);
 		ms.error = 0;
 	}
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
-void	err(t_ms *ms)
-{
-	printf("Error.\n");
-	ms->error = 1;
-}
-
-int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
+static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 {
 	int	pid;
 
+	// Fork the process into main process and executable
 	pid = fork();
 	if (pid == -1)
-		exit(0);
+		return(0);
+
+	// Executing (child) fork
 	if (pid == 0)
 	{
+		// If there is just 1 cmd, execute it
 		if (ms->cmd_n == 1)
 			exe_cmd(cmds);
+
+		// Otherwise use pipex
 		else if (ms->cmd_n != 0)
 			pipex(cmds, ms->cmd_n);
-		free_ms(ms, ms->cmd_line, cmds, 1);
-		exit(1);
-	}
-	free_cmds(cmds, ms->cmd_n);
-	return (0);
-}
 
-int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
-{
-	if (ms->paths)
-	{
-		free_array_of_arrays(ms->paths);
-		ms->paths = NULL;
+		// If the execve fails, free memory and exit
+		free_ms(ms, ms->cmd_line, cmds, 1);
+		exit(1); // Exit value? // Should whole process stop ??
 	}
-	// free history?
-	if (cmds)
-	{
-		free_cmds(cmds, ms->cmd_n);
-	}
-	if (cmd_line)
-		ft_memdel(&cmd_line);
-	return (ret);
+	// Free parsed cmds
+	free_cmds(cmds, ms->parsed_cmds);
+	return (1);
 }

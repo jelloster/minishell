@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_ms.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/04 16:06:53 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:07:06 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	init_ms_struct(char *av[], char *envp[], t_ms *ms);
@@ -7,10 +19,8 @@ int	init_ms(int ac, char *av[], char *envp[], t_ms *ms)
 {
 	if (ac != 1)
 		return (0);
-
 	if(!init_ms_struct(av, envp, ms))
 		return (0);
-
 	welcome_msg();
 	return (1);
 }

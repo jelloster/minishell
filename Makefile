@@ -22,6 +22,7 @@ SRC_FILES		:=	main.c			\
 				redirection_utils.c	\
 				memory_functions.c	\
 				arg_cpy.c			\
+				error_utils.c
 # ms_echo.c
 
 # ------- PIPEX --------
@@ -31,7 +32,6 @@ PIPEX_FILES		:=	awk_split.c	\
 				error_utils.c	\
 				pipex.c		\
 				pipe_utils.c	\
-				str_utils.c	\
 
 PIPEX_SRC		:=	$(addprefix $(PIPEX_PATH), $(PIPEX_FILES))
 PIPEX_OBJ		:=	$(PIPEX_SRC:.c=.o)

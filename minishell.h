@@ -133,8 +133,14 @@ int		check_for_redirections(t_cmd *cmd);
 
 //		memory_functions.c
 int		free_cmds(t_cmd *cmds, int cmd_n);
+int		free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
+void	*free_array_of_arrays(char **arr);
 
 /* - Miscellaneous - */
+
+//		error_utils.c
+void	err(t_ms *ms);
+
 
 //		print_utils.c
 void	print_in_color(const char *str, t_color color);
@@ -142,7 +148,6 @@ void	clear_terminal(void);
 
 //		str_utils.c
 size_t	strlen_mod(char const *s, char c);
-int		free_array_of_arrays(char **arr);
 int		str_in_array_of_strs(char *str, char **strs);
 int		strstrlen(char **strs);
 

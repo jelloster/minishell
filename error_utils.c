@@ -1,47 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_utils.c                                        :+:      :+:    :+:   */
+/*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 12:47:43 by motuomin          #+#    #+#             */
-/*   Updated: 2024/06/18 13:30:47 by motuomin         ###   ########.fr       */
+/*   Created: 2024/11/04 16:05:29 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:05:31 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "minishell.h"
 
-/*
-int	free_array_of_arrays(char **arr)
+void	err(t_ms *ms)
 {
-	size_t	i;
-
-	i = 0;
-	if (arr)
-	{
-		while (arr[i])
-		{
-			if (arr[i])
-			{
-				free(arr[i]);
-				arr[i] = NULL;
-			}
-			i++;
-		}
-		free(arr);
-		arr = NULL;
-	}
-	return (-1);
+	printf("Error.\n");
+	ms->error = 1;
 }
-
-size_t	strlen_mod(char const *s, char c)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i] != c && s[i] != '\0')
-		i++;
-	return (i);
-}
-*/

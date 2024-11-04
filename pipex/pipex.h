@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:01:01 by motuomin          #+#    #+#             */
-/*   Updated: 2024/10/10 16:09:01 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:27:10 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int		read_and_write(t_cmd cmd, int fd_r, int fd_w);
 int		read_from_pipe(t_cmd cmd, int fd);
 
 //	str_utils.c
-int		free_array_of_arrays(char **arr);
 size_t	strlen_mod(char const *s, char c);
 
 //	awk_split.c

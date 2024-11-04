@@ -99,6 +99,13 @@ static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
 	return (extract_pathed_cmd(cmd, paths));
 }
 
+/*
+ * Function : check_for_redirections
+ *
+ * Returns 1 if there is a redirection symbol in the args of the given cmd and
+ * 0 otherwise.
+*/
+
 int	check_for_redirections(t_cmd *cmd)
 {
 	if (str_in_array_of_strs(">", cmd->args))
@@ -112,6 +119,12 @@ int	check_for_redirections(t_cmd *cmd)
 	return (0);
 }
 
+/*
+ * Function : is_redirection
+ *
+ * Returns 1 if the given string (str) of size (len) is a redirection symbol
+ * and 0 if it isn't.
+*/
 static int	is_redirection(char *str, size_t len)
 {
 	if (!ft_strncmp(">", str, len))
@@ -125,11 +138,15 @@ static int	is_redirection(char *str, size_t len)
 	return (0);
 }
 
+/*
+ * Function : is_out_redirection
+ *
+ * Returns 1 if the given string (str) is ">" or ">>", otherwise a 0.
+*/
+
 static int	is_out_redirection(char *str, size_t len)
 {
-	if (!ft_strncmp(">", str, len))
-		return (1);
-	else if (!ft_strncmp(">>", str, len))
+	if (!ft_strncmp(">", str, len) || !ft_strncmp(">>", str, len))
 		return (1);
 	return (0);
 }

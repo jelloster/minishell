@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:33:07 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms);
@@ -15,24 +27,23 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	t_cmd	*cmds;
 	char	**split_cmd_line;
 
+	ms->parsed_cmds = 0;
 	// Split the command line into separate strings
-	split_cmd_line = cmd_split(cmd_line); // malloc 3 (leak?)
+	split_cmd_line = cmd_split(cmd_line); // malloc 3
 	if (!split_cmd_line)
 		return (NULL);
 
 	// Allocate memory for x num of commands
 	ms->cmd_n = count_cmds(split_cmd_line);
-	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc (leak?)
+	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc 4
 	if (!cmds)
-	{
-		free_array_of_arrays(split_cmd_line);
-		return (NULL);
-	}
+		return (free_array_of_arrays(split_cmd_line));
+
+	// Init command structs & fill them with appropriate info
 	if (!init_cmds(cmds, split_cmd_line, ms))
 	{
-		free_array_of_arrays(split_cmd_line);
-		free_cmds(cmds, ms->parsed_cmds); // is it always cmd_n
-		return (NULL);
+		free_cmds(cmds, ms->parsed_cmds);
+		return (free_array_of_arrays(split_cmd_line));
 	}
 	return (cmds);
 }
@@ -54,11 +65,15 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 	i = 0;
 	j = 0;
 	cmd_i = 0;
+
+	// Iterate through split cmd line
 	while (split[i])
 	{
+		// If a pipe is encountered or we're at the end of the string
 		if (ft_strncmp(split[i], "|", ft_strlen(split[i])) == 0
 			|| split[i + 1] == NULL)
 		{
+			// Select size of the cmds args based on if it's in a pipe or not
 			if (split[i + 1] == NULL)
 				size = i - j + 1;
 			else
@@ -68,11 +83,12 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 			i++;
 			j = i;
 		}
+		// Otherwise keep iterating
 		else
 			i++;
 	}
 	free_array_of_arrays(split);
-	// free split cmd line (pipes etc. are not freed!)
+	// free split cmd line (pipes etc. are not freed!) ????
 	return (1);
 }
 
@@ -88,10 +104,10 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	int	i;
 
 	// Allocate memory for the command's args
-	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc // leak when "q"
-	cmd->args[size] = NULL;
+	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc ?
 	if (!cmd->args)
 		return (0);
+	cmd->args[size] = NULL;
 
 	// Give the command basic info
 	init_cmd(cmd, ms);

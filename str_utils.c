@@ -1,26 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   str_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/04 13:59:36 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:21:52 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	free_array_of_arrays(char **arr)
-{
-	size_t	i;
-
-	i = 0;
-	if (arr)
-	{
-		while (arr[i])
-		{
-			if (arr[i])
-			{
-				free(arr[i]);
-				arr[i] = NULL;
-			}
-			i++;
-		}
-		free(arr);
-		arr = NULL;
-	}
-	return (-1);
-}
 
 size_t	strlen_mod(char const *s, char c)
 {
