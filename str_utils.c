@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/*
+ * Function: strlen_mod
+ *
+ * Returns the len of a str until a given character (c)
+ * or to the end of the string.
+*/
+
 size_t	strlen_mod(char const *s, char c)
 {
 	size_t	i;
@@ -21,6 +28,13 @@ size_t	strlen_mod(char const *s, char c)
 		i++;
 	return (i);
 }
+
+/*
+ * Function : str_in_array_of_strs
+ *
+ * Returns 1 if a given string (str) can be found in an array of strings (strs),
+ * Returns 0 if not.
+*/
 
 int	str_in_array_of_strs(char *str, char **strs)
 {
@@ -39,6 +53,12 @@ int	str_in_array_of_strs(char *str, char **strs)
 	}
 	return (0);
 }
+
+/*
+ * Function : strstrlen
+ *
+ * Calculates and returns the length of an array of strs
+*/
 
 int	strstrlen(char **strs)
 {

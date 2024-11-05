@@ -1,22 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	free_n_exit(char *t_cmd, char *s_cmd, char **args, int ret)
-{
-	size_t	i;
-
-	i = 0;
-	if (t_cmd)
-		free(t_cmd);
-	if (s_cmd)
-		free(s_cmd);
-	if (args)
-	{
-		while (args[i])
-			free(args[i++]);
-		free(args);
-	}
-	return (ret);
-}
+/*
+ * Function : count_cmds
+ *
+ * Counts how many commands are in the (split) command line.
+ *
+ * Example:
+ * "echo" "hello" "|" "wc" "-l"
+ * count : 2
+*/
 
 size_t	count_cmds(char **split)
 {
@@ -38,6 +42,12 @@ size_t	count_cmds(char **split)
 	else
 		return (1);
 }
+
+/*
+ * Function : init_cmd
+ *
+ * Gives the cmd struct basic info and sets pointers to null
+*/
 
 void	init_cmd(t_cmd *cmd, t_ms *ms)
 {

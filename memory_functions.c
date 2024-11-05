@@ -21,7 +21,7 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 	{
 		while (i < cmd_n)
 		{
-			if (cmds[i].pathed_cmd && cmds[i].args[0] != cmds[i].pathed_cmd) // heap buffer overflow
+			if (cmds[i].pathed_cmd && cmds[i].args[0] != cmds[i].pathed_cmd)
 				ft_memdel(&cmds[i].pathed_cmd);
 			if (cmds[i].args)
 				free_array_of_arrays(cmds[i].args);
@@ -34,7 +34,7 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 		free(cmds);
 		cmds = NULL;
 	}
-	return(0);
+	return (0);
 }
 
 int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
@@ -72,5 +72,31 @@ void	*free_array_of_arrays(char **arr)
 		free(arr);
 		arr = NULL;
 	}
+	return (NULL);
+}
+
+int	free_n_exit(char *t_cmd, char *s_cmd, char **args, int ret)
+{
+	size_t	i;
+
+	i = 0;
+	if (t_cmd)
+		free(t_cmd);
+	if (s_cmd)
+		free(s_cmd);
+	if (args)
+	{
+		while (args[i])
+			free(args[i++]);
+		free(args);
+	}
+	return (ret);
+}
+
+void	*cmd_free_memory(char **res, char **res_start)
+{
+	while (res > res_start)
+		free(*(--res));
+	free(res_start);
 	return (NULL);
 }

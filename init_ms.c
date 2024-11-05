@@ -15,15 +15,28 @@
 static int	init_ms_struct(char *av[], char *envp[], t_ms *ms);
 static void	welcome_msg(void);
 
+/*
+ * Function : init_ms
+ *
+ * Calls the init_ms_struct function, clears the terminal,
+ * and prints a welcome message.
+*/
+
 int	init_ms(int ac, char *av[], char *envp[], t_ms *ms)
 {
 	if (ac != 1)
 		return (0);
-	if(!init_ms_struct(av, envp, ms))
+	if (!init_ms_struct(av, envp, ms))
 		return (0);
 	welcome_msg();
 	return (1);
 }
+
+/*
+ * Function : init_ms_struct
+ *
+ * Fills the ms struct with basic info.
+*/
 
 static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 {
@@ -37,6 +50,13 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 		return (0);
 	return (1);
 }
+
+/*
+ * Function : welcome_msg
+ *
+ * Clears the terminal and prints out a welcome message.
+ * (Welcome message defined in minishell.h)
+*/
 
 static void	welcome_msg(void)
 {

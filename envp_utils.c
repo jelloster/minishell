@@ -1,4 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+/*
+ * Function : extract_paths
+ *
+ * Finds the PATH info from envp and returns the paths in an array of strings,
+ * or NULL in case of error.
+*/
 
 char	**extract_paths(char *envp[])
 {
@@ -12,7 +31,7 @@ char	**extract_paths(char *envp[])
 	if (envp[i] == NULL)
 		return (NULL);
 	path_env = envp[i] + 5;
-	paths = ft_split(path_env, ':'); // malloc
+	paths = ft_split(path_env, ':'); // malloc 1
 	if (!paths)
 		return (NULL);
 	return (paths);

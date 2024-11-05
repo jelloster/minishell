@@ -13,9 +13,15 @@
 #include "minishell.h"
 
 static int		cmd_count_words(char const *s);
-static void		*cmd_free_memory(char **res, char **r_s);
-static char		*arg_cpy(char **res, char const **s, char **r_s);
 static int		iterate_quoted_word(char const *s, int *i, char quote);
+
+/*
+ * Function : cmd_split
+ *
+ * Splits the command line (s) into arguments while handling quoted
+ * sections. Returns a NULL-terminated array of strings, or NULL on
+ * failure.
+*/
 
 char	**cmd_split(char const *s)
 {
@@ -26,7 +32,7 @@ char	**cmd_split(char const *s)
 	count = cmd_count_words(s);
 	if (count == -1)
 		return (NULL);
-	res = malloc((count + 1) * sizeof(char *)); // memleak if redir fail
+	res = malloc((count + 1) * sizeof(char *)); // malloc
 	if (!res)
 		return (NULL);
 	res_start = res;
@@ -34,10 +40,8 @@ char	**cmd_split(char const *s)
 	{
 		while (*s == ' ')
 			s++;
-		if (*s)
-			if (!arg_cpy(res, &s, res_start))
-				return (NULL); // free res
-		if (!*res)
+		// !*res necessary?
+		if ((*s && !arg_cpy(res, &s, res_start)) || !*res)
 			return (NULL);
 		res++;
 	}
@@ -45,20 +49,13 @@ char	**cmd_split(char const *s)
 	return (res_start);
 }
 
-static char	*arg_cpy(char **res, char const **s, char **r_s)
-{
-	char	*arg;
-	int		len;
-
-	len = arg_strlen((char *)*s);
-	arg = malloc(sizeof(char) * (len + 1)); // memleak
-	if (!arg)
-		return (cmd_free_memory(res, r_s));
-	arg_strcpy(*s, arg);
-	*s += arg_total_strlen((char *)*s);
-	*res = arg;
-	return (arg);
-}
+/*
+ * Function : cmd_count_words
+ *
+ * Calculates how many arguments are in the command line string (s).
+ * Treats quoted sections as single words.
+ * Returns the count or -1 in case of unclosed quotes.
+*/
 
 static int	cmd_count_words(char const *s)
 {
@@ -86,20 +83,17 @@ static int	cmd_count_words(char const *s)
 	return (count);
 }
 
+/*
+ * Function : iterate_quoted_word
+ *
+ * Advances the index (i) past a quoted word in (s).
+ * Returns 1 if successful and 0 in the case of an unclosed quote.
+*/
+
 static int	iterate_quoted_word(char const *s, int *i, char quote)
 {
 	(*i)++;
-	while (s[*i] != quote && s[*i])
+	while (s[*i] && s[*i] != quote)
 		(*i)++;
-	if (!s[*i]) // checks quote here as well.. other ones useless?
-		return (0);
-	return (1);
-}
-
-static void	*cmd_free_memory(char **res, char **res_start)
-{
-	while (res > res_start)
-		free(*(--res));
-	free(res_start);
-	return (NULL);
+	return (s[*i] != '\0');
 }

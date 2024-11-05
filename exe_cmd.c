@@ -1,7 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exe_cmd.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-	Executes a command with a fork.
+ * Function: exe_cmd
+ *
+ * Executes a command (cmd) using execve.
 */
 
 int	exe_cmd(t_cmd *cmd)

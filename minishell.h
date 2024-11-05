@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
+/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -43,13 +55,11 @@ typedef struct s_cmd
 {
 	char	**args;
 	char	*pathed_cmd;
-	// char	*file;
-	char	*infile; // < infile cat > outfile
+	char	*infile;
 	char	*outfile;
 	char	**envp;
-	//t_redir	redir; // what if 2 ? not allowd in pipe!
-	t_redir outredir;
-	t_redir inredir;
+	t_redir	outredir;
+	t_redir	inredir;
 }	t_cmd;
 
 typedef struct s_ms
@@ -90,14 +100,6 @@ char	**extract_paths(char *envp[]);
 
 /* - Command line parsing - */
 
-//		arg_cpy.c
-void		arg_strcpy(const char *from, char *to);
-int		arg_strlen(char *s);
-int		arg_total_strlen(char *s);
-
-//		cmd_split.c
-char	**cmd_split(char const *s);
-
 //		parsing.c
 t_cmd	*parse(char *cmd_line, t_ms *ms);
 int		extract_pathed_cmd(t_cmd *cmd, char **paths);
@@ -106,6 +108,12 @@ int		extract_pathed_cmd(t_cmd *cmd, char **paths);
 size_t	count_cmds(char **split);
 int		free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
 void	init_cmd(t_cmd *cmd, t_ms *ms);
+
+//		arg_cpy.c
+char	*arg_cpy(char **res, char const **s, char **r_s);
+
+//		cmd_split.c
+char	**cmd_split(char const *s);
 
 /* - Command exection & pipes - */
 
@@ -134,13 +142,13 @@ int		check_for_redirections(t_cmd *cmd);
 //		memory_functions.c
 int		free_cmds(t_cmd *cmds, int cmd_n);
 int		free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
+void	*cmd_free_memory(char **res, char **res_start);
 void	*free_array_of_arrays(char **arr);
 
 /* - Miscellaneous - */
 
 //		error_utils.c
 void	err(t_ms *ms);
-
 
 //		print_utils.c
 void	print_in_color(const char *str, t_color color);
