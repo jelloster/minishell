@@ -12,8 +12,8 @@
 
 #include "minishell.h"
 
-static int		cmd_count_words(char const *s);
-static int		iterate_quoted_word(char const *s, int *i, char quote);
+static int	cmd_count_words(char const *s);
+static int	iterate_quoted_word(char const *s, int *i, char quote);
 
 /*
  * Function : cmd_split
@@ -40,10 +40,8 @@ char	**cmd_split(char const *s)
 	{
 		while (*s == ' ')
 			s++;
-		// !*res necessary?
-		if ((*s && !arg_cpy(res, &s, res_start)) || !*res)
+		if ((*s && !arg_cpy(res++, &s, res_start)))
 			return (NULL);
-		res++;
 	}
 	*res = NULL;
 	return (res_start);

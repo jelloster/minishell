@@ -21,9 +21,11 @@
 int	exe_cmd(t_cmd *cmd)
 {
 	if (cmd->inredir == INPUT && cmd->infile)
-		redirect_input(cmd->infile);
+		if (!redirect_input(cmd->infile, cmd))
+			return (0);
 	if (cmd->outredir == REPLACE && cmd->outfile)
-		redirect_output(cmd->outfile);
+		if (!redirect_output(cmd->outfile, cmd))
+			return (0);
 	if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
 	{
 		execve(cmd->pathed_cmd, cmd->args, cmd->envp);

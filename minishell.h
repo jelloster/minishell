@@ -58,6 +58,7 @@ typedef struct s_cmd
 	char	*infile;
 	char	*outfile;
 	char	**envp;
+	char	*program_name;
 	t_redir	outredir;
 	t_redir	inredir;
 }	t_cmd;
@@ -71,6 +72,7 @@ typedef struct s_ms
 	int		error;
 	int		cmd_n;
 	int		parsed_cmds;
+	int		ret_val;
 }	t_ms;
 
 typedef enum e_color
@@ -108,6 +110,7 @@ int		extract_pathed_cmd(t_cmd *cmd, char **paths);
 size_t	count_cmds(char **split);
 int		free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
 void	init_cmd(t_cmd *cmd, t_ms *ms);
+int	copy_args_from_split(t_cmd *cmd, char **split, size_t size);
 
 //		arg_cpy.c
 char	*arg_cpy(char **res, char const **s, char **r_s);
@@ -124,8 +127,8 @@ int		exe_cmd(t_cmd *cmd);
 int		pipex(t_cmd *cmds, int cmd_n);
 
 //		pipex/pipe_utils.c
-void	redirect_input(char *file);
-void	redirect_output(char *file);
+int	redirect_input(char *file, t_cmd *cmd);
+int	redirect_output(char *file, t_cmd *cmd);
 
 /* - Builtin functions - */
 

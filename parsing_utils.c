@@ -59,4 +59,20 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->pathed_cmd = NULL;
+	cmd->program_name = ms->program_name;
+	ms->parsed_cmds++;
+}
+
+int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < (int)size)
+	{
+		cmd->args[i] = ft_strdup(split[i]);
+		if (!cmd->args[i])
+			return (0);
+	}
+	return (1);
 }

@@ -28,18 +28,13 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	char	**split_cmd_line;
 
 	ms->parsed_cmds = 0;
-	// Split the command line into separate strings
 	split_cmd_line = cmd_split(cmd_line); // malloc 3
 	if (!split_cmd_line)
 		return (NULL);
-
-	// Allocate memory for x num of commands
 	ms->cmd_n = count_cmds(split_cmd_line);
 	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc 4
 	if (!cmds)
 		return (free_array_of_arrays(split_cmd_line));
-
-	// Init command structs & fill them with appropriate info
 	if (!init_cmds(cmds, split_cmd_line, ms))
 	{
 		free_cmds(cmds, ms->parsed_cmds);
@@ -59,36 +54,25 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 {
 	size_t	i;
 	size_t	j;
-	size_t	cmd_i;
 	int	size;
 
 	i = 0;
 	j = 0;
-	cmd_i = 0;
-
-	// Iterate through split cmd line
 	while (split[i])
 	{
-		// If a pipe is encountered or we're at the end of the string
-		if (ft_strncmp(split[i], "|", ft_strlen(split[i])) == 0
-			|| split[i + 1] == NULL)
+		if (!ft_strncmp(split[i], "|", ft_strlen(split[i]))
+		|| !split[i + 1])
 		{
-			// Select size of the cmds args based on if it's in a pipe or not
-			if (split[i + 1] == NULL)
-				size = i - j + 1;
-			else
-				size = i - j;
-			if(!cmd_block(&cmds[cmd_i++], &split[j], size, ms))
+			size = i - j + (split[i + 1] == NULL);
+			if (!cmd_block(cmds++, &split[j], size, ms))
 				return (0);
 			i++;
 			j = i;
 		}
-		// Otherwise keep iterating
 		else
 			i++;
 	}
 	free_array_of_arrays(split);
-	// free split cmd line (pipes etc. are not freed!) ????
 	return (1);
 }
 
@@ -101,43 +85,32 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 {
 	char	*no_path_cmd;
-	int	i;
 
-	// Allocate memory for the command's args
 	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc ?
 	if (!cmd->args)
 		return (0);
 	cmd->args[size] = NULL;
-
-	// Give the command basic info
 	init_cmd(cmd, ms);
-
-	// Assign the appropriate pointers to args
-	i = -1;
-	while (++i < (int)size)
-	{
-		cmd->args[i] = ft_strdup(split[i]); // Leak when "q"
-		if (!cmd->args[i])
-			return (0);
-	}
-	
-	ms->parsed_cmds++;
-	// Check for redirections
+	if (!copy_args_from_split(cmd, split, size))
+		return (0);
 	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
-
-	// If not, check if the command was pathed
 	else if (access(cmd->args[0], X_OK) == 0)
 	{
 		cmd->pathed_cmd = cmd->args[0];
 		no_path_cmd = cmd->args[0] + strlen_mod(cmd->args[0], '/');
 		cmd->args[0] = no_path_cmd;
 	}
-	// Or if we need to find the path for the command
 	else
 		return (extract_pathed_cmd(cmd, ms->paths));
 	return (1);
 }
+
+/*
+ * Function : extract_pathed_cmd
+ *
+ * Goes through paths until it finds one that is executable
+*/
 
 int	extract_pathed_cmd(t_cmd *cmd, char **paths)
 {

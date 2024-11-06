@@ -17,6 +17,11 @@ static void	child_process(t_cmd cmd, int **fds, int i, int amount);
 static int	wait_and_close(pid_t *pids, int cmd_n);
 static int	free_fds(int **fds, int amount);
 
+/*
+ * Function : pipex
+ *
+ * Takes an array of cmd_n command structs (cmds) and executes them using pipes.
+*/
 int	pipex(t_cmd *cmds, int cmd_n)
 {
 	int	**fds;
@@ -77,6 +82,14 @@ static int	fork_and_exe(t_cmd *cmds, int **fds, int cmd_n)
 	}
 	return (wait_and_close(pids, cmd_n));
 }
+
+
+/*
+ * Function : child_process
+ *
+ * Depending on the location of the command in the pipeline, the function
+ * writes, reads or reads and writes to/from the pipe.
+*/
 
 static void	child_process(t_cmd cmd, int **fds, int i, int amount)
 {

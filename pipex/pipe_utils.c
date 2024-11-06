@@ -12,28 +12,42 @@
 
 #include "pipex.h"
 
-void	redirect_input(char *file);
-void	redirect_output(char *file);
-
 int	write_to_pipe(t_cmd cmd, int *fd)
 {
-	if (cmd.inredir == INPUT)
+	// If there is an input file
+	if (cmd.inredir == INPUT && cmd.infile)
 	{
+		// If the file isn't readable
 		if (access(cmd.infile, R_OK) != 0)
 		{
-			/*
+			// File not found
 			if (errno == ENOENT)
-				error_msg(FILE_NOT_FOUND, infile, cmd.aae->av[0]);
+			{
+				error_msg(FILE_NOT_FOUND, cmd.infile, cmd.program_name);
+				//return (1);
+			}
+			// Permission denied
 			else if (errno == EACCES)
-				error_msg(PERMISSION_DENIED, infile, cmd.aae->av[0]);
-			*/
+			{
+				error_msg(PERMISSION_DENIED, cmd.infile, cmd.program_name);
+				//return (1);
+			}
 			return (0);
 		}
-		redirect_input(cmd.infile);
+		// Redirect input to infile ??
+		redirect_input(cmd.infile, &cmd);
 	}
+	/* else if(cmd.inredir = STDIN)
+	 */
+
+	// Redirec output to pipe's write end
 	dup2(fd[1], STDOUT_FILENO);
+
+	// Close pipe
 	close(fd[0]);
 	close(fd[1]);
+	
+	// Execute the command
 	return (exe_cmd(&cmd));
 }
 
@@ -50,12 +64,12 @@ int	read_from_pipe(t_cmd cmd, int fd)
 {
 	dup2(fd, STDIN_FILENO);
 	if (cmd.outfile)
-		redirect_output(cmd.outfile);
+		redirect_output(cmd.outfile, &cmd);
 	close(fd);
 	return (exe_cmd(&cmd));
 }
 
-void	redirect_input(char *file)
+int	redirect_input(char *file, t_cmd *cmd)
 {
 	int	fd;
 
@@ -63,25 +77,33 @@ void	redirect_input(char *file)
 	if (fd == -1)
 	{
 		// free duplicated memory
-		exit(0);
+		if (access(file, R_OK) != 0)
+		{
+			if (errno == ENOENT)
+				error_msg(FILE_NOT_FOUND, file, cmd->program_name);
+			else if (errno == EACCES)
+				error_msg(PERMISSION_DENIED, file, cmd->program_name);
+		}
+		return (0);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	return (1);
 }
 
-void	redirect_output(char *file)
+int	redirect_output(char *file, t_cmd *cmd)
 {
 	int	fd;
 
-	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	/*
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664); // CHANGE
 	if (fd == -1)
 	{
-		error_msg(PERMISSION_DENIED, file, aae.av[0]);
+		
+		error_msg(PERMISSION_DENIED, file, cmd->program_name);
 		// free duplicated memory
-		exit(EXIT_FAILURE);
+		return (0); // return?
 	}
-	*/
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (1);
 }
