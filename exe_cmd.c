@@ -20,6 +20,7 @@
 
 int	exe_cmd(t_cmd *cmd)
 {
+	printf("%s entered exe_cmd.\n", cmd->pathed_cmd);
 	if (cmd->inredir == INPUT && cmd->infile)
 		if (!redirect_input(cmd->infile, cmd))
 			return (0);
@@ -31,6 +32,6 @@ int	exe_cmd(t_cmd *cmd)
 		execve(cmd->pathed_cmd, cmd->args, cmd->envp);
 		return (2);
 	}
-	// reset out and in?
-	return (0);
+	// free memory?
+	exit (0);
 }

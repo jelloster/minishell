@@ -99,6 +99,8 @@ static void	child_process(t_cmd cmd, int **fds, int i, int amount)
 		read_from_pipe(cmd, fds[i - 1][0]);
 	else
 		read_and_write(cmd, fds[i - 1][0], fds[i][1]);
+	exit(1); // added to avoid child processes making forks
+	// only ones that fail execve go here
 }
 
 static int	wait_and_close(pid_t *pids, int cmd_n)
