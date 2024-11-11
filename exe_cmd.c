@@ -20,7 +20,6 @@
 
 int	exe_cmd(t_cmd *cmd)
 {
-	printf("%s entered exe_cmd.\n", cmd->pathed_cmd);
 	if (cmd->inredir == INPUT && cmd->infile)
 		if (!redirect_input(cmd->infile, cmd))
 			return (0);
