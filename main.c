@@ -27,7 +27,7 @@ int	main(int ac, char *av[], char *envp[])
 		waitpid(-1, NULL, 0);
 
 		// Prompt
-		ms.cmd_line = readline("> ");
+		ms.cmd_line = readline("$ ");
 
 		// Add to history
 		if (ms.cmd_line)
