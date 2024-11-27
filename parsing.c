@@ -26,7 +26,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 {
 	t_cmd	*cmds;
 	char	**split_cmd_line;
-
+	
 	ms->parsed_cmds = 0;
 	split_cmd_line = cmd_split(cmd_line); // malloc 3
 	if (!split_cmd_line)
@@ -85,7 +85,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 {
 	char	*no_path_cmd;
-
+	
 	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc ?
 	if (!cmd->args)
 		return (0);
@@ -95,6 +95,11 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 		return (0);
 	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
+	else if (is_built_in(cmd->args[0]))
+	{
+		exe_built_in(cmd, ms);	
+		return (1);
+	}
 	else if (access(cmd->args[0], X_OK) == 0)
 	{
 		cmd->pathed_cmd = cmd->args[0];

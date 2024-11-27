@@ -23,6 +23,9 @@ SRC_FILES		:=	main.c			\
 				memory_functions.c	\
 				arg_cpy.c		\
 				error_utils.c		\
+				heredoc_handle.c	\
+				built_ins.c		\
+				built_in_utils.c
 
 # ms_echo.c
 

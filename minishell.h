@@ -25,6 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>      // opendir, readdir, closedir
+# include <fcntl.h>
 
 /*
 # include <sys/stat.h>    // stat, lstat, fstat
@@ -121,10 +122,10 @@ char	**cmd_split(char const *s);
 /* - Command exection & pipes - */
 
 //		exe_cmd.c
-int		exe_cmd(t_cmd *cmd);
+int		exe_cmd(t_cmd *cmd, t_ms *ms);
 
 //		pipex/pipex.c
-int		pipex(t_cmd *cmds, int cmd_n);
+int		pipex(t_cmd *cmds, t_ms *ms);
 
 //		pipex/pipe_utils.c
 int	redirect_input(char *file, t_cmd *cmd);
@@ -142,11 +143,27 @@ int		update_history(t_ms *ms, char *cmd_line);
 int		handle_redirected_cmd(t_cmd *cmd, char **paths);
 int		check_for_redirections(t_cmd *cmd);
 
+//		heredoc_handle.c
+int		heredoc_write(const char *delim, t_cmd *cmd);
+int		heredoc_print(t_cmd *cmd);
+
 //		memory_functions.c
 int		free_cmds(t_cmd *cmds, int cmd_n);
 int		free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
 void	*cmd_free_memory(char **res, char **res_start);
 void	*free_array_of_arrays(char **arr);
+
+//		built_ins.c
+int		cd_built_in(char **args, t_ms *ms);
+int		echo_built_in(char **args);
+int		unsetenv_manual(const char *key, char **envp);
+int		unset_built_in(char **args, t_ms *ms);
+int		setenv_update(const char *key, const char *value, char **envp);
+
+//built_in_utils.c
+int	is_built_in(const char *cmd);
+int	exe_built_in(t_cmd *cmd, t_ms *ms);
+
 
 /* - Miscellaneous - */
 

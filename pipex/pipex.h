@@ -57,9 +57,9 @@ int		extract_command(t_cmd *cmd);
 //int		exe_cmd(t_cmd cmd);
 
 //	pipe_utils.c
-int		write_to_pipe(t_cmd cmd, int *fd);
-int		read_and_write(t_cmd cmd, int fd_r, int fd_w);
-int		read_from_pipe(t_cmd cmd, int fd);
+int		write_to_pipe(t_cmd cmd, int *fd, t_ms *ms);
+int		read_and_write(t_cmd cmd, int fd_r, int fd_w, t_ms *ms);
+int		read_from_pipe(t_cmd cmd, int fd, t_ms *ms);
 
 //	str_utils.c
 size_t	strlen_mod(char const *s, char c);
