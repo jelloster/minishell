@@ -70,8 +70,10 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 
 		// Otherwise use pipex
 		else if (ms->cmd_n != 0)
-			ft_printf("pipes disabled for testingf");
-			//ms->ret_val = pipex(cmds, ms->cmd_n); // doesn't work cause fork not thread (threads not allowed)
+		{
+			//ft_printf("pipes disabled for testingf");
+			ms->ret_val = pipex(cmds, ms); // doesn't work cause fork not thread (threads not allowed)
+		}
 
 		// If the execve fails, free memory and exit
 		free_ms(ms, ms->cmd_line, cmds, 1);

@@ -66,7 +66,7 @@ typedef struct s_cmd
 
 typedef struct s_ms
 {
-	char	*program_name; // not used yet
+	char	*program_name;
 	char	**envp;
 	char	**paths;
 	char	*cmd_line;
@@ -74,6 +74,7 @@ typedef struct s_ms
 	int		cmd_n;
 	int		parsed_cmds;
 	int		ret_val;
+	int		fds[2];
 }	t_ms;
 
 typedef enum e_color

@@ -12,95 +12,78 @@
 
 #include "pipex.h"
 
-static int	fork_and_exe(t_cmd *cmds, int **fds, t_ms *ms);
-static void	child_process(t_cmd cmd, int **fds, int i, int amount, t_ms *ms);
+static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms);
 static int	wait_and_close(pid_t *pids, int cmd_n);
-static int	free_fds(int **fds, int amount);
+static int	free_and_ret(void *ptr, int ret);
 
 /*
  * Function : pipex
  *
  * Takes an array of cmd_n command structs (cmds) and executes them using pipes.
 */
+
+// amount of pipes : ms->cmd_n - 1
+
 int	pipex(t_cmd *cmds, t_ms *ms)
 {
-	int	**fds;
 	int	i;
-	int	exit_status;
-
-	// Allocate a list of fds[2] for pipes
-	fds = malloc((ms->cmd_n - 1) * sizeof(int *));
-	if (!fds)
-		return (0);
-
-	// Create the pipes with pipe() ONLY 1 PIPE OPEN
-	i = 0;
-	while (i < ms->cmd_n - 1)
-	{
-		fds[i] = malloc(2 * sizeof(int));
-		if (!fds[i])
-			return (free_fds(fds, i));
-		if (pipe(fds[i]) == -1)
-			return (free_fds(fds, i));
-		i++;
-	}
-	exit_status = fork_and_exe(cmds, fds, ms);
-	free_fds(fds, ms->cmd_n - 1);
-	//free_cmds(cmds, cmd_n);
-	//exit (exit_status);
-	return (exit_status);
-}
-
-static int	fork_and_exe(t_cmd *cmds, int **fds, t_ms *ms)
-{
-	int		i;
-	pid_t	pid;
+	int	prev_pipe;
 	pid_t	*pids;
+	prev_pipe = -1;
 
-	// Allocate for fork process ids
 	pids = malloc(sizeof(pid_t) * ms->cmd_n);
 	if (!pids)
 		return (0);
-
-	// Fork and execute
 	i = 0;
 	while (i < ms->cmd_n)
 	{
-		pid = fork();
-		if (pid == -1)
-		{
-			free(pids);
-			return (0);
-		}
-		if (pid == 0)
-			child_process(cmds[i], fds, i, ms->cmd_n, ms);
-		pids[i] = pid;
-		if (i > 0)
-			close(fds[i - 1][0]);
+		if (i < ms->cmd_n && pipe(ms->fds) == -1)
+			return (free_and_ret(pids, 0));
+		pids[i] = fork();
+		if (pids[i] == -1)
+			return (free_and_ret(pids, 0));
+		if (pids[i] == 0)
+			child_process(cmds[i], i, prev_pipe, ms);
+		// Close read end of previous pipe
+		if (prev_pipe != -1)
+			close(prev_pipe);
+		// Store current read end
+		if (i < ms->cmd_n - 1)
+			prev_pipe = ms->fds[0];
+		// Close write-end of the current pipe
 		if (i++ < ms->cmd_n - 1)
-			close(fds[i - 1][1]);
+			close(ms->fds[1]);
 	}
 	return (wait_and_close(pids, ms->cmd_n));
 }
 
-
-/*
- * Function : child_process
- *
- * Depending on the location of the command in the pipeline, the function
- * writes, reads or reads and writes to/from the pipe.
-*/
-
-static void	child_process(t_cmd cmd, int **fds, int i, int amount, t_ms *ms)
-{
+static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
+{	
 	if (i == 0)
-		write_to_pipe(cmd, fds[i], ms);
-	else if (i == amount - 1)
-		read_from_pipe(cmd, fds[i - 1][0], ms);
+	{
+		if (cmd.infile && !redirect_input(cmd.infile, &cmd))
+			exit(1);
+		dup2(ms->fds[1], STDOUT_FILENO);
+	}
+	else if (i == ms->cmd_n - 1)
+	{
+		if (prev_pipe != -1)
+			dup2(prev_pipe, STDIN_FILENO);
+		if (cmd.outfile && !redirect_output(cmd.outfile, &cmd))
+			exit(1);
+	}
 	else
-		read_and_write(cmd, fds[i - 1][0], fds[i][1], ms);
-	exit(1); // added to avoid child processes making forks
-	// only ones that fail execve go here
+	{
+		if (prev_pipe != -1)
+			dup2(prev_pipe, STDIN_FILENO);
+		dup2(ms->fds[1], STDOUT_FILENO);
+	}
+	if (prev_pipe != -1)
+		close(prev_pipe);
+	close(ms->fds[0]);
+	close(ms->fds[1]);
+	exe_cmd(&cmd, ms);
+	exit(1);
 }
 
 static int	wait_and_close(pid_t *pids, int cmd_n)
@@ -122,24 +105,8 @@ static int	wait_and_close(pid_t *pids, int cmd_n)
 	return (last_status);
 }
 
-static int	free_fds(int **fds, int amount)
+static int	free_and_ret(void *ptr, int ret)
 {
-	int	i;
-
-	i = 0;
-	if (fds)
-	{
-		while (i < amount)
-		{
-			if (fds[i])
-			{
-				free (fds[i]);
-				fds[i] = NULL;
-			}
-			i++;
-		}
-		free (fds);
-		fds = NULL;
-	}
-	return (0);
+	free (ptr);
+	return (ret);
 }

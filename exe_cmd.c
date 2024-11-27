@@ -41,7 +41,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	}*/
 	if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
 	{
-		execve(cmd->pathed_cmd, cmd->args, cmd->envp);
+		execve(cmd->pathed_cmd, cmd->args, ms->envp);
 		return (2);
 	}
 	// free memory?

@@ -12,26 +12,13 @@
 
 #include "pipex.h"
 
+/*
 int	write_to_pipe(t_cmd cmd, int *fd, t_ms *ms)
 {
-	if (cmd.inredir == INPUT && cmd.infile)
-	{
-		if (access(cmd.infile, R_OK) != 0)
-		{
-			if (errno == ENOENT)
-				error_msg(FILE_NOT_FOUND, cmd.infile, cmd.program_name);
-			else if (errno == EACCES)
-				error_msg(PERMISSION_DENIED, cmd.infile, cmd.program_name);
-			return (0);
-		}
-	}
-	/* else if(cmd.inredir = STDIN)
-	 */
-
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	return (exe_cmd(&cmd, ms));
+	if (cmd.infile && !redirect_input(cmd.infile, &cmd))
+		exit(1);
+	// Write to pipe
+	dup2(fds[1], STDOUT_FILENO);
 }
 
 int	read_and_write(t_cmd cmd, int fd_r, int fd_w, t_ms *ms)
@@ -50,7 +37,7 @@ int	read_from_pipe(t_cmd cmd, int fd, t_ms *ms)
 		redirect_output(cmd.outfile, &cmd);
 	close(fd);
 	return (exe_cmd(&cmd, ms));
-}
+} */
 
 int	redirect_input(char *file, t_cmd *cmd)
 {
