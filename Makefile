@@ -25,7 +25,9 @@ SRC_FILES		:=	main.c			\
 				error_utils.c		\
 				heredoc_handle.c	\
 				built_ins.c		\
-				built_in_utils.c
+				built_in_utils.c	\
+				signal.c		\
+
 
 # ms_echo.c
 

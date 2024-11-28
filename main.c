@@ -14,10 +14,14 @@
 
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
+t_sig	sig;
+
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
 	t_cmd	*cmds;
+
+	handle_signals();
 
 	if (!init_ms(ac, av, envp, &ms))
 		return (1);
@@ -60,10 +64,11 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	pid = fork();
 	if (pid == -1)
 		return(0);
-
+        sig.child = 0;
 	// Executing (child) fork
 	if (pid == 0)
 	{
+                sig.child = 1;
 		// If there is just 1 cmd, execute it
 		if (ms->cmd_n == 1)
 			ms->ret_val = exe_cmd(cmds, ms);

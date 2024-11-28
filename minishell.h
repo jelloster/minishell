@@ -15,6 +15,7 @@
 
 // --- INCLUDES ---
 
+
 // - LIBRARIES -
 
 # include <stdio.h>
@@ -24,12 +25,12 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <dirent.h>      // opendir, readdir, closedir
+# include <dirent.h>
 # include <fcntl.h>
+# include <signal.h>      // signal, sigaction, sigemptyset, sigaddset, kill
 
 /*
 # include <sys/stat.h>    // stat, lstat, fstat
-# include <signal.h>      // signal, sigaction, sigemptyset, sigaddset, kill
 # include <string.h>      // strerror
 # include <termios.h>     // tcsetattr, tcgetattr
 # include <curses.h>      // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
@@ -76,6 +77,16 @@ typedef struct s_ms
 	int		ret_val;
 	int		fds[2];
 }	t_ms;
+
+typedef struct s_sig
+{
+	int	sigint; // Tracks if SIGINT was recieved
+	int	sigquit; // Tracks if SIGQUIT was received
+	int	exit_status; // Exit status of the program
+	int	child;
+}	t_sig;
+
+extern t_sig sig;
 
 typedef enum e_color
 {
@@ -179,5 +190,11 @@ void	clear_terminal(void);
 size_t	strlen_mod(char const *s, char c);
 int		str_in_array_of_strs(char *str, char **strs);
 int		strstrlen(char **strs);
+
+//		signal.c
+void	handle_sigint(int signal);
+void	handle_sigquit(int signal);
+void	handle_signals(void);
+
 
 #endif
