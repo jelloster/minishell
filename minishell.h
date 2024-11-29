@@ -40,6 +40,7 @@
 // - HEADER FILES -
 
 # include "libft/inc/libft.h"
+//# include "pipex/pipex.h"
 
 // --- TYPEDEFS ---
 
@@ -52,6 +53,13 @@ typedef enum e_redir
 	INPUT,
 	STD_IN,
 }	t_redir;
+
+typedef enum e_error_code
+{
+	COMMAND_NOT_FOUND = 1,
+	FILE_NOT_FOUND,
+	PERMISSION_DENIED,
+}	t_error_code;
 
 typedef struct s_cmd
 {
@@ -195,6 +203,10 @@ int		strstrlen(char **strs);
 void	handle_sigint(int signal);
 void	handle_sigquit(int signal);
 void	handle_signals(void);
+
+//		pipex/error_utils.c
+void	error_msg(int error, char *str, char *binary);
+void	print_and_clear_errorlog(void);
 
 
 #endif

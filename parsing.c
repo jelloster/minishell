@@ -28,13 +28,18 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	char	**split_cmd_line;
 	
 	ms->parsed_cmds = 0;
+	// Should return NULL if bad quotes
 	split_cmd_line = cmd_split(cmd_line); // malloc 3
 	if (!split_cmd_line)
+	{
+		printf("Bad quotes\n");
 		return (NULL);
+	}
 	ms->cmd_n = count_cmds(split_cmd_line);
 	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc 4
 	if (!cmds)
 		return (free_array_of_arrays(split_cmd_line));
+	// if this fails not always reason to print error
 	if (!init_cmds(cmds, split_cmd_line, ms))
 	{
 		free_cmds(cmds, ms->parsed_cmds);
@@ -64,7 +69,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 		|| !split[i + 1])
 		{
 			size = i - j + (split[i + 1] == NULL);
-			if (!cmd_block(cmds++, &split[j], size, ms))
+			if (cmd_block(cmds++, &split[j], size, ms) == -1) // -1 = malloc fail
 				return (0);
 			i++;
 			j = i;
@@ -88,11 +93,11 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	
 	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc ?
 	if (!cmd->args)
-		return (0);
+		return (-1); // malloc fail
 	cmd->args[size] = NULL;
 	init_cmd(cmd, ms);
 	if (!copy_args_from_split(cmd, split, size))
-		return (0);
+		return (-1); // malloc fail
 	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
@@ -107,6 +112,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 		cmd->args[0] = no_path_cmd;
 	}
 	else
+	// return -1 for malloc fail
 		return (extract_pathed_cmd(cmd, ms->paths));
 	return (1);
 }
@@ -144,5 +150,6 @@ int	extract_pathed_cmd(t_cmd *cmd, char **paths)
 		}
 		free(pathed_cmd);
 	}
+	cmd->pathed_cmd = cmd->args[0];
 	return (free_n_exit(NULL, slashed_cmd, NULL, 0));
 }

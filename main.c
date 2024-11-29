@@ -29,6 +29,7 @@ int	main(int ac, char *av[], char *envp[])
 	{
 		// Wait for execution threads to finish
 		waitpid(-1, NULL, 0);
+		print_and_clear_errorlog();
 
 		// Prompt
 		ms.cmd_line = readline("$ ");

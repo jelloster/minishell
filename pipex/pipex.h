@@ -24,12 +24,14 @@
 
 # include "../minishell.h"
 
+/*
 typedef enum e_error_code
 {
 	COMMAND_NOT_FOUND = 1,
 	FILE_NOT_FOUND,
 	PERMISSION_DENIED,
 }	t_error_code;
+*/
 
 // TYPEDEFS
 typedef struct s_aae
