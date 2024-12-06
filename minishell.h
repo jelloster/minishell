@@ -73,6 +73,14 @@ typedef struct s_cmd
 	t_redir	inredir;
 }	t_cmd;
 
+typedef struct s_shell_var
+{
+    char *key;
+    char *value;
+	int	is_exported;
+    struct s_shell_var *next;
+} t_shell_var;
+
 typedef struct s_ms
 {
 	char	*program_name;
@@ -84,6 +92,7 @@ typedef struct s_ms
 	int		parsed_cmds;
 	int		ret_val;
 	int		fds[2];
+	t_shell_var *shell_vars;
 }	t_ms;
 
 typedef struct s_sig
@@ -179,6 +188,18 @@ int		echo_built_in(char **args);
 int		unsetenv_manual(const char *key, char **envp);
 int		unset_built_in(char **args, t_ms *ms);
 int		setenv_update(const char *key, const char *value, char **envp);
+
+//	built_ins2.c
+int		pwd_built_in(char **msenvp);
+int		env_built_in(char **msenvp);
+int		cashmoney_handle(t_ms *ms);
+int		export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
+void	add_shell_var(t_shell_var **shell_vars, char *key, char *value);
+void	remove_shell_var(t_shell_var **shell_vars, char *key);
+void	init_shell_vars(char **envp, t_shell_var **shell_vars);
+void	print_exported_vars(t_shell_var *shell_vars);
+int		handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars);
+t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
 
 //built_in_utils.c
 int	is_built_in(const char *cmd);

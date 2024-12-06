@@ -60,6 +60,7 @@ int	main(int ac, char *av[], char *envp[])
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 {
 	int	pid;
+	int	status;
 
 	// Fork the process into main process and executable
 	pid = fork();
@@ -80,10 +81,19 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 			//ft_printf("pipes disabled for testingf");
 			ms->ret_val = pipex(cmds, ms); // doesn't work cause fork not thread (threads not allowed)
 		}
-
+		//if (ms->ret_val == 69)
+		//	exit(69);
 		// If the execve fails, free memory and exit
 		free_ms(ms, ms->cmd_line, cmds, 1);
-		exit(1); // Exit value? // Should whole process stop ??
+		exit(ms->ret_val); // Exit value? // Should whole process stop ??
+	}
+	ft_printf("BEFORE WAITPID%i\n", ms->ret_val);
+	waitpid(pid, &status, 0);
+	ms->ret_val = WEXITSTATUS(status);
+	ft_printf("RET VAL AFTER WAIT PID%i\n", ms->ret_val);
+	if (ms->ret_val == 69)
+	{
+		ms->ret_val = exe_built_in(cmds, ms);
 	}
 	// Free parsed cmds
 	free_cmds(cmds, ms->parsed_cmds);

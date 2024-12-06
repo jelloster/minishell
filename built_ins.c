@@ -98,32 +98,33 @@ int	echo_built_in(char **args)
 	return (0);
 }
 
-int	setenv_update(const char *key, const char *value, char **envp)
+int setenv_update(const char *key, const char *value, char **envp)
 {
-	size_t	key_len;
-	char	*new_entry;
-	char	*temp;
-	int		i;
+    size_t key_len = ft_strlen(key);
+    char *new_entry = ft_strjoin(key, "=");
+    if (!new_entry)
+        return -1;
 
-	key_len = ft_strlen(key);
-	temp = ft_strjoin(key, "=");
-	if (!temp)
-		return (-1);
-	new_entry = ft_strjoin(temp, value);
-	free(temp);
-	if (!new_entry)
-		return (-1);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], key, key_len) == 0 && envp[i][key_len] == '=')
-		{
-			envp[i] = new_entry;
-			return (0);
-		}
-		i++;
-	}
-	envp[i] = new_entry;
-	envp[i + 1] = NULL;
-	return (0);
+    char *temp = ft_strjoin(new_entry, value);
+    free(new_entry);
+    if (!temp)
+        return -1;
+
+    for (int i = 0; envp[i]; i++)
+    {
+        if (!ft_strncmp(envp[i], key, key_len) && envp[i][key_len] == '=')
+        {
+            free(envp[i]);
+            envp[i] = temp;
+            return 0;
+        }
+    }
+
+    // Add new variable to envp
+    int env_len = strstrlen(envp);
+    envp[env_len] = temp;
+    envp[env_len + 1] = NULL;
+
+    return 0;
 }
+

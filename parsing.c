@@ -102,7 +102,8 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 		return(handle_redirected_cmd(cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
 	{
-		exe_built_in(cmd, ms);	
+		ft_printf("found built in exe_block \n");
+		cmd->pathed_cmd = cmd->args[0];
 		return (1);
 	}
 	else if (access(cmd->args[0], X_OK) == 0)

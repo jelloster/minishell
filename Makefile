@@ -25,11 +25,11 @@ SRC_FILES		:=	main.c			\
 				error_utils.c		\
 				heredoc_handle.c	\
 				built_ins.c		\
+				built_ins2.c 	\
+				built_ins3.c	\
 				built_in_utils.c	\
 				signal.c		\
-
-
-# ms_echo.c
+				# ms_echo.c
 
 # ------- PIPEX --------
 

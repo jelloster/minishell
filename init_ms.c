@@ -47,6 +47,8 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 	ms->parsed_cmds = 0;
 	ms->ret_val = 1;
 	ms->paths = extract_paths(envp); // malloc 1
+	ms->shell_vars = NULL;
+    init_shell_vars(envp, &ms->shell_vars);
 	if (!ms->paths)
 		return (0);
 	return (1);

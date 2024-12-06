@@ -27,17 +27,16 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	{	
 		if (!redirect_input(cmd->infile, cmd))
 			return (0);
-		heredoc_print(cmd);
+		ms->ret_val = heredoc_print(cmd);
 		unlink(cmd->infile);
-		exit(1);
+		exit(ms->ret_val);
 	}
 	if (cmd->outredir == REPLACE && cmd->outfile)
 		if (!redirect_output(cmd->outfile, cmd))
 			return (0);
-	if (is_built_in(cmd->pathed_cmd))
+	if (is_built_in(cmd->args[0]))
 	{
-		exe_built_in(cmd, ms);
-		exit(1);
+		return (69);
 	}
 	if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
 	{
@@ -46,6 +45,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	}
 	else
 	{
+		ft_printf("sokmehow we are her\n");
 		error_msg(COMMAND_NOT_FOUND, cmd->args[0], ms->program_name);
 	}
 	// free memory?
