@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 14:33:41 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:40:17 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef enum e_error_code
 	COMMAND_NOT_FOUND = 1,
 	FILE_NOT_FOUND,
 	PERMISSION_DENIED,
+	IS_DIRECTORY,
 }	t_error_code;
 
 typedef struct s_cmd

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 16:37:56 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:11:41 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int ac, char *av[], char *envp[])
 
 		// Add to history
 		if (ms.cmd_line)
-			add_history(ms.cmd_line);
+			add_history(ms.cmd_line); // how to free this?
 		else
 			return (free_ms(&ms, ms.cmd_line, NULL, 1));
 
