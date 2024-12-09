@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:07:00 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 17:40:16 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 18:14:21 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	error_msg(int error, char *str, char *binary)
 		b = binary;
 	ft_putstr_fd(b, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	if (str && error != PERMISSION_DENIED)
+	if (str && error != PERMISSION_DENIED && error != IS_DIRECTORY)
 		ft_putstr_fd(str, STDERR_FILENO);
 	if (error == FILE_NOT_FOUND)
 		ft_putstr_fd(": No such file or directory", STDERR_FILENO);
