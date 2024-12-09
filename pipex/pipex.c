@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:35 by motuomin          #+#    #+#             */
-/*   Updated: 2024/10/10 14:25:32 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:57:07 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 		close(prev_pipe);
 	close(ms->fds[0]);
 	close(ms->fds[1]);
-	exe_cmd(&cmd, ms);
+	if (exe_cmd(&cmd, ms) == 69)
+		exe_built_in(&cmd, ms);
 	exit(1);
 }
 

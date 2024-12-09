@@ -29,7 +29,8 @@ SRC_FILES		:=	main.c			\
 				built_ins3.c	\
 				built_in_utils.c	\
 				signal.c		\
-				# ms_echo.c
+				find_last.c		\
+
 
 # ------- PIPEX --------
 

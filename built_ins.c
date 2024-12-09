@@ -96,6 +96,8 @@ int	echo_built_in(t_cmd *cmd, char *file, char **args)
 	while (args[i])
 	{	
 		ft_putstr_fd(args[i], fd);
+		if (args[i + 1])
+			ft_putstr_fd(" ", fd);
 		i++;
 	}
 	write(fd, "\n", 1);

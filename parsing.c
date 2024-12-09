@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:33:07 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:31:33 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,25 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 		return(handle_redirected_cmd(cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
 	{
-		ft_printf("found built in exe_block \n");
-		cmd->pathed_cmd = cmd->args[0];
+		cmd->pathed_cmd = cmd->args[0]; // ft_strdup ?
 		return (1);
 	}
 	else if (access(cmd->args[0], X_OK) == 0)
 	{
-		cmd->pathed_cmd = cmd->args[0];
-		no_path_cmd = cmd->args[0] + strlen_mod(cmd->args[0], '/');
+		cmd->pathed_cmd = ft_strdup(cmd->args[0]);
+		if (!cmd->pathed_cmd)
+		{
+			// free
+			return (-1);
+		}
+		no_path_cmd = ft_strdup(cmd->args[0] + find_last(cmd->args[0], '/') + 1);
+		free(cmd->args[0]);
 		cmd->args[0] = no_path_cmd;
+		if (!cmd->args[0])
+		{
+			//free
+			return (-1);
+		}
 	}
 	else
 	// return -1 for malloc fail

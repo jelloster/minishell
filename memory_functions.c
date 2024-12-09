@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:07:31 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:29:26 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:37:55 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 	{
 		while (i < cmd_n)
 		{
-			if (cmds[i].pathed_cmd && cmds[i].args[0] != cmds[i].pathed_cmd)
+				//&& cmds[i].args[0] != cmds[i].pathed_cmd + find_last(cmds[i].pathed_cmd, '/') + 1)
+			if (cmds[i].pathed_cmd && cmds[i].pathed_cmd != cmds[i].args[0])
 				ft_memdel(&cmds[i].pathed_cmd);
 			if (cmds[i].args)
 				free_array_of_arrays(cmds[i].args);

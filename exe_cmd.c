@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:36:02 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 {
 	if (is_built_in(cmd->args[0]))
 	{
-		ft_printf("meow\n");
+	//	ft_printf("meow\n");
 		return (69);
 	}
 

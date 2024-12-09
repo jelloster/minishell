@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:31:34 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
 	i = -1;
 	while (++i < (int)size)
 	{
-		cmd->args[i] = ft_strdup(split[i]);
+		cmd->args[i] = ft_strdup(split[i]); // leaks
 		if (!cmd->args[i])
 			return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 12:00:29 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:33:41 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,9 +162,6 @@ int			redirect_output(char *file, t_cmd *cmd);
 
 /* - Builtin functions - */
 
-//			ms_echo.c
-void		ms_echo(char *str, int flag, int fd);
-
 //			history.c
 int			update_history(t_ms *ms, char *cmd_line);
 
@@ -227,5 +224,7 @@ void		handle_signals(void);
 //			pipex/error_utils.c
 void		error_msg(int error, char *str, char *binary);
 void		print_and_clear_errorlog(void);
+
+int			find_last(char *str, char c);
 
 #endif

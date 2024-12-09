@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 12:01:07 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:37:56 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int ac, char *av[], char *envp[])
 
 		// Prompt
 		ms.cmd_line = readline("$ ");
+		//ms.cmd_line = readline("");
 
 		// Add to history
 		if (ms.cmd_line)
@@ -62,41 +63,27 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	int	pid;
 	int	status;
 
-	// Fork the process into main process and executable
 	pid = fork();
 	if (pid == -1)
 		return(0);
-        g_sig.child = 0;
-	// Executing (child) fork
+	g_sig.child = 0;
 	if (pid == 0)
 	{
-                g_sig.child = 1;
-		// If there is just 1 cmd, execute it
+		g_sig.child = 1;
 		if (ms->cmd_n == 1)
 			ms->ret_val = exe_cmd(cmds, ms);
-
-		// Otherwise use pipex
 		else if (ms->cmd_n != 0)
-		{
-			//ft_printf("pipes disabled for testingf");
-			ms->ret_val = pipex(cmds, ms); // doesn't work cause fork not thread (threads not allowed)
-		}
-		//if (ms->ret_val == 69)
-		//	exit(69);
-		// If the execve fails, free memory and exit
+			ms->ret_val = pipex(cmds, ms);
 		free_ms(ms, ms->cmd_line, cmds, 1);
 		exit(ms->ret_val); // Exit value? // Should whole process stop ??
 	}
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);
+	//printf("temp ret = %d.\n", ms->temp_ret);
 	if (ms->temp_ret == 69)
-	{
-		ms->ret_val = exe_built_in(cmds, ms);
-	}
+		ms->ret_val = exe_built_in(cmds, ms); // built in
 	else
-	{
 		ms->ret_val = ms->temp_ret;
-	}
 	// Free parsed cmds
 	free_cmds(cmds, ms->parsed_cmds);
 	return (1);

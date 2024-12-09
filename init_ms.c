@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:06:53 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 12:03:21 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:13:55 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 static void	welcome_msg(void)
 {
 	clear_terminal();
-	print_in_color(WELCOME_MSG, BLUE);
+//	print_in_color(WELCOME_MSG, BLUE);
 }
