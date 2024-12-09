@@ -45,8 +45,8 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	}
 	else
 	{
-		ft_printf("sokmehow we are her\n");
 		error_msg(COMMAND_NOT_FOUND, cmd->args[0], ms->program_name);
+		exit(127);
 	}
 	// free memory?
 	exit (0);

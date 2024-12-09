@@ -87,13 +87,15 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 		free_ms(ms, ms->cmd_line, cmds, 1);
 		exit(ms->ret_val); // Exit value? // Should whole process stop ??
 	}
-	ft_printf("BEFORE WAITPID%i\n", ms->ret_val);
 	waitpid(pid, &status, 0);
-	ms->ret_val = WEXITSTATUS(status);
-	ft_printf("RET VAL AFTER WAIT PID%i\n", ms->ret_val);
-	if (ms->ret_val == 69)
+	ms->temp_ret = WEXITSTATUS(status);
+	if (ms->temp_ret == 69)
 	{
 		ms->ret_val = exe_built_in(cmds, ms);
+	}
+	else
+	{
+		ms->ret_val = ms->temp_ret;
 	}
 	// Free parsed cmds
 	free_cmds(cmds, ms->parsed_cmds);

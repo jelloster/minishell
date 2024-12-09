@@ -91,6 +91,7 @@ typedef struct s_ms
 	int		cmd_n;
 	int		parsed_cmds;
 	int		ret_val;
+	int		temp_ret;
 	int		fds[2];
 	t_shell_var *shell_vars;
 }	t_ms;
