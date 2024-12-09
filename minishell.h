@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:00:29 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 // --- INCLUDES ---
-
 
 // - LIBRARIES -
 
@@ -27,7 +26,7 @@
 # include <readline/history.h>
 # include <dirent.h>
 # include <fcntl.h>
-# include <signal.h>      // signal, sigaction, sigemptyset, sigaddset, kill
+# include <signal.h>
 
 /*
 # include <sys/stat.h>    // stat, lstat, fstat
@@ -75,36 +74,36 @@ typedef struct s_cmd
 
 typedef struct s_shell_var
 {
-    char *key;
-    char *value;
-	int	is_exported;
-    struct s_shell_var *next;
-} t_shell_var;
+	char				*key;
+	char				*value;
+	int					is_exported;
+	struct s_shell_var	*next;
+}	t_shell_var;
 
 typedef struct s_ms
 {
-	char	*program_name;
-	char	**envp;
-	char	**paths;
-	char	*cmd_line;
-	int		error;
-	int		cmd_n;
-	int		parsed_cmds;
-	int		ret_val;
-	int		temp_ret;
-	int		fds[2];
-	t_shell_var *shell_vars;
+	char		*program_name;
+	char		**envp;
+	char		**paths;
+	char		*cmd_line;
+	int			error;
+	int			cmd_n;
+	int			parsed_cmds;
+	int			ret_val;
+	int			temp_ret;
+	int			fds[2];
+	t_shell_var	*shell_vars;
 }	t_ms;
 
 typedef struct s_sig
 {
-	int	sigint; // Tracks if SIGINT was recieved
-	int	sigquit; // Tracks if SIGQUIT was received
-	int	exit_status; // Exit status of the program
+	int	sigint;
+	int	sigquit;
+	int	exit_status;
 	int	child;
 }	t_sig;
 
-extern t_sig sig;
+extern t_sig	g_sig;
 
 typedef enum e_color
 {
@@ -125,110 +124,108 @@ typedef enum e_color
 
 /* - Minishell initialization - */
 
-//		init_ms.c
-int		init_ms(int ac, char *av[], char *envp[], t_ms *ms);
+//			init_ms.c
+int			init_ms(int ac, char *av[], char *envp[], t_ms *ms);
 
-//		envp_utils.c
-char	**extract_paths(char *envp[]);
+//			envp_utils.c
+char		**extract_paths(char *envp[]);
 
 /* - Command line parsing - */
 
-//		parsing.c
-t_cmd	*parse(char *cmd_line, t_ms *ms);
-int		extract_pathed_cmd(t_cmd *cmd, char **paths);
+//			parsing.c
+t_cmd		*parse(char *cmd_line, t_ms *ms);
+int			extract_pathed_cmd(t_cmd *cmd, char **paths);
 
-//		parsing_utils.c
-size_t	count_cmds(char **split);
-int		free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
-void	init_cmd(t_cmd *cmd, t_ms *ms);
-int	copy_args_from_split(t_cmd *cmd, char **split, size_t size);
+//			parsing_utils.c
+size_t		count_cmds(char **split);
+int			free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
+void		init_cmd(t_cmd *cmd, t_ms *ms);
+int			copy_args_from_split(t_cmd *cmd, char **split, size_t size);
 
-//		arg_cpy.c
-char	*arg_cpy(char **res, char const **s, char **r_s);
+//			arg_cpy.c
+char		*arg_cpy(char **res, char const **s, char **r_s);
 
-//		cmd_split.c
-char	**cmd_split(char const *s);
+//			cmd_split.c
+char		**cmd_split(char const *s);
 
 /* - Command exection & pipes - */
 
-//		exe_cmd.c
-int		exe_cmd(t_cmd *cmd, t_ms *ms);
+//			exe_cmd.c
+int			exe_cmd(t_cmd *cmd, t_ms *ms);
 
-//		pipex/pipex.c
-int		pipex(t_cmd *cmds, t_ms *ms);
+//			pipex/pipex.c
+int			pipex(t_cmd *cmds, t_ms *ms);
 
-//		pipex/pipe_utils.c
-int	redirect_input(char *file, t_cmd *cmd);
-int	redirect_output(char *file, t_cmd *cmd);
+//			pipex/pipe_utils.c
+int			redirect_input(char *file, t_cmd *cmd);
+int			redirect_output(char *file, t_cmd *cmd);
 
 /* - Builtin functions - */
 
-//		ms_echo.c
-void	ms_echo(char *str, int flag, int fd);
+//			ms_echo.c
+void		ms_echo(char *str, int flag, int fd);
 
-//		history.c
-int		update_history(t_ms *ms, char *cmd_line);
+//			history.c
+int			update_history(t_ms *ms, char *cmd_line);
 
-//		redirection_utils.c
-int		handle_redirected_cmd(t_cmd *cmd, char **paths);
-int		check_for_redirections(t_cmd *cmd);
+//			redirection_utils.c
+int			handle_redirected_cmd(t_cmd *cmd, char **paths);
+int			check_for_redirections(t_cmd *cmd);
 
-//		heredoc_handle.c
-int		heredoc_write(const char *delim, t_cmd *cmd);
-int		heredoc_print(t_cmd *cmd);
+//			heredoc_handle.c
+int			heredoc_write(const char *delim, t_cmd *cmd);
+int			heredoc_print(t_cmd *cmd);
 
-//		memory_functions.c
-int		free_cmds(t_cmd *cmds, int cmd_n);
-int		free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
-void	*cmd_free_memory(char **res, char **res_start);
-void	*free_array_of_arrays(char **arr);
+//			memory_functions.c
+int			free_cmds(t_cmd *cmds, int cmd_n);
+int			free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
+void		*cmd_free_memory(char **res, char **res_start);
+void		*free_array_of_arrays(char **arr);
 
-//		built_ins.c
-int		cd_built_in(char **args, t_ms *ms);
-int		echo_built_in(t_cmd *cmd, char *file, char **args);
-int		unsetenv_manual(const char *key, char **envp);
-int		unset_built_in(char **args, t_ms *ms);
-int		setenv_update(const char *key, const char *value, char **envp);
+//			built_ins.c
+int			cd_built_in(char **args, t_ms *ms);
+int			echo_built_in(t_cmd *cmd, char *file, char **args);
+int			unsetenv_manual(const char *key, char **envp);
+int			unset_built_in(char **args, t_ms *ms);
+int			setenv_update(const char *key, const char *value, char **envp);
 
-//	built_ins2.c
-int		pwd_built_in(char **msenvp);
-int		env_built_in(char **msenvp);
-int		cashmoney_handle(t_ms *ms);
-int		export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
-void	add_shell_var(t_shell_var **shell_vars, char *key, char *value);
-void	remove_shell_var(t_shell_var **shell_vars, char *key);
-void	init_shell_vars(char **envp, t_shell_var **shell_vars);
-void	print_exported_vars(t_shell_var *shell_vars);
-int		handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars);
+//			built_ins2.c
+int			pwd_built_in(char **msenvp);
+int			env_built_in(char **msenvp);
+int			cashmoney_handle(t_ms *ms);
+int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
+void		add_shell_var(t_shell_var **shell_vars, char *key, char *value);
+void		remove_shell_var(t_shell_var **shell_vars, char *key);
+void		init_shell_vars(char **envp, t_shell_var **shell_vars);
+void		print_exported_vars(t_shell_var *shell_vars);
+int			handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars);
 t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
 
-//built_in_utils.c
-int	is_built_in(const char *cmd);
-int	exe_built_in(t_cmd *cmd, t_ms *ms);
-
+//			built_in_utils.c
+int			is_built_in(const char *cmd);
+int			exe_built_in(t_cmd *cmd, t_ms *ms);
 
 /* - Miscellaneous - */
 
-//		error_utils.c
-void	err(t_ms *ms);
+//			error_utils.c
+void		err(t_ms *ms);
 
-//		print_utils.c
-void	print_in_color(const char *str, t_color color);
-void	clear_terminal(void);
+//			print_utils.c
+void		print_in_color(const char *str, t_color color);
+void		clear_terminal(void);
 
-//		str_utils.c
-size_t	strlen_mod(char const *s, char c);
-int		str_in_array_of_strs(char *str, char **strs);
-int		strstrlen(char **strs);
+//			str_utils.c
+size_t		strlen_mod(char const *s, char c);
+int			str_in_array_of_strs(char *str, char **strs);
+int			strstrlen(char **strs);
 
-//		signal.c
-void	handle_sigint(int signal);
-void	handle_sigquit(int signal);
-void	handle_signals(void);
+//			signal.c
+void		handle_sigint(int signal);
+void		handle_sigquit(int signal);
+void		handle_signals(void);
 
-//		pipex/error_utils.c
-void	error_msg(int error, char *str, char *binary);
-void	print_and_clear_errorlog(void);
-
+//			pipex/error_utils.c
+void		error_msg(int error, char *str, char *binary);
+void		print_and_clear_errorlog(void);
 
 #endif

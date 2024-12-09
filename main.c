@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:01:07 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
-t_sig	sig;
+t_sig	g_sig;
 
 int	main(int ac, char *av[], char *envp[])
 {
@@ -66,11 +66,11 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	pid = fork();
 	if (pid == -1)
 		return(0);
-        sig.child = 0;
+        g_sig.child = 0;
 	// Executing (child) fork
 	if (pid == 0)
 	{
-                sig.child = 1;
+                g_sig.child = 1;
 		// If there is just 1 cmd, execute it
 		if (ms->cmd_n == 1)
 			ms->ret_val = exe_cmd(cmds, ms);
