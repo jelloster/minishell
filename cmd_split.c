@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:28:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 13:11:28 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 11:50:21 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**cmd_split(char const *s)
 	count = cmd_count_words(s);
 	if (count == -1)
 		return (NULL);
-	res = malloc((count + 1) * sizeof(char *)); // malloc
+	res = malloc((count + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	res_start = res;
