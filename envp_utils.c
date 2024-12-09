@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:06:40 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:02:31 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**extract_paths(char *envp[])
 	if (envp[i] == NULL)
 		return (NULL);
 	path_env = envp[i] + 5;
-	paths = ft_split(path_env, ':'); // malloc 1
+	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
 	return (paths);
