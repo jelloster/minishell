@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 17:55:22 by jkarhu           ###   ########.fr       */
+/*   Updated: 2024/12/09 18:16:02 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,8 +182,8 @@ void		*free_array_of_arrays(char **arr);
 
 //			built_ins.c
 int			cd_built_in(char **args, t_ms *ms);
-int			echo_built_in(t_cmd *cmd, char *file, char **args, char **envp);
-void		dollar_check(char **args, char **envp);
+int			echo_built_in(t_cmd *cmd, t_ms *ms, char *file, char **args);
+void		dollar_check(t_ms *ms, char **args);
 int			unsetenv_manual(const char *key, char **envp);
 int			unset_built_in(char **args, t_ms *ms);
 int			setenv_update(const char *key, const char *value, char **envp);

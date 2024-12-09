@@ -74,12 +74,14 @@ int	unset_built_in(char **args, t_ms *ms)
 	return (0);
 }
 
-int	echo_built_in(t_cmd *cmd, char *file, char **args)
+int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 {
 	int		fd;
 	int		i;
 
+		
 	fd = STDOUT_FILENO;
+	dollar_check(ms, args);
 	if (cmd->outredir == REPLACE && cmd -> outfile)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -104,6 +106,44 @@ int	echo_built_in(t_cmd *cmd, char *file, char **args)
 	if (fd != STDOUT_FILENO)
 		close(fd);
 	return (0);
+}
+
+void	dollar_check(t_ms *ms, char **args)
+{
+	int		i;
+	int		j;
+	int		found_key;
+
+	i = 0;
+	j = 0;
+	while (args[i])
+	{
+		ft_printf("i loop\n");
+		found_key = 0;
+		if (args[i][0] == '$')
+		{
+			if (args[i][1] == '?')
+			{
+				cashmoney_handle(ms);
+				args[i] = args[i] + 2;
+				break ;
+
+			}
+			while (ms->envp[j])
+			{
+				ft_printf("j loop\n");
+				if (ft_strncmp((args[i] + 1), ms->envp[j], ft_strlen(args[i]) - 1))
+				{
+					args[i] = ms->envp[j] + ft_strlen(args[i] - 1);
+					found_key = 1;
+				}
+				j++;
+			}
+			if (!found_key)
+				args[i] = "boo";
+		}
+		i++;
+	}
 }
 
 int	setenv_update(const char *key, const char *value, char **envp)
