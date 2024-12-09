@@ -44,7 +44,7 @@ int	env_built_in(char **msenvp)
 
 int	cashmoney_handle(t_ms *ms)
 {
-	ft_printf("%d\n", ms->ret_val);
+	ft_printf("%d", ms->ret_val);
 	return (0);
 }
 

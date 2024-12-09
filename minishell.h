@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 18:16:02 by jkarhu           ###   ########.fr       */
+/*   Updated: 2024/12/09 18:59:34 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # include <fcntl.h>
 # include <signal.h>
 
-/*
 # include <sys/stat.h>    // stat, lstat, fstat
+/*
 # include <string.h>      // strerror
 # include <termios.h>     // tcsetattr, tcgetattr
 # include <curses.h>      // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs

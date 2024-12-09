@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 17:11:41 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 19:00:57 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	else
 		ms->ret_val = ms->temp_ret;
 	// Free parsed cmds
-	free_cmds(cmds, ms->parsed_cmds);
+	free_cmds(cmds, ms->parsed_cmds); // free
 	return (1);
 }

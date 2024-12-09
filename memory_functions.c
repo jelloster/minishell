@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:07:31 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 15:37:55 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 19:00:45 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	*free_array_of_arrays(char **arr)
 		{
 			if (arr[i])
 			{
-				free(arr[i]);
+				free(arr[i]); // free that was not malloced 
 				arr[i] = NULL;
 			}
 			i++;

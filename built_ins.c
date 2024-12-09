@@ -113,34 +113,45 @@ void	dollar_check(t_ms *ms, char **args)
 	int		i;
 	int		j;
 	int		found_key;
+	char	*temp;
 
 	i = 0;
 	j = 0;
 	while (args[i])
 	{
-		ft_printf("i loop\n");
 		found_key = 0;
 		if (args[i][0] == '$')
 		{
 			if (args[i][1] == '?')
 			{
 				cashmoney_handle(ms);
-				args[i] = args[i] + 2;
+				temp = ft_strdup(args[i] + 2);
+				if (!temp)
+				{
+					// free stuff if malloc
+					return ;
+				}
+				free (args[i]);
+				args[i] = temp;
 				break ;
 
 			}
 			while (ms->envp[j])
 			{
-				ft_printf("j loop\n");
-				if (ft_strncmp((args[i] + 1), ms->envp[j], ft_strlen(args[i]) - 1))
+				if (!ft_strncmp((args[i] + 1), ms->envp[j], ft_strlen(args[i]) - 1))
 				{
-					args[i] = ms->envp[j] + ft_strlen(args[i] - 1);
+					temp = ft_strdup(ms->envp[j] + ft_strlen(args[i]));
+					free(args[i]);
+					args[i] = temp;
 					found_key = 1;
 				}
 				j++;
 			}
 			if (!found_key)
-				args[i] = "boo";
+			{
+				free(args[i]);
+				args[i] = NULL;
+			}
 		}
 		i++;
 	}
