@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:07:00 by motuomin          #+#    #+#             */
-/*   Updated: 2024/06/18 16:11:18 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:40:16 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,13 @@ void	error_msg(int error, char *str, char *binary)
 		ft_putstr_fd("permission denied: ", STDERR_FILENO);
 		if (str)
 			ft_putstr_fd(str, STDERR_FILENO);
+	}
+	else if (error == IS_DIRECTORY)
+	{
+		ft_putstr_fd("is a directory: ", STDERR_FILENO);
+		if (str)
+			ft_putstr_fd(str, STDERR_FILENO);
+
 	}
 	ft_putstr_fd("\n", STDERR_FILENO);
 
