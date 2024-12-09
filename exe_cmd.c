@@ -20,6 +20,12 @@
 
 int	exe_cmd(t_cmd *cmd, t_ms *ms)
 {
+	if (is_built_in(cmd->args[0]))
+	{
+		ft_printf("meow\n");
+		return (69);
+	}
+
 	if (cmd->inredir == INPUT && cmd->infile)
 		if (!redirect_input(cmd->infile, cmd))
 			return (0);

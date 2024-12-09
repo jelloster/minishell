@@ -74,32 +74,30 @@ int	unset_built_in(char **args, t_ms *ms)
 	return (0);
 }
 
-int	echo_built_in(char **args)
+int	echo_built_in(t_cmd *cmd, char *file, char **args)
 {
 	int		fd;
-	char	*text;
+	int		i;
 
-	if (!args[1])
-		return (1);
 	fd = STDOUT_FILENO;
-	if (args[2] && !ft_strncmp(">", args[2], 1))
+	if (cmd->outredir == REPLACE && cmd -> outfile)
 	{
-		if (!args[3])
-			return (1);
-		fd = open(args[3], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 			return (perror("echo"), 1);
 	}
-	else if (args[2] && !ft_strncmp(">>", args[2], 2))
+	else if (cmd->outredir == ADD)
 	{
-		if (!args[3])
-			return (1);
-		fd = open(args[3], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(file , O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 			return (perror("echo"), 1);
 	}
-	text = args[1];
-	ft_putstr_fd(text, fd);
+	i = 1;
+	while (args[i])
+	{	
+		ft_putstr_fd(args[i], fd);
+		i++;
+	}
 	write(fd, "\n", 1);
 	if (fd != STDOUT_FILENO)
 		close(fd);

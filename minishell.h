@@ -185,7 +185,7 @@ void	*free_array_of_arrays(char **arr);
 
 //		built_ins.c
 int		cd_built_in(char **args, t_ms *ms);
-int		echo_built_in(char **args);
+int		echo_built_in(t_cmd *cmd, char *file, char **args);
 int		unsetenv_manual(const char *key, char **envp);
 int		unset_built_in(char **args, t_ms *ms);
 int		setenv_update(const char *key, const char *value, char **envp);

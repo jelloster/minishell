@@ -25,7 +25,7 @@ int	exe_built_in(t_cmd *cmd, t_ms *ms)
 	else if (!ft_strncmp(cmd->args[0], "unset", 5))
 		ret = unset_built_in(cmd->args, ms);
 	else if (!ft_strncmp(cmd->args[0], "echo", 4))
-		ret = echo_built_in(cmd->args);
+		ret = echo_built_in(cmd, cmd->outfile, cmd->args);
 	else if	(!ft_strncmp(cmd->args[0], "pwd", 3))
 		ret = pwd_built_in(ms->envp);
 	else if (!ft_strncmp(cmd->args[0], "env", 3))
