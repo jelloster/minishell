@@ -1,4 +1,14 @@
-// signal.c 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 11:49:03 by motuomin          #+#    #+#             */
+/*   Updated: 2024/12/09 11:49:27 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -12,18 +22,14 @@ static void	sig_init(void)
 
 void	handle_signals(void)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	sig_init();
-
-	// Handle SIGINT (Ctrl+C)
 	sa_int.sa_handler = handle_sigint;
 	sa_int.sa_flags = SA_RESTART;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
-	// Ignore SIGQUIT (Ctrl+\)
 	sa_quit.sa_handler = handle_sigquit;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);
@@ -33,7 +39,6 @@ void	handle_signals(void)
 void	handle_sigint(int signal)
 {
 	(void)signal;
-	// If a child process is not running
 	if (!sig.child)
 	{
 		write(STDERR_FILENO, "\n", 1);
@@ -54,4 +59,3 @@ void	handle_sigquit(int signal)
 {
 	(void)signal;
 }
-
