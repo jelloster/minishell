@@ -98,7 +98,7 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 	while (args[i])
 	{	
 		ft_putstr_fd(args[i], fd);
-		if (args[i + 1])
+		if (args[i + 1] && ft_strlen(args[i]) != 0)
 			ft_putstr_fd(" ", fd);
 		i++;
 	}
@@ -150,7 +150,12 @@ void	dollar_check(t_ms *ms, char **args)
 			if (!found_key)
 			{
 				free(args[i]);
-				args[i] = NULL;
+				args[i] = ft_strdup("");
+				if (!args[i])
+				{
+					// free stuff
+					return ;
+				}
 			}
 		}
 		i++;
@@ -190,3 +195,48 @@ int	setenv_update(const char *key, const char *value, char **envp)
 	return (0);
 }
 
+
+/*
+void check_for_dollar(char *from, char quote, char **envp)
+{
+	char	*new_arg;
+	char	
+	int		len;
+	int		i;
+
+	// If single quote, keep copying normally.
+	if (quote == '\'')
+		return ;
+	// If dollar is found
+	if (*from = '$')
+	{
+		// Iterate over $
+		from++;
+		// Get string length until space
+		len = strlen_mod(from, ' ');
+		// Look through envp for a match
+		while (envp[i])
+		{
+			if (!ft_strncmp(from, envp[i], len - 1))
+			{
+				
+			}
+		}
+	}
+}
+
+int	str_len_dollar(char *from, char quote, char **envp)
+{
+	int	len;
+
+	while (from[len] != quote)
+	{
+		len++;
+	}
+}
+
+int	dollar_len
+{
+
+}
+*/

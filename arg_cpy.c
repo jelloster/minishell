@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:11:59 by motuomin          #+#    #+#             */
-/*   Updated: 2024/10/28 15:28:03 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:34:34 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ char	*arg_cpy(char **res, char const **s, char **r_s)
 static void	arg_strcpy(const char *from, char *to)
 {
 	char	quote;
-
+	
+	printf("from : %s.\n", from);
 	while (*from && *from != ' ')
 	{
 		if (*from != '\'' && *from != '\"')
@@ -60,7 +61,24 @@ static void	arg_strcpy(const char *from, char *to)
 			quote = *from;
 			from++;
 			while (*from != quote && *from)
+			{
+				//check_for_dollar(from, quote);
+				/*
+				if (--*from == ''' && ++*from == '$')
+				{
+					
+				}
+				*/
+				// finds a dollar
+				// if (!single_quote)
+				/*
+				{
+					// "lalal $PWD"
+					lalal /sefs/drdfgdf
+					new_string = malloc(ft_strlen(envp[j] + 
+				}*/
 				*to++ = *from++;
+			}
 			if (*from)
 				from++;
 		}
