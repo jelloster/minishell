@@ -62,7 +62,6 @@ static void	arg_strcpy(const char *from, char *to)
 			from++;
 			while (*from != quote && *from)
 			{
-<<<<<<< HEAD
 				if (quote == '\'' && *from == '$')
 				{
 					*to++ = '\xFF';
@@ -70,24 +69,6 @@ static void	arg_strcpy(const char *from, char *to)
 				}
 				else
 					*to++ = *from++;
-=======
-				//check_for_dollar(from, quote);
-				/*
-				if (--*from == ''' && ++*from == '$')
-				{
-					
-				}
-				*/
-				// finds a dollar
-				// if (!single_quote)
-				/*
-				{
-					// "lalal $PWD"
-					lalal /sefs/drdfgdf
-					new_string = malloc(ft_strlen(envp[j] + 
-				}*/
-				*to++ = *from++;
->>>>>>> 4faca8b57542c304225463908161aca6ec1c7175
 			}
 			if (*from)
 				from++;
