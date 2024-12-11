@@ -120,8 +120,11 @@ void	dollar_check(t_ms *ms, char **args)
 	while (args[i])
 	{
 		found_key = 0;
+
+		// If dollar is found
 		if (args[i][0] == '$')
 		{
+			// If the next one is ?
 			if (args[i][1] == '?')
 			{
 				cashmoney_handle(ms);
@@ -136,6 +139,7 @@ void	dollar_check(t_ms *ms, char **args)
 				break ;
 
 			}
+			// Check if it matches anything in env
 			while (ms->envp[j])
 			{
 				if (!ft_strncmp((args[i] + 1), ms->envp[j], ft_strlen(args[i]) - 1))
@@ -147,10 +151,11 @@ void	dollar_check(t_ms *ms, char **args)
 				}
 				j++;
 			}
+			// If not, delete the string 
 			if (!found_key)
 			{
 				free(args[i]);
-				args[i] = NULL;
+				args[i] = ft_strdup(""); // words after no worky
 			}
 		}
 		i++;

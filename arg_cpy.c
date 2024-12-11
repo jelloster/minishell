@@ -60,7 +60,15 @@ static void	arg_strcpy(const char *from, char *to)
 			quote = *from;
 			from++;
 			while (*from != quote && *from)
-				*to++ = *from++;
+			{
+				if (quote == '\'' && *from == '$')
+				{
+					*to++ = '\xFF';
+					from++;
+				}
+				else
+					*to++ = *from++;
+			}
 			if (*from)
 				from++;
 		}
@@ -99,7 +107,7 @@ static int	arg_strlen(char *s)
 					len++;
 				quote_n += 2;
 				len++;
-			}
+}
 			else
 				return (-1);
 		}

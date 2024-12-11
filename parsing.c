@@ -69,7 +69,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 		|| !split[i + 1])
 		{
 			size = i - j + (split[i + 1] == NULL);
-			if (cmd_block(cmds++, &split[j], size, ms) == -1) // -1 = malloc fail
+			if (cmd_block(cmds++, &split[j], size, ms) == -1)
 				return (0);
 			i++;
 			j = i;
@@ -91,18 +91,18 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 {
 	char	*no_path_cmd;
 	
-	cmd->args = malloc((size + 1) * sizeof(char *)); // malloc ?
+	cmd->args = malloc((size + 1) * sizeof(char *));
 	if (!cmd->args)
-		return (-1); // malloc fail
+		return (-1);
 	cmd->args[size] = NULL;
 	init_cmd(cmd, ms);
 	if (!copy_args_from_split(cmd, split, size))
-		return (-1); // malloc fail
+		return (-1);
 	if (check_for_redirections(cmd))
 		return(handle_redirected_cmd(cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
 	{
-		cmd->pathed_cmd = cmd->args[0]; // ft_strdup ?
+		cmd->pathed_cmd = cmd->args[0];
 		return (1);
 	}
 	else if (access(cmd->args[0], X_OK) == 0)
@@ -110,20 +110,20 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 		cmd->pathed_cmd = ft_strdup(cmd->args[0]);
 		if (!cmd->pathed_cmd)
 		{
-			// free
+			free_array_of_arrays(cmd->args);
 			return (-1);
 		}
 		no_path_cmd = ft_strdup(cmd->args[0] + find_last(cmd->args[0], '/') + 1);
-		free(cmd->args[0]);
-		cmd->args[0] = no_path_cmd;
-		if (!cmd->args[0])
+		if (!no_path_cmd)
 		{
-			//free
+			free (cmd->pathed_cmd);
+			free_array_of_arrays(cmd->args);
 			return (-1);
 		}
+		free(cmd->args[0]);
+		cmd->args[0] = no_path_cmd;
 	}
 	else
-	// return -1 for malloc fail
 		return (extract_pathed_cmd(cmd, ms->paths));
 	return (1);
 }
