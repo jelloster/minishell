@@ -85,7 +85,7 @@ void	dollar_check(t_ms *ms, char **args)
 	{
 		result = ft_strdup("");
 		if (!result)
-			return ;
+			return ; // return -1 and stop process
 		split_words = ft_split(args[i], ' ');
 		if (!split_words)
 		{
@@ -158,23 +158,40 @@ char	*get_env_value(t_ms *ms, const char *key)
 	return (NULL);
 }
 
-
-
 char	*free_on_error(char **split_words, char *result) // ei varmaan tarvitse muuta temp free
-														 // functio varmuudek
 {
 	free_array_of_arrays(split_words);
 	free(result);
 	return (NULL);
 }
+
+void	return_uninterpreted_dollar(t_cmd *cmd)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (cmd->args[i])
+	{
+		j = 0;
+		while (cmd->args[i][j])
+		{
+			if (cmd->args[i][j] == '\xFF')
+				cmd->args[i][j] = '$';
+			j++;
+		}
+		i++;
+	}
+}
+
 int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 {
 	int		fd;
 	int		i;
 
-		
 	fd = STDOUT_FILENO;
 	dollar_check(ms, args);
+	return_uninterpreted_dollar(cmd);
 	if (cmd->outredir == REPLACE && cmd -> outfile)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);

@@ -51,7 +51,6 @@ static void	arg_strcpy(const char *from, char *to)
 {
 	char	quote;
 	
-	printf("from : %s.\n", from);
 	while (*from && *from != ' ')
 	{
 		if (*from != '\'' && *from != '\"')
