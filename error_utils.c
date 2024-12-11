@@ -14,6 +14,6 @@
 
 void	err(t_ms *ms)
 {
-	printf("Error.\n");
+	//printf("Error.\n");
 	ms->error = 1;
 }
