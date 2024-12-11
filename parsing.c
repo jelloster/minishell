@@ -45,6 +45,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		free_cmds(cmds, ms->parsed_cmds);
 		return (free_array_of_arrays(split_cmd_line));
 	}
+	ms->cmds = cmds;
 	return (cmds);
 }
 

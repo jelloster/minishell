@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+static void	exit_built_in(t_cmd *cmd, t_ms *ms);
+
 int	is_built_in(const char *cmd)
 {
 
@@ -33,7 +35,31 @@ int	exe_built_in(t_cmd *cmd, t_ms *ms)
 	else if (!ft_strncmp(cmd->args[0], "$?", 2))
 		ret = cashmoney_handle(ms);
 	else if (!ft_strncmp(cmd->args[0], "exit", 4))
-		exit (0);
+		exit_built_in(cmd, ms);
 	ms->ret_val = ret;
 	return (ret);
+}
+
+static int	ft_isdigit_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		if (!ft_isdigit(str[i++]))
+				return (0);
+	return (1);
+}
+
+static void	exit_built_in(t_cmd *cmd, t_ms *ms)
+{
+	if (!cmd->args[1])
+		exit (free_ms(ms, NULL, ms->cmds, ms->ret_val));
+	else
+	{
+		if (ft_isdigit_str(cmd->args[1]))
+			exit (free_ms(ms, NULL, ms->cmds, ft_atoi(cmd->args[1])));
+		else
+			perror("Exit needs a numeric value\n");
+	}
 }
