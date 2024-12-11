@@ -205,6 +205,8 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 			return (perror("echo"), 1);
 	}
 	i = 1;
+	if (cmd->args[1] && !ft_strncmp(cmd->args[1], "-n", 3))
+		i++;
 	while (args[i])
 	{	
 		ft_putstr_fd(args[i], fd);
@@ -212,7 +214,8 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 			ft_putstr_fd(" ", fd);
 		i++;
 	}
-	write(fd, "\n", 1);
+	if (!(cmd->args[1] && !ft_strncmp(cmd->args[1], "-n", 3)))
+		write(fd, "\n", 1);
 	if (fd != STDOUT_FILENO)
 		close(fd);
 	return (0);
