@@ -32,7 +32,8 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	split_cmd_line = cmd_split(cmd_line); // malloc 3
 	if (!split_cmd_line)
 	{
-		printf("Bad quotes\n");
+		write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
+		write(2, ": unclosed quotes\n", 18);
 		return (NULL);
 	}
 	ms->cmd_n = count_cmds(split_cmd_line);
