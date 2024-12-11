@@ -11,11 +11,17 @@ t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key)
 	return (NULL);
 }
 
-int	pwd_built_in(char **msenvp)
+int	pwd_built_in(char **msenvp, t_cmd *cmd)
 {
 	int	i;
 
 	i = 0;
+	if (cmd->args[1] && cmd->args[1][0] == '-')
+	{
+		write(2, cmd->program_name + 2, ft_strlen(cmd->program_name) - 2);
+		write(2, ": pwd: arguments and options aren't supported\n", 46);
+		return (0);
+	}
 	while (msenvp[i])
 	{
 		if (!ft_strncmp(msenvp[i], "PWD=", 4))
@@ -29,10 +35,16 @@ int	pwd_built_in(char **msenvp)
 	return (1);
 }
 
-int	env_built_in(char **msenvp)
+int	env_built_in(char **msenvp, t_cmd *cmd)
 {
 	int	i;
 
+	if (cmd->args[1])
+	{
+		write(2, cmd->program_name + 2, ft_strlen(cmd->program_name) - 2);
+		write(2, ": env: arguments and options aren't supported\n", 46);
+		return (0);
+	}
 	i = 0;
 	while (msenvp[i])
 	{

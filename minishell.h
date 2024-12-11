@@ -198,8 +198,8 @@ char	*free_on_error(char **split_words, char *result);
 
 
 //			built_ins2.c
-int			pwd_built_in(char **msenvp);
-int			env_built_in(char **msenvp);
+int			pwd_built_in(char **msenvp, t_cmd *cmd);
+int			env_built_in(char **msenvp, t_cmd *cmd);
 int			cashmoney_handle(t_ms *ms);
 int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
 void		add_shell_var(t_shell_var **shell_vars, char *key, char *value);

@@ -29,7 +29,7 @@ int	exe_built_in(t_cmd *cmd, t_ms *ms)
 	else if (!ft_strncmp(cmd->args[0], "echo", 4))
 		ret = echo_built_in(cmd, ms, cmd->outfile, cmd->args);
 	else if	(!ft_strncmp(cmd->args[0], "pwd", 3))
-		ret = pwd_built_in(ms->envp);
+		ret = pwd_built_in(ms->envp, cmd);
 	else if (!ft_strncmp(cmd->args[0], "env", 3))
 		ret = env_built_in(ms->envp, cmd);
 	else if (!ft_strncmp(cmd->args[0], "$?", 2))
