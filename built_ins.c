@@ -74,6 +74,99 @@ int	unset_built_in(char **args, t_ms *ms)
 	return (0);
 }
 
+void	dollar_check(t_ms *ms, char **args)
+{
+	int		i;
+	char	**split_words;
+	char	*result;
+
+	i = 0;
+	while (args[i])
+	{
+		result = ft_strdup("");
+		if (!result)
+			return ;
+		split_words = ft_split(args[i], ' ');
+		if (!split_words)
+		{
+			free(result);
+			return ;
+		}
+		args[i] = process_split_words(ms, split_words, result);
+		if (!args[i])
+			return ;
+		i++;
+	}
+}
+
+char	*process_split_words(t_ms *ms, char **split_words, char *result)
+{
+	int		j;
+	char	*temp;
+
+	j = 0;
+	while (split_words[j])
+	{
+		if (split_words[j][0] == '$')
+			temp = process_dollar(ms, result, split_words[j]);
+		else
+			temp = ft_strjoin(result, split_words[j]);
+		if (!temp)
+			return (free_on_error(split_words, result));
+		free(result);
+		result = temp;
+		if (split_words[j + 1])
+		{
+			temp = ft_strjoin(result, " ");
+			if (!temp)
+				return (free_on_error(split_words, result));
+			free(result);
+			result = temp;
+		}
+		j++;
+	}
+	free_array_of_arrays(split_words);
+	return (result);
+}
+
+char	*process_dollar(t_ms *ms, char *result, char *word)
+{
+	char	*env_value;
+	char	*temp;
+
+	env_value = get_env_value(ms, word + 1);
+	if (env_value)
+		temp = ft_strjoin(result, env_value);
+	else
+		temp = ft_strjoin(result, "");
+	return (temp);
+}
+
+char	*get_env_value(t_ms *ms, const char *key)
+{
+	int		i;
+	size_t	key_len;
+
+	i = 0;
+	key_len = ft_strlen(key);
+	while (ms->envp[i])
+	{
+		if (!ft_strncmp(ms->envp[i], key, key_len) && ms->envp[i][key_len] == '=')
+			return (ms->envp[i] + key_len + 1);
+		i++;
+	}
+	return (NULL);
+}
+
+
+
+char	*free_on_error(char **split_words, char *result) // ei varmaan tarvitse muuta temp free
+														 // functio varmuudek
+{
+	free_array_of_arrays(split_words);
+	free(result);
+	return (NULL);
+}
 int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 {
 	int		fd;
@@ -98,7 +191,7 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 	while (args[i])
 	{	
 		ft_putstr_fd(args[i], fd);
-		if (args[i + 1])
+		if (args[i + 1] && ft_strlen(args[i]) != 0)
 			ft_putstr_fd(" ", fd);
 		i++;
 	}
@@ -108,7 +201,7 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 	return (0);
 }
 
-void	dollar_check(t_ms *ms, char **args)
+/*void	dollar_check(t_ms *ms, char **args)
 {
 	int		i;
 	int		j;
@@ -155,13 +248,18 @@ void	dollar_check(t_ms *ms, char **args)
 			if (!found_key)
 			{
 				free(args[i]);
-				args[i] = ft_strdup(""); // words after no worky
+				args[i] = ft_strdup("");
+				if (!args[i])
+				{
+					// free stuff
+					return ;
+				}
 			}
 		}
 		i++;
 	}
 }
-
+*/
 int	setenv_update(const char *key, const char *value, char **envp)
 {
 	int		i;
@@ -195,3 +293,48 @@ int	setenv_update(const char *key, const char *value, char **envp)
 	return (0);
 }
 
+
+/*
+void check_for_dollar(char *from, char quote, char **envp)
+{
+	char	*new_arg;
+	char	
+	int		len;
+	int		i;
+
+	// If single quote, keep copying normally.
+	if (quote == '\'')
+		return ;
+	// If dollar is found
+	if (*from = '$')
+	{
+		// Iterate over $
+		from++;
+		// Get string length until space
+		len = strlen_mod(from, ' ');
+		// Look through envp for a match
+		while (envp[i])
+		{
+			if (!ft_strncmp(from, envp[i], len - 1))
+			{
+				
+			}
+		}
+	}
+}
+
+int	str_len_dollar(char *from, char quote, char **envp)
+{
+	int	len;
+
+	while (from[len] != quote)
+	{
+		len++;
+	}
+}
+
+int	dollar_len
+{
+
+}
+*/

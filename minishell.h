@@ -188,6 +188,14 @@ int			unsetenv_manual(const char *key, char **envp);
 int			unset_built_in(char **args, t_ms *ms);
 int			setenv_update(const char *key, const char *value, char **envp);
 
+// testing built ins.c
+void	dollar_check(t_ms *ms, char **args);
+char	*process_split_words(t_ms *ms, char **split_words, char *result);
+char	*process_dollar(t_ms *ms, char *result, char *word);
+char	*get_env_value(t_ms *ms, const char *key);
+char	*free_on_error(char **split_words, char *result);
+
+
 //			built_ins2.c
 int			pwd_built_in(char **msenvp);
 int			env_built_in(char **msenvp);
