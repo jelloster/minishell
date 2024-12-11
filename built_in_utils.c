@@ -31,7 +31,7 @@ int	exe_built_in(t_cmd *cmd, t_ms *ms)
 	else if	(!ft_strncmp(cmd->args[0], "pwd", 3))
 		ret = pwd_built_in(ms->envp);
 	else if (!ft_strncmp(cmd->args[0], "env", 3))
-		ret = env_built_in(ms->envp);
+		ret = env_built_in(ms->envp, cmd);
 	else if (!ft_strncmp(cmd->args[0], "$?", 2))
 		ret = cashmoney_handle(ms);
 	else if (!ft_strncmp(cmd->args[0], "exit", 4))
@@ -46,8 +46,11 @@ static int	ft_isdigit_str(char *str)
 
 	i = 0;
 	while (str[i])
-		if (!ft_isdigit(str[i++]))
-				return (0);
+	{
+		if (!ft_isdigit(str[i]) && !(str[i] == '-' && i == 0))
+			return (0);
+		i++;
+	}
 	return (1);
 }
 
@@ -60,7 +63,6 @@ static void	exit_built_in(t_cmd *cmd, t_ms *ms)
 	{
 		if (cmd->args[2])
 		{
-			//("%s: exit: too many arguments\n", ms->program_name);
 			write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
 			write(2, ": exit: too many arguments\n", 27); 
 			exit (free_ms(ms, NULL, ms->cmds, 2));
