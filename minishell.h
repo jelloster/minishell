@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 18:59:34 by jkarhu           ###   ########.fr       */
+/*   Updated: 2024/12/12 18:21:44 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int			setenv_update(const char *key, const char *value, char **envp);
 void	dollar_check(t_ms *ms, char **args);
 char	*process_split_words(t_ms *ms, char **split_words, char *result);
 char	*process_dollar(t_ms *ms, char *result, char *word);
-char	*get_env_value(t_ms *ms, const char *key);
+char	*get_env_value(t_ms *ms, const char *key, int custom_len);
 char	*free_on_error(char **split_words, char *result);
 
 

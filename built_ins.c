@@ -74,6 +74,25 @@ int	unset_built_in(char **args, t_ms *ms)
 	return (0);
 }
 
+static void	mark_args(char *args, char c)
+{
+	int	i;
+
+	i = 0;
+	while (args[i] && args[i + 1])
+	{
+		if (args[i] == c && (args[i + 1] == c || args[i + 1] == '\0'))
+		{
+			args[i] = 'X';
+			i++;
+			while (args[i] == c)
+				i++;
+		}
+		i++;
+	}
+}
+
+
 void	dollar_check(t_ms *ms, char **args)
 {
 	int		i;
@@ -85,8 +104,9 @@ void	dollar_check(t_ms *ms, char **args)
 	{
 		result = ft_strdup("");
 		if (!result)
-			return ; // return -1 and stop process
-		split_words = ft_split(args[i], ' ');
+			return ;
+		mark_args(args[i], ' ');
+		split_words = ft_split(args[i], 'X');
 		if (!split_words)
 		{
 			free(result);
@@ -134,7 +154,7 @@ char	*process_dollar(t_ms *ms, char *result, char *word)
 	char	*env_value;
 	char	*temp;
 
-	env_value = get_env_value(ms, word + 1);
+	env_value = get_env_value(ms, word + 1, 0);
 	if (env_value)
 		temp = ft_strjoin(result, env_value);
 	else
@@ -142,17 +162,26 @@ char	*process_dollar(t_ms *ms, char *result, char *word)
 	return (temp);
 }
 
-char	*get_env_value(t_ms *ms, const char *key)
+char	*get_env_value(t_ms *ms, const char *key, int custom_len)
 {
 	int		i;
 	size_t	key_len;
 
 	i = 0;
-	key_len = ft_strlen(key);
+	if (custom_len)
+	{
+		key_len = custom_len;
+	}
+	else
+		key_len = ft_strlen(key);
 	while (ms->envp[i])
 	{
+		//printf("ms->envp[i] = %s, ms->envp[i][key_len] = %c.\n", ms->envp[i], ms->envp[i][key_len]);
 		if (!ft_strncmp(ms->envp[i], key, key_len) && ms->envp[i][key_len] == '=')
+		{
+			//printf("HALOOOOOOOOOOOOOOOOOO\n");
 			return (ms->envp[i] + key_len + 1);
+		}
 		i++;
 	}
 	return (NULL);
@@ -184,14 +213,31 @@ void	return_uninterpreted_dollar(t_cmd *cmd)
 	}
 }
 
+static int dollar_value_print(t_ms *ms, char *arg, int fd)
+{
+		int		i;
+		char	*output;
+		
+		i = 0;
+		while (arg[i] && arg[i] != ' ')
+			i++;
+		output = get_env_value(ms, arg + 1, i - 1);
+		if (output)
+			//printf("hello there\n");
+			ft_putstr_fd(output, fd);
+			//printf("len : %d.\n", len);
+		return (i);
+}
+
 int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 {
 	int		fd;
 	int		i;
+	int		j;
 
 	fd = STDOUT_FILENO;
-	dollar_check(ms, args);
-	return_uninterpreted_dollar(cmd);
+	//dollar_check(ms, args);
+	//return_uninterpreted_dollar(cmd);
 	if (cmd->outredir == REPLACE && cmd -> outfile)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -208,8 +254,34 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms,  char *file, char **args)
 	if (cmd->args[1] && !ft_strncmp(cmd->args[1], "-n", 3))
 		i++;
 	while (args[i])
-	{	
-		ft_putstr_fd(args[i], fd);
+	{
+		j = 0;
+		while (args[i][j])
+		{
+
+			if (args[i][j] == '$')
+			{
+				//printf("j at dollar : %d.\n", j);
+				int temp = dollar_value_print(ms, &args[i][j], fd);
+				j += temp;
+				//printf("j after dollar : %d.\n", j);
+			}
+			if (cmd->args[i][j] == '\xFF')
+			{
+				cmd->args[i][j] = '$';
+			}
+			if (args[i][j] == '~' && (args[i][j - 1] == ' ' || j == 0))
+			{
+				char *home;
+
+				home = get_env_value(ms, "HOME", 4);
+				ft_putstr_fd(home, fd);
+				j++;
+			}
+			write(fd, &args[i][j], 1);
+			j++;
+		}
+		//ft_putstr_fd(args[i], fd);
 		if (args[i + 1] && ft_strlen(args[i]) != 0)
 			ft_putstr_fd(" ", fd);
 		i++;
