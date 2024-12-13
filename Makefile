@@ -30,6 +30,8 @@ SRC_FILES		:=	main.c			\
 				built_in_utils.c	\
 				signal.c		\
 				find_last.c		\
+				redirection_utils2.c	\
+
 
 
 # ------- PIPEX --------

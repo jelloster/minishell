@@ -27,6 +27,7 @@
 # include <dirent.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <errno.h>
 
 # include <sys/stat.h>    // stat, lstat, fstat
 /*
@@ -66,9 +67,15 @@ typedef struct s_cmd
 	char	**args;
 	char	*pathed_cmd;
 	char	*infile;
+	char	**infiles;
+	int	infile_n;
+	char	**outfiles;
+	int	outfile_n;
 	char	*outfile;
 	char	**envp;
 	char	*program_name;
+	int	o_i;
+	int	i_i;
 	t_redir	outredir;
 	t_redir	inredir;
 }	t_cmd;
@@ -237,5 +244,7 @@ void		error_msg(int error, char *str, char *binary);
 void		print_and_clear_errorlog(void);
 
 int			find_last(char *str, char c);
+
+int	malloc_for_redirs(t_cmd *cmd);
 
 #endif

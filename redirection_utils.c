@@ -21,24 +21,22 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 {
 	int	i;
 	int	len;
-	int	redirs;
 
 	i = 0;
-	redirs = 0;
+	malloc_for_redirs(cmd);
+	cmd->o_i = 0;
+	cmd->i_i = 0;
 	while (cmd->args[i])
 	{
 		len = ft_strlen(cmd->args[i]);
 		if (is_redirection(cmd->args[i], len))
-		{ 
 			if (!assign_redirection_type(cmd, len, i))
 				return (0);
-			redirs++;
-		}
 		i++;
 	}
-	if (redirs > 2)
-		return (0);
-	return (parse_redir_args(cmd, paths, redirs));
+	//if (redirs > 2)
+	//	return (0);
+	return (parse_redir_args(cmd, paths, cmd->infile_n + cmd->outfile_n));
 }
 
 /*
@@ -49,16 +47,16 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
  */
 static int assign_redirection_type(t_cmd *cmd, int len, int i)
 {
-	if (!ft_strncmp(">", cmd->args[i], len) && cmd->outredir == NONE
+	if (!ft_strncmp(">", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 		cmd->outredir = REPLACE;
-	else if (!ft_strncmp("<", cmd->args[i], len) && cmd->inredir == NONE
+	else if (!ft_strncmp("<", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 		cmd->inredir = INPUT;
-	else if (!ft_strncmp(">>", cmd->args[i], len) && cmd->outredir == NONE
+	else if (!ft_strncmp(">>", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 		cmd->outredir = ADD;
-	else if (!ft_strncmp("<<", cmd->args[i], len) && cmd->inredir == NONE
+	else if (!ft_strncmp("<<", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 	{
 		cmd->inredir = STD_IN;
@@ -94,12 +92,17 @@ static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
 		// If we come across a redirection symbol
 		if (is_redirection(cmd->args[i], len))
 		{
-			
 			// Set the str after as the in/outfile
 			if (is_out_redirection(cmd->args[i], len))
-				cmd->outfile = cmd->args[++i];
+			{
+				cmd->outfiles[cmd->o_i++] = cmd->args[++i];
+				cmd->outfile = cmd->args[i];
+			}
 			else if (cmd->inredir != STD_IN)
-				cmd->infile = cmd->args[++i];
+			{
+				cmd->infiles[cmd->i_i++] = cmd->args[++i];
+				cmd->infile = cmd->args[i];
+			}
 			else
 				i++;
 			// Free the symbol string

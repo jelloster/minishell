@@ -28,8 +28,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	char	**split_cmd_line;
 	
 	ms->parsed_cmds = 0;
-	// Should return NULL if bad quotes
-	split_cmd_line = cmd_split(cmd_line); // malloc 3
+	split_cmd_line = cmd_split(cmd_line);
 	if (!split_cmd_line)
 	{
 		write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
@@ -37,10 +36,9 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		return (NULL);
 	}
 	ms->cmd_n = count_cmds(split_cmd_line);
-	cmds = malloc (ms->cmd_n * sizeof(t_cmd)); // malloc 4
+	cmds = malloc (ms->cmd_n * sizeof(t_cmd));
 	if (!cmds)
 		return (free_array_of_arrays(split_cmd_line));
-	// if this fails not always reason to print error
 	if (!init_cmds(cmds, split_cmd_line, ms))
 	{
 		free_cmds(cmds, ms->parsed_cmds);
