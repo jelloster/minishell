@@ -219,6 +219,11 @@ static int dollar_value_print(t_ms *ms, char *arg, int fd)
 		char	*output;
 		
 		i = 0;
+		if (arg[1] == '?')
+		{
+			cashmoney_handle(ms);
+			return (2);
+		}
 		while (arg[i] && arg[i] != ' ')
 			i++;
 		output = get_env_value(ms, arg + 1, i - 1);
@@ -373,7 +378,7 @@ int	setenv_update(const char *key, const char *value, char **envp)
 	{
 		if (!ft_strncmp(envp[i], key, key_len) && envp[i][key_len] == '=')
 		{
-			free(envp[i]);
+//			free(envp[i]);
 			envp[i] = temp;
 			return (0);
 		}
