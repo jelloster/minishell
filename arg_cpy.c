@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:11:59 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 12:33:54 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:50:35 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,25 @@ static int	has_quote_pair(char *s, char quote, int len);
 static void	arg_strcpy(const char *from, char *to);
 static int	arg_strlen(char *s);
 static int	arg_total_strlen(char *s);
+
+static char	*copy_symbol(char const **s)
+{
+	char	*str;
+
+	str = NULL;
+	if (**s == '|')
+		str = ft_strdup ("|");
+	else if (!ft_strncmp(*s, ">>", 2))
+		str = ft_strdup (">>");
+	else if (!ft_strncmp(*s, "<<", 2))
+		str = ft_strdup ("<<");
+	else if (!ft_strncmp(*s, ">", 1))
+		str = ft_strdup (">");
+	else if (!ft_strncmp(*s, "<", 1))
+		str = ft_strdup ("<");
+	*s += ft_strlen(str);
+	return (str);
+}
 
 /*
  * Function : arg_cpy
@@ -28,11 +47,24 @@ char	*arg_cpy(char **res, char const **s, char **r_s)
 {
 	char	*arg;
 
-	arg = malloc(sizeof(char) * (arg_strlen((char *)*s) + 1));
-	if (!arg)
-		return (cmd_free_memory(res, r_s));
-	arg_strcpy(*s, arg);
-	*s += arg_total_strlen((char *)*s);
+	if (**s == '|' || !ft_strncmp(*s, ">>", 2) || !ft_strncmp(*s, "<<", 2)
+		|| !ft_strncmp(*s, "<", 1) || !ft_strncmp(*s, ">", 1))
+	{
+		arg = copy_symbol(s);
+		if (!arg)
+			return (cmd_free_memory(res, r_s));
+	}
+	else
+	{
+		arg = malloc(sizeof(char) * (arg_strlen((char *)*s) + 1));
+		if (!arg)
+		{
+			printf("hiii\n");
+			return (cmd_free_memory(res, r_s));
+		}
+		arg_strcpy(*s, arg);
+		*s += arg_total_strlen((char *)*s);
+	}
 	*res = arg;
 	return (arg);
 }
@@ -51,7 +83,9 @@ static void	arg_strcpy(const char *from, char *to)
 {
 	char	quote;
 
-	while (*from && *from != ' ')
+	//while (*from && *from != ' ')
+	while (*from && *from != ' ' && *from != '\t'
+		&& *from != '|' && *from != '>' && *from != '<')
 	{
 		if (*from != '\'' && *from != '\"')
 			*to++ = *from++;
@@ -65,7 +99,7 @@ static void	arg_strcpy(const char *from, char *to)
 				{
 					*to++ = '\xFF';
 					from++;
-				}
+	}
 				else
 					*to++ = *from++;
 			}
@@ -77,6 +111,30 @@ static void	arg_strcpy(const char *from, char *to)
 }
 
 /*
+static void	arg_strcpy(const char *from, char *to)
+{
+	char	quote;
+
+	while (*from && *from != ' ' && *from != '\t'
+		&& *from != '|' && *from != '>' && *from != '<')
+	{
+		if (*from != '\'' && *from != '\"')
+			*to++ = *from++; // Copy non-quote characters
+		else
+		{
+			quote = *from;
+			from++;
+			while (*from != quote && *from)
+				*to++ = *from++; // Copy quoted content
+			if (*from)
+				from++;
+		}
+	}
+	*to = '\0'; // Null-terminate the string
+}
+*/
+
+/*
  * Function : arg_strlen
  *
  * Calculates the lenght of the next argument in string "s"
@@ -86,6 +144,7 @@ static void	arg_strcpy(const char *from, char *to)
  *	len : 5
  */
 
+/*
 static int	arg_strlen(char *s)
 {
 	int		len;
@@ -114,6 +173,39 @@ static int	arg_strlen(char *s)
 	}
 	return (len - quote_n);
 }
+*/
+
+static int	arg_strlen(char *s)
+{
+	int		len;
+	int		quote_n;
+	char	quote;
+
+	len = 0;
+	quote_n = 0;
+	while (s[len] && s[len] != ' ' && s[len] != '\t' && s[len] != '|' && s[len] != '>' && s[len] != '<') // Stop at operators or spaces
+	{
+		if (s[len] != '\'' && s[len] != '\"')
+			len++;
+		else
+		{
+			quote = s[len];
+			if (has_quote_pair(s, quote, len++))
+			{
+				while (s[len] && s[len] != quote)
+					len++; // Move past the quoted content
+				quote_n += 2;
+				len++;
+			}
+			else
+			{
+				printf("yo\n");
+				return (-1); // Error in quotes
+			}
+		}
+	}
+	return (len - quote_n);
+}
 
 /*
  * Function : arg_total_strlen
@@ -131,7 +223,8 @@ static int	arg_total_strlen(char *s)
 	char	quote;
 
 	len = 0;
-	while (s[len] && s[len] != ' ')
+	//while (s[len] && s[len] != ' ')
+	while (s[len] && s[len] != ' ' && s[len] != '\t' && s[len] != '|' && s[len] != '>' && s[len] != '<') // Stop at operators or spaces
 	{
 		if (s[len] != '\'' && s[len] != '\"')
 			len++;

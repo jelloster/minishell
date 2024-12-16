@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 14:41:39 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:59:58 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,6 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	if (cmd->outfile)
 		if (!redirect_output(cmd->outfile, cmd))
 			return (0);
-	if (is_built_in(cmd->args[0]))
-	{
-		return (69);
-	}
 	if (access(cmd->pathed_cmd, X_OK) == 0)
 	{
 		execve(cmd->pathed_cmd, cmd->args, ms->envp);
