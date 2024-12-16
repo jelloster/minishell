@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:07:31 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 19:00:45 by jkarhu           ###   ########.fr       */
+/*   Updated: 2024/12/16 13:38:28 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 	{
 		while (i < cmd_n)
 		{
-				//&& cmds[i].args[0] != cmds[i].pathed_cmd + find_last(cmds[i].pathed_cmd, '/') + 1)
 			if (cmds[i].pathed_cmd && cmds[i].pathed_cmd != cmds[i].args[0])
 				ft_memdel(&cmds[i].pathed_cmd);
 			if (cmds[i].args)
@@ -38,6 +37,23 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 	return (0);
 }
 
+void	free_shell_vars(t_shell_var *shell_var)
+{
+	int	i;
+
+	i = 0;
+	//while (shell_var[i])
+	//{
+		if (shell_var->key)
+			ft_memdel(&shell_var->key);
+		if (shell_var->value)
+			ft_memdel(&shell_var->value);
+		i++;
+	//}
+	free (shell_var);
+	shell_var = NULL;
+}
+
 int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 {
 	if (ms->paths)
@@ -51,6 +67,7 @@ int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 	}
 	if (cmd_line)
 		ft_memdel(&cmd_line);
+	//free_shell_vars(ms->shell_vars);
 	return (ret);
 }
 

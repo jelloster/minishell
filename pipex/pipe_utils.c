@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:47:35 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 18:15:25 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:38:34 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	redirect_output(char *file, t_cmd *cmd)
 	
 	if (cmd->outredir == REPLACE)
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	//else if (cmd->outredir == ADD)
 	else
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (fd == -1)

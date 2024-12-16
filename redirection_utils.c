@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:03 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 12:04:35 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:08:16 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
 		// If we come across a redirection symbol
 		if (is_redirection(cmd->args[i], len))
 		{
-			
 			// Set the str after as the in/outfile
 			if (is_out_redirection(cmd->args[i], len))
 				cmd->outfile = cmd->args[++i];

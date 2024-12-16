@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:11:59 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/10 18:34:34 by jkarhu           ###   ########.fr       */
+/*   Updated: 2024/12/16 12:33:54 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*arg_cpy(char **res, char const **s, char **r_s)
 static void	arg_strcpy(const char *from, char *to)
 {
 	char	quote;
-	
+
 	while (*from && *from != ' ')
 	{
 		if (*from != '\'' && *from != '\"')
@@ -107,7 +107,7 @@ static int	arg_strlen(char *s)
 					len++;
 				quote_n += 2;
 				len++;
-}
+			}
 			else
 				return (-1);
 		}

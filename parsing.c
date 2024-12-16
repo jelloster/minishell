@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 16:31:33 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:32:56 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 {
 	t_cmd	*cmds;
 	char	**split_cmd_line;
-	
+
 	ms->parsed_cmds = 0;
 	// Should return NULL if bad quotes
 	split_cmd_line = cmd_split(cmd_line); // malloc 3
@@ -68,7 +68,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 	while (split[i])
 	{
 		if (!ft_strncmp(split[i], "|", ft_strlen(split[i]))
-		|| !split[i + 1])
+			|| !split[i + 1])
 		{
 			size = i - j + (split[i + 1] == NULL);
 			if (cmd_block(cmds++, &split[j], size, ms) == -1)
@@ -92,7 +92,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 {
 	char	*no_path_cmd;
-	
+
 	cmd->args = malloc((size + 1) * sizeof(char *));
 	if (!cmd->args)
 		return (-1);
@@ -101,7 +101,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (!copy_args_from_split(cmd, split, size))
 		return (-1);
 	if (check_for_redirections(cmd))
-		return(handle_redirected_cmd(cmd, ms->paths));
+		return (handle_redirected_cmd(cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
 	{
 		cmd->pathed_cmd = cmd->args[0];
