@@ -25,10 +25,14 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 				ft_memdel(&cmds[i].pathed_cmd);
 			if (cmds[i].args)
 				free_array_of_arrays(cmds[i].args);
-			if (cmds[i].infile)
+			if (cmds[i].infile && !cmds[i].infiles)
 				ft_memdel(&cmds[i].infile);
-			if (cmds[i].outfile)
+			if (cmds[i].infiles)
+				free_array_of_arrays(cmds[i].infiles);
+			if (cmds[i].outfile && !cmds[i].outfiles)
 				ft_memdel(&cmds[i].outfile);
+			if (cmds[i].outfiles)
+				free_array_of_arrays(cmds[i].outfiles);
 			i++;
 		}
 		free(cmds);
@@ -82,7 +86,7 @@ void	*free_array_of_arrays(char **arr)
 		{
 			if (arr[i])
 			{
-				free(arr[i]); // free that was not malloced 
+				free(arr[i]);
 				arr[i] = NULL;
 			}
 			i++;
