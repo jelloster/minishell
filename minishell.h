@@ -28,8 +28,8 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <errno.h>
+# include <sys/stat.h>
 
-# include <sys/stat.h>    // stat, lstat, fstat
 /*
 # include <string.h>      // strerror
 # include <termios.h>     // tcsetattr, tcgetattr
@@ -40,7 +40,6 @@
 // - HEADER FILES -
 
 # include "libft/inc/libft.h"
-//# include "pipex/pipex.h"
 
 // --- TYPEDEFS ---
 
@@ -197,22 +196,16 @@ int			unset_built_in(char **args, t_ms *ms);
 int			setenv_update(const char *key, const char *value, char **envp);
 
 // testing built ins.c
-/*
-void	dollar_check(t_ms *ms, char **args);
-char	*process_split_words(t_ms *ms, char **split_words, char *result);
-char	*process_dollar(t_ms *ms, char *result, char *word); */
 char	*get_env_value(t_ms *ms, const char *key, int custom_len);
 char	*free_on_error(char **split_words, char *result);
 
 
-//			built_ins2.c
 int			pwd_built_in(char **msenvp, t_cmd *cmd);
 int			env_built_in(char **msenvp, t_cmd *cmd);
 void		add_shell_var(t_shell_var **shell_vars, char *key, char *value);
 void		remove_shell_var(t_shell_var **shell_vars, char *key);
 void		init_shell_vars(char **envp, t_shell_var **shell_vars);
 
-//			export_built_in.c
 int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
 void		print_exported_vars(char **msenvp, t_shell_var *shell_vars);
 void		print_shell_vars(t_shell_var *shell_vars);
@@ -254,5 +247,6 @@ int			find_last(char *str, char c);
 void	exit_built_in(t_cmd *cmd, t_ms *ms);
 
 int	malloc_for_redirs(t_cmd *cmd);
+void    signal_check(t_ms *ms);
 
 #endif

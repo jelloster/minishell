@@ -49,6 +49,18 @@ static int	handle_io(int *fd, t_cmd *cmd)
 	return (1);
 }
 
+static void	handle_squiggly(char **args, int *i, int *j, int fd, t_ms *ms)
+{
+	char *home;
+
+	if (args[*i][*j] == '~' && (args[*i][*j - 1] == ' ' || *j == 0))
+	{
+		home = get_env_value(ms, "HOME", 4);
+		ft_putstr_fd(home, fd);
+		(*j)++;
+	}
+}
+
 static void	iterate_args(char **args, int fd, t_ms *ms)
 {
 	int		i;
@@ -68,7 +80,10 @@ static void	iterate_args(char **args, int fd, t_ms *ms)
 			{
 				if (args[i][j] == '\xFF')
 					args[i][j] = '$';
-				write(fd, &args[i][j++], 1);
+				handle_squiggly(args, &i, &j, fd, ms);
+				write(fd, &args[i][j], 1);
+				if (args[i][j] && args[i][j + 1])
+					j++;
 			}
 		}
 		if (args[i + 1] && ft_strlen(args[i]) != 0)
@@ -81,6 +96,7 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms, char **args)
 {
 	int		fd;
 
+	signal_check(ms);
 	if (!handle_io(&fd, cmd))
 		return (1);
 	iterate_args(args, fd, ms);
@@ -91,13 +107,3 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms, char **args)
 	return (0);
 }
 
-/*
-if (args[i][j] == '~' && (args[i][j - 1] == ' ' || j == 0))
-{
-	char *home;
-
-	home = get_env_value(ms, "HOME", 4);
-	ft_putstr_fd(home, fd);
-	j++;
-}
-*/

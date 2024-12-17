@@ -59,3 +59,18 @@ void	handle_sigquit(int signal)
 {
 	(void)signal;
 }
+
+void    signal_check(t_ms *ms)
+{
+	if (g_sig.sigint)
+	{
+		ms->ret_val = 130;
+		g_sig.sigint = 0;
+	}
+	else if (g_sig.sigquit)
+	{
+		ms->ret_val = 131;
+		g_sig.sigquit = 0;
+	}
+}
+

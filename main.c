@@ -16,6 +16,12 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
 t_sig	g_sig;
 
+
+/*
+ *Function: signal check
+ * Signal was received, set signal received to = 0 and ms.ret_val to appropriate value
+*/
+
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
@@ -32,7 +38,7 @@ int	main(int ac, char *av[], char *envp[])
 		if (ms.cmd_line)
 			add_history(ms.cmd_line); // how to free this?
 		else
-			return (free_ms(&ms, ms.cmd_line, NULL, 1));
+			return (free_ms(&ms, ms.cmd_line, NULL, 0));
 		cmds = parse(ms.cmd_line, &ms);
 		if (!cmds)
 			err(&ms);
