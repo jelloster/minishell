@@ -31,12 +31,12 @@ size_t	count_cmds(char **split)
 	i = 0;
 	while (split[i])
 	{
-		if (ft_strncmp(split[i], "|", ft_strlen(split[i])) == 0)
+		if (!ft_strncmp(split[i], "|", 2))
 			pipe_count++;
 		i++;
 	}
 	if (pipe_count)
-		return (pipe_count + 1);
+		return! (pipe_count + 1);
 	else if (i == 0)
 		return (0);
 	else
@@ -56,8 +56,8 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 	cmd->outredir = NONE;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
+	cmd->infiles = NULL;
+	cmd->outfiles = NULL;
 	cmd->pathed_cmd = NULL;
 	cmd->outfile_n = 0;
 	cmd->infile_n = 0;
