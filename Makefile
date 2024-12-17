@@ -37,6 +37,7 @@ SRC_FILES		:=	main.c			\
 				env_built_in.c		\
 				export_built_in.c	\
 				exit_built_in.c		\
+				syntax_check.c		\
 
 # ------- PIPEX --------
 

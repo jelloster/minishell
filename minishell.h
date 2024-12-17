@@ -249,4 +249,6 @@ void	exit_built_in(t_cmd *cmd, t_ms *ms);
 int	malloc_for_redirs(t_cmd *cmd);
 void    signal_check(t_ms *ms);
 
+int	syntax_check(char **split);
+
 #endif
