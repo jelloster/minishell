@@ -61,14 +61,22 @@ static void	handle_squiggly(char **args, int *i, int *j, int fd, t_ms *ms)
 	}
 }
 
+static int	handle_flag(char **args)
+{
+	int	i;
+
+	i = 1;
+	while (args[i] && !ft_strncmp(args[i], "-n", 2))
+		i++;
+	return (i);
+}
+
 static void	iterate_args(char **args, int fd, t_ms *ms)
 {
 	int		i;
 	int		j;
 
-	i = 1;
-	if (args[1] && !ft_strncmp(args[1], "-n", 3))
-		i++;
+	i = handle_flag(args);
 	while (args[i])
 	{
 		j = 0;
@@ -94,13 +102,13 @@ static void	iterate_args(char **args, int fd, t_ms *ms)
 
 int	echo_built_in(t_cmd *cmd, t_ms *ms, char **args)
 {
-	int		fd;
+	int	fd;
 
 	signal_check(ms);
 	if (!handle_io(&fd, cmd))
 		return (1);
 	iterate_args(args, fd, ms);
-	if (!(cmd->args[1] && !ft_strncmp(cmd->args[1], "-n", 3)))
+	if (!(cmd->args[1] && !ft_strncmp(cmd->args[1], "-n", 2)))
 		write(fd, "\n", 1);
 	if (fd != STDOUT_FILENO)
 		close(fd);
