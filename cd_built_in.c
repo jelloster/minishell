@@ -26,8 +26,15 @@ int	cd_built_in(char **args, t_ms *ms)
 			return (perror("cd"), 1);
 	}
 	else
+	{
+		if (args[2])
+		{
+			write(STDERR_FILENO, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
+			write(STDERR_FILENO, ": cd: too many arguments\n", 25);
+		}
 		if (chdir(args[1]) == -1)
-			return (perror("cd"), 1);;
+			return (perror("cd"), 1);
+	}
 	if (getcwd(cwd, sizeof(cwd)))
 		setenv_update("PWD", cwd, ms->envp);
 	return (0);
