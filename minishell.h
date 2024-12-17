@@ -201,12 +201,20 @@ char	*free_on_error(char **split_words, char *result);
 //			built_ins2.c
 int			pwd_built_in(char **msenvp, t_cmd *cmd);
 int			env_built_in(char **msenvp, t_cmd *cmd);
-int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
 void		add_shell_var(t_shell_var **shell_vars, char *key, char *value);
 void		remove_shell_var(t_shell_var **shell_vars, char *key);
 void		init_shell_vars(char **envp, t_shell_var **shell_vars);
-void		print_exported_vars(t_shell_var *shell_vars);
-t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
+
+//			export_built_in.c
+int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
+void		print_exported_vars(char **msenvp, t_shell_var *shell_vars);
+void		print_shell_vars(t_shell_var *shell_vars);
+void		print_env_vars(char **msenvp);
+int			key_legit_check(char *arg);
+
+//			shell shit
+			t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
+			char	*get_key(char *envp);
 
 //			built_in_utils.c
 int			is_built_in(const char *cmd);

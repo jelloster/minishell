@@ -38,17 +38,38 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 
 int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 {
-	int	i;
+	int		i;
+	char	*key;
 
-	printf("Export built in\n");
 	if (!args[1])
 	{
-		print_exported_vars(*shell_vars);
+		print_exported_vars(ms->envp, *shell_vars);
 		return (0);
 	}
 	i = 1;
 	while (args[i])
 	{
+		key = get_key(args[i]);
+		if (!key)
+		{
+			perror("key malloc");
+			return (1);
+		}
+		else
+		{
+			if (!key_legit_check(key))
+			{
+				ft_printf("invalid key shit\n");
+				free(key);
+				i++;
+				continue ;
+			}
+			else
+			{
+				ft_printf("good key shit");
+				free(key);
+			}
+		}
 		if (ft_strchr(args[i], '='))
 		{
 			if (handle_key_value(args[i], ms, shell_vars) == -1)
@@ -59,4 +80,70 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 		i++;
 	}
 	return (0);
+}
+
+int	key_legit_check(char *arg)
+{
+	int i;
+
+	if (!arg || (!((arg[0] >= 'a' && arg[0] <= 'z')
+		|| (arg[0] >= 'A' && arg[0] <= 'Z') || arg[0] == '_')))
+		return (0);
+	i = 1;
+	while (arg[i])
+	{
+		if (!((arg[i] >= 'a' && arg[i] <= 'z')
+			|| (arg[i] >= 'A' && arg[i] <= 'Z')
+			|| (arg[i] >= '0' && arg[i] <= '9') || arg[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);	
+}
+
+void	print_env_vars(char **msenvp)
+{
+	char	*val;
+	char	*key;
+
+	while (*msenvp)
+	{
+		val = ft_strchr(*msenvp, '=');
+		if (val)
+		{
+			key = get_key(*msenvp);
+			if (!key)
+			{
+				perror("malloc");
+				return ;
+			}
+			val++;
+			ft_printf("declare -x %s=\"%s\"\n", key, val);
+			free(key);
+		}
+		else
+			ft_printf("declare -x %s\n", *msenvp);
+		msenvp++;
+	}
+}
+
+void	print_shell_vars(t_shell_var *shell_vars)
+{
+	t_shell_var	*current;
+
+	current = shell_vars;
+	while (current)
+	{
+		if (current->value)
+			ft_printf("declare -x %s=\"%s\"\n", current->key, current->value);
+		else
+			ft_printf("declare -x %s\n", current->key);
+		current = current->next;
+	}
+}
+
+void	print_exported_vars(char **msenvp, t_shell_var *shell_vars)
+{
+	print_env_vars(msenvp);
+	print_shell_vars(shell_vars);
 }

@@ -82,18 +82,22 @@ void	init_shell_vars(char **envp, t_shell_var **shell_vars)
 	}
 }
 
-void	print_exported_vars(t_shell_var *shell_vars)
+char	*get_key(char *envp)
 {
-	t_shell_var	*current;
+	char	*val;
+	char	*key;
+	int		key_len;
 
-	current = shell_vars;
-	ft_printf("declare -x variables:\n");
-	while (current)
+	val = ft_strchr(envp, '=');
+	if (val)
 	{
-		if (current->value)
-			ft_printf("declare -x %s=\"%s\"\n", current->key, current->value);
-		else
-			ft_printf("declare -x %s\n", current->key);
-		current = current->next;
+		key_len = val - envp;
+		key = malloc(key_len + 1);
+		if (!key)
+			return (NULL);
+		ft_strlcpy(key, envp, key_len + 1);
+		return(key);
 	}
+	else
+		return (NULL);
 }
