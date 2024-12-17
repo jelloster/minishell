@@ -27,22 +27,16 @@ SRC_FILES		:=	main.c			\
 				built_in_utils.c	\
 				signal.c		\
 				find_last.c		\
-<<<<<<< HEAD
 				redirection_utils2.c	\
-
-
-=======
-				cd_built_in.c	\
+				cd_built_in.c		\
 				unset_built_in.c	\
-				echo_built_in.c	\
+				echo_built_in.c		\
 				set_env_built_in.c	\
-				shell_vars.c	\
-				pwd_built_in.c	\
-				env_built_in.c	\
+				shell_vars.c		\
+				pwd_built_in.c		\
+				env_built_in.c		\
 				export_built_in.c	\
 				exit_built_in.c		\
-			
->>>>>>> 3dfb0672f06847c6fdf4e25379265633025a3a48
 
 # ------- PIPEX --------
 

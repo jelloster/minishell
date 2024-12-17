@@ -41,11 +41,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	if (cmd->outfile)
 		if (!redirect_output(cmd->outfile, cmd))
 			return (0);
-<<<<<<< HEAD
-	if (access(cmd->pathed_cmd, X_OK) == 0) // needed?
-=======
 	if (access(cmd->pathed_cmd, X_OK) == 0)
->>>>>>> 3dfb0672f06847c6fdf4e25379265633025a3a48
 	{
 		execve(cmd->pathed_cmd, cmd->args, ms->envp);
 		return (2);
