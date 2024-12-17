@@ -49,6 +49,8 @@ int	unset_built_in(char **args, t_ms *ms)
 	while (args[i])
 	{
 		unsetenv_manual(args[i], ms->envp);
+		if (find_shell_var(ms->shell_vars, args[i]))
+			remove_shell_var(&ms->shell_vars, args[i]);
 		i++;
 	}
 	return (0);

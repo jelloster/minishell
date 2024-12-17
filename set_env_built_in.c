@@ -63,7 +63,6 @@ int	setenv_update(const char *key, const char *value, char **envp)
 	{
 		if (!ft_strncmp(envp[i], key, key_len) && envp[i][key_len] == '=')
 		{
-//			free(envp[i]);
 			envp[i] = temp;
 			return (0);
 		}

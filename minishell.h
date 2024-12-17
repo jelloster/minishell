@@ -207,8 +207,8 @@ void		remove_shell_var(t_shell_var **shell_vars, char *key);
 void		init_shell_vars(char **envp, t_shell_var **shell_vars);
 
 int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
-void		print_exported_vars(char **msenvp, t_shell_var *shell_vars);
-void		print_shell_vars(t_shell_var *shell_vars);
+void		print_exported_vars(t_ms *ms, t_shell_var *shell_vars);
+void		print_shell_vars(t_shell_var *shell_vars, t_ms *ms);
 void		print_env_vars(char **msenvp);
 int			key_legit_check(char *arg);
 

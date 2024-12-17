@@ -29,6 +29,12 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 		return (-1);
 	ft_strlcpy(key, arg, key_len + 1);
 	value = equal_sign + 1;
+	if (value[0] == '$')
+	{
+		value = get_env_value(ms, value + 1, ft_strlen(value) - 1);
+		if (!value)
+			value = "";
+	}
 	if (setenv_update(key, value, ms->envp) == -1)
 		return (-1);
 	remove_shell_var(shell_vars, key);
@@ -43,7 +49,7 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 
 	if (!args[1])
 	{
-		print_exported_vars(ms->envp, *shell_vars);
+		print_exported_vars(ms, *shell_vars);
 		return (0);
 	}
 	i = 1;
@@ -52,6 +58,7 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 		key = get_key(args[i]);
 		if (!key)
 		{
+			// add check werhn only KEY
 			perror("key malloc");
 			return (1);
 		}
@@ -67,6 +74,7 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 			else
 			{
 				ft_printf("good key shit");
+				ft_printf("KEY %s\n", key);
 				free(key);
 			}
 		}
@@ -127,23 +135,26 @@ void	print_env_vars(char **msenvp)
 	}
 }
 
-void	print_shell_vars(t_shell_var *shell_vars)
+void	print_shell_vars(t_shell_var *shell_vars, t_ms *ms)
 {
 	t_shell_var	*current;
 
 	current = shell_vars;
 	while (current)
 	{
-		if (current->value)
-			ft_printf("declare -x %s=\"%s\"\n", current->key, current->value);
-		else
-			ft_printf("declare -x %s\n", current->key);
+		if (!get_env_value(ms, current->key, 0))
+		{
+			if (current->value)
+				ft_printf("declare -x %s=\"%s\"\n", current->key, current->value);
+			else
+				ft_printf("declare -x %s\n", current->key);
+		}
 		current = current->next;
 	}
 }
 
-void	print_exported_vars(char **msenvp, t_shell_var *shell_vars)
+void	print_exported_vars(t_ms *ms, t_shell_var *shell_vars)
 {
-	print_env_vars(msenvp);
-	print_shell_vars(shell_vars);
+	print_env_vars(ms->envp);
+	print_shell_vars(shell_vars, ms);
 }
