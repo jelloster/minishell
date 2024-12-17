@@ -82,7 +82,7 @@ static void	iterate_args(char **args, int fd, t_ms *ms)
 					args[i][j] = '$';
 				handle_squiggly(args, &i, &j, fd, ms);
 				write(fd, &args[i][j], 1);
-				if (args[i][j] && args[i][j + 1])
+				if (args[i][j])
 					j++;
 			}
 		}
