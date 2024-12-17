@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   cd_built_in.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 17:28:13 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/12 19:18:25 by jkarhu           ###   ########.fr       */
+/*   Created: 2024/12/16 11:35:49 by motuomin          #+#    #+#             */
+/*   Updated: 2024/12/16 12:57:48 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* Description : Outputs the string ’s’ to the given file descriptor.*/
+#include "minishell.h"
 
-#include <unistd.h>
-
-void	ft_putstr_fd(char *s, int fd)
+int	cd_built_in(char **args, t_ms *ms)
 {
-	unsigned int	i;
+	char	cwd[1024];
+	char	*home;
 
-	i = 0;
-	while (s[i] != '\0')
+	if (!args[1])
 	{
-		write(fd, &s[i], 1);
-		i++;
+		home = getenv("HOME");
+		if (!home)
+			return (perror("HOME env"), 1);
+		if (chdir(home) == -1)
+			return (perror("cd"), 1);
 	}
+	else
+		if (chdir(args[1]) == -1)
+			return (perror("cd"), 1);;
+	if (getcwd(cwd, sizeof(cwd)))
+		setenv_update("PWD", cwd, ms->envp);
+	return (0);
 }

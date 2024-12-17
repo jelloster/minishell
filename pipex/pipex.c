@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:35 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 12:57:07 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 14:08:00 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 	{
 		if (prev_pipe != -1)
 			dup2(prev_pipe, STDIN_FILENO);
+		//printf("Has outfile : %d\n.", cmd.outfile != NULL);
 		if (cmd.outfile && !redirect_output(cmd.outfile, &cmd))
 			exit(1);
 	}

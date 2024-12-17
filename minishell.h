@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 18:59:34 by jkarhu           ###   ########.fr       */
+/*   Updated: 2024/12/16 13:10:11 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,31 +190,38 @@ void		*free_array_of_arrays(char **arr);
 
 //			built_ins.c
 int			cd_built_in(char **args, t_ms *ms);
-int			echo_built_in(t_cmd *cmd, t_ms *ms, char *file, char **args);
+int			echo_built_in(t_cmd *cmd, t_ms *ms, char **args);
 void		dollar_check(t_ms *ms, char **args);
 int			unsetenv_manual(const char *key, char **envp);
 int			unset_built_in(char **args, t_ms *ms);
 int			setenv_update(const char *key, const char *value, char **envp);
 
 // testing built ins.c
+/*
 void	dollar_check(t_ms *ms, char **args);
 char	*process_split_words(t_ms *ms, char **split_words, char *result);
-char	*process_dollar(t_ms *ms, char *result, char *word);
-char	*get_env_value(t_ms *ms, const char *key);
+char	*process_dollar(t_ms *ms, char *result, char *word); */
+char	*get_env_value(t_ms *ms, const char *key, int custom_len);
 char	*free_on_error(char **split_words, char *result);
 
 
 //			built_ins2.c
 int			pwd_built_in(char **msenvp, t_cmd *cmd);
 int			env_built_in(char **msenvp, t_cmd *cmd);
-int			cashmoney_handle(t_ms *ms);
-int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
 void		add_shell_var(t_shell_var **shell_vars, char *key, char *value);
 void		remove_shell_var(t_shell_var **shell_vars, char *key);
 void		init_shell_vars(char **envp, t_shell_var **shell_vars);
-void		print_exported_vars(t_shell_var *shell_vars);
-int			handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars);
-t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
+
+//			export_built_in.c
+int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
+void		print_exported_vars(char **msenvp, t_shell_var *shell_vars);
+void		print_shell_vars(t_shell_var *shell_vars);
+void		print_env_vars(char **msenvp);
+int			key_legit_check(char *arg);
+
+//			shell shit
+			t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
+			char	*get_key(char *envp);
 
 //			built_in_utils.c
 int			is_built_in(const char *cmd);
@@ -244,6 +251,7 @@ void		error_msg(int error, char *str, char *binary);
 void		print_and_clear_errorlog(void);
 
 int			find_last(char *str, char c);
+void	exit_built_in(t_cmd *cmd, t_ms *ms);
 
 int	malloc_for_redirs(t_cmd *cmd);
 

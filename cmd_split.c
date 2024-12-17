@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:28:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/09 11:50:21 by motuomin         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:50:36 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	**cmd_split(char const *s)
 	res_start = res;
 	while (*s)
 	{
-		while (*s == ' ')
+		while (*s == ' ' || *s == '\t')
 			s++;
 		if ((*s && !arg_cpy(res++, &s, res_start)))
 			return (NULL);
@@ -55,6 +55,7 @@ char	**cmd_split(char const *s)
  * Returns the count or -1 in case of unclosed quotes.
 */
 
+/*
 static int	cmd_count_words(char const *s)
 {
 	int		i;
@@ -77,6 +78,41 @@ static int	cmd_count_words(char const *s)
 			count++;
 		if (s[i])
 			i++;
+	}
+	return (count);
+} */
+
+static int	cmd_count_words(char const *s)
+{
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	if (!s[i])
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == '\'' || s[i] == '\"')
+		{
+			if (!iterate_quoted_word(s, &i, s[i]))
+				return (-1);
+			i++; // new
+			count++;
+		}
+		else if (s[i] == ' ' || s[i] == '\t')
+			i++;
+		else if (s[i] == '|' || s[i] == '>' || s[i] == '<')
+		{
+			count++;
+			i++;
+		}
+		else
+		{
+			count++;
+			while (s[i] && s[i] != ' ' && s[i] != '\t' && s[i] != '|' && s[i] != '>' && s[i] != '<') // Stop at operators or spaces
+				i++;
+		}
 	}
 	return (count);
 }
