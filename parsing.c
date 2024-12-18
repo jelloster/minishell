@@ -35,6 +35,13 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		write(2, ": unclosed quotes\n", 18);
 		return (NULL);
 	}
+	if (!syntax_check(split_cmd_line))
+	{
+		free_array_of_arrays(split_cmd_line);
+		write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
+		write(2, ": syntax error\n", 16);
+		return (NULL);
+	}
 	ms->cmd_n = count_cmds(split_cmd_line);
 	cmds = malloc (ms->cmd_n * sizeof(t_cmd));
 	if (!cmds)
