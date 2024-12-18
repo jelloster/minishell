@@ -61,9 +61,9 @@ void	handle_sigint(int signal)
 /*
  * Handles Ctrl+\
 */
-void handle_sigquit(int signal)
+void	handle_sigquit(int signal)
 {
-	struct sigaction act;
+	struct sigaction	act;
 
 	(void)signal;
 	memset(&act, 0, sizeof(act));
@@ -72,14 +72,7 @@ void handle_sigquit(int signal)
 	g_sig.sigquit = 1;
 }
 
-/*
-void	handle_sigquit(int signal)
-{
-	(void)signal;
-	g_sig.sigquit = 1;
-}
-*/
-void    signal_check(t_ms *ms)
+void	signal_check(t_ms *ms)
 {
 	if (g_sig.sigint)
 	{
@@ -92,4 +85,3 @@ void    signal_check(t_ms *ms)
 		g_sig.sigquit = 0;
 	}
 }
-
