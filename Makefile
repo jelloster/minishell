@@ -22,7 +22,6 @@ SRC_FILES		:=	main.c			\
 				redirection_utils.c	\
 				memory_functions.c	\
 				arg_cpy.c		\
-				error_utils.c		\
 				heredoc_handle.c	\
 				built_in_utils.c	\
 				signal.c		\
@@ -38,6 +37,7 @@ SRC_FILES		:=	main.c			\
 				export_built_in.c	\
 				exit_built_in.c		\
 				syntax_check.c		\
+				echo_utils.c		\
 
 # ------- PIPEX --------
 

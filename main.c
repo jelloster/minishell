@@ -40,15 +40,10 @@ int	main(int ac, char *av[], char *envp[])
 		else
 			return (free_ms(&ms, ms.cmd_line, NULL, 0));
 		cmds = parse(ms.cmd_line, &ms);
-		if (!cmds)
-			err(&ms);
-		if (!ms.error)
-		{
+		if (cmds)
 			if(!exe_or_pipe(&ms, cmds)) // cannot return 0
 				return (free_ms(&ms, ms.cmd_line, cmds, 1));
-		}
 		free(ms.cmd_line);
-		ms.error = 0;
 	}
 	return (free_ms(&ms, NULL, cmds, 0));
 }
