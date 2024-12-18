@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_handle.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
+/*   Updated: 2024/12/16 13:38:20 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	heredoc_write(const char *delim, t_cmd *cmd)
@@ -33,17 +45,19 @@ int	heredoc_print(t_cmd *cmd)
 {
 	int		fd;
 	char	*line;
-	
+
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd == -1)
 	{
 		perror("open print");
 		return (0);
 	}
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		ft_printf("%s", line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (1);
