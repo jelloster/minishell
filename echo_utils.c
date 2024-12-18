@@ -16,7 +16,7 @@ void	handle_squiggly(char *arg, int *j, int fd, t_ms *ms)
 {
 	char	*home;
 
-	if (args[*i][*j] == '~' && (args[*i][*j - 1] == ' ' || *j == 0))
+	if (arg[*j] == '~' && (arg[*j - 1] == ' ' || *j == 0))
 	{
 		home = get_env_value(ms, "HOME", 4);
 		ft_putstr_fd(home, fd);
