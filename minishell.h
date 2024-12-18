@@ -250,6 +250,8 @@ void		print_and_clear_errorlog(void);
 int			find_last(char *str, char c);
 void	exit_built_in(t_cmd *cmd, t_ms *ms);
 
+void	handle_squiggly(char *arg, int *j, int fd, t_ms *ms);
+int	handle_flag(char **args);
 int	malloc_for_redirs(t_cmd *cmd);
 void    signal_check(t_ms *ms);
 

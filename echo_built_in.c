@@ -21,7 +21,7 @@ static int	dollar_value_print(t_ms *ms, char *arg, int fd)
 	if (arg[1] == '?')
 	{
 		ft_printf("%d", ms->ret_val);
-		return (2); // why 2?
+		return (2);
 	}
 	while (arg[i] && arg[i] != ' ' && (i == 0 || ft_isalnum(arg[i])))
 		i++;
@@ -49,28 +49,6 @@ static int	handle_io(int *fd, t_cmd *cmd)
 	return (1);
 }
 
-static void	handle_squiggly(char **args, int *i, int *j, int fd, t_ms *ms)
-{
-	char *home;
-
-	if (args[*i][*j] == '~' && (args[*i][*j - 1] == ' ' || *j == 0))
-	{
-		home = get_env_value(ms, "HOME", 4);
-		ft_putstr_fd(home, fd);
-		(*j)++;
-	}
-}
-
-static int	handle_flag(char **args)
-{
-	int	i;
-
-	i = 1;
-	while (args[i] && !ft_strncmp(args[i], "-n", 2))
-		i++;
-	return (i);
-}
-
 static void	iterate_args(char **args, int fd, t_ms *ms)
 {
 	int		i;
@@ -88,7 +66,7 @@ static void	iterate_args(char **args, int fd, t_ms *ms)
 			{
 				if (args[i][j] == '\xFF')
 					args[i][j] = '$';
-				handle_squiggly(args, &i, &j, fd, ms);
+				handle_squiggly(args[i], &j, fd, ms);
 				write(fd, &args[i][j], 1);
 				if (args[i][j])
 					j++;
@@ -114,4 +92,3 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms, char **args)
 		close(fd);
 	return (0);
 }
-
