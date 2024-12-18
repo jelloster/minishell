@@ -177,6 +177,9 @@ int			update_history(t_ms *ms, char *cmd_line);
 int			handle_redirected_cmd(t_cmd *cmd, char **paths);
 int			check_for_redirections(t_cmd *cmd);
 
+
+int	has_quote_pair(char *s, char quote, int len);
+
 //			heredoc_handle.c
 int			heredoc_write(const char *delim, t_cmd *cmd);
 int			heredoc_print(t_cmd *cmd);

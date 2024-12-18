@@ -23,7 +23,7 @@ static int	dollar_value_print(t_ms *ms, char *arg, int fd)
 		ft_printf("%d", ms->ret_val);
 		return (2); // why 2?
 	}
-	while (arg[i] && arg[i] != ' ')
+	while (arg[i] && arg[i] != ' ' && (i == 0 || ft_isalnum(arg[i])))
 		i++;
 	output = get_env_value(ms, arg + 1, i - 1);
 	if (output)

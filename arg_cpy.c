@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-static int	has_quote_pair(char *s, char quote, int len);
 static void	arg_strcpy(const char *from, char *to);
 static int	arg_strlen(char *s);
 static int	arg_total_strlen(char *s);
@@ -58,10 +57,7 @@ char	*arg_cpy(char **res, char const **s, char **r_s)
 	{
 		arg = malloc(sizeof(char) * (arg_strlen((char *)*s) + 1));
 		if (!arg)
-		{
-			printf("hiii\n");
 			return (cmd_free_memory(res, r_s));
-		}
 		arg_strcpy(*s, arg);
 		*s += arg_total_strlen((char *)*s);
 	}
@@ -253,7 +249,7 @@ static int	arg_total_strlen(char *s)
  *	returns > 0 (position of closing quote)
  */
 
-static int	has_quote_pair(char *s, char quote, int len)
+int	has_quote_pair(char *s, char quote, int len)
 {
 	len++;
 	while (s[len])

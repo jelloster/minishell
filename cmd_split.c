@@ -97,7 +97,7 @@ static int	cmd_count_words(char const *s)
 		{
 			if (!iterate_quoted_word(s, &i, s[i]))
 				return (-1);
-			i++; // new
+			i++;
 			count++;
 		}
 		else if (s[i] == ' ' || s[i] == '\t')
@@ -111,9 +111,15 @@ static int	cmd_count_words(char const *s)
 		{
 			count++;
 			while (s[i] && s[i] != ' ' && s[i] != '\t' && s[i] != '|' && s[i] != '>' && s[i] != '<') // Stop at operators or spaces
+			{
+				if (s[i] == '\'' || s[i] == '\"')
+					if (!iterate_quoted_word(s, &i, s[i]))
+						return (-1);
 				i++;
+			}
 		}
 	}
+	printf("count : %d\n", count);
 	return (count);
 }
 
