@@ -18,7 +18,7 @@ int	env_built_in(char **msenvp, t_cmd *cmd)
 
 	if (cmd->args[1])
 	{
-		write(2, cmd->program_name + 2, ft_strlen(cmd->program_name) - 2);
+		write(2, cmd->pn + 2, ft_strlen(cmd->pn) - 2);
 		write(2, ": env: arguments and options aren't supported\n", 46);
 		return (0);
 	}

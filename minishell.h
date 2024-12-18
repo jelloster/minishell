@@ -72,7 +72,7 @@ typedef struct s_cmd
 	int	outfile_n;
 	char	*outfile;
 	char	**envp;
-	char	*program_name;
+	char	*pn;
 	int	o_i;
 	int	i_i;
 	t_redir	outredir;
@@ -128,6 +128,10 @@ typedef enum e_color
 // --- MACROS ---
 
 # define WELCOME_MSG "\n ✧.* Welcome to MINISHELL! ✧.*\n\n"
+# define CNF COMMAND_NOT_FOUND
+# define FNF FILE_NOT_FOUND
+# define PD PERMISSION_DENIED
+# define ID IS_DIRECTORY
 
 /* --- FUNCTION PROTOTYPES --- */
 

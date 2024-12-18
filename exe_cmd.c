@@ -71,24 +71,24 @@ void	complain_about_input_files(t_cmd *cmd)
 			if (access(cmd->infiles[i], R_OK) != 0)
 			{
 				if (errno == ENOENT)
-					error_msg(FILE_NOT_FOUND, cmd->infiles[i], cmd->program_name);
-				else if (stat(cmd->infiles[i], &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-					error_msg(IS_DIRECTORY, cmd->infiles[i], cmd->program_name); // doesn't work
+					error_msg(FNF, cmd->infiles[i], cmd->pn);
+				else if (stat(cmd->infiles[i], &statbuf) == 0
+					&& S_ISDIR(statbuf.st_mode))
+					error_msg(ID, cmd->infiles[i], cmd->pn); // doesn't work
 				else if (errno == EACCES)
-					error_msg(PERMISSION_DENIED, cmd->infiles[i], cmd->program_name);
+					error_msg(PD, cmd->infiles[i], cmd->pn);
 			}
 		}
 		close(fd);
 		i++;
 	}
-
 }
 
 void	create_output_files(t_cmd *cmd)
 {
-	int		fd;
+	int			fd;
 	struct stat	statbuf;
-	int		i;
+	int			i;
 
 	i = 0;
 	if (cmd->outfile_n <= 1)
@@ -98,10 +98,11 @@ void	create_output_files(t_cmd *cmd)
 		fd = open(cmd->outfiles[i], O_WRONLY | O_CREAT | O_APPEND, 0664);
 		if (fd == -1)
 		{
-			if (stat(cmd->outfiles[i], &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-				error_msg(IS_DIRECTORY, cmd->outfiles[i], cmd->program_name);
+			if (stat(cmd->outfiles[i], &statbuf) == 0
+				&& S_ISDIR(statbuf.st_mode))
+				error_msg(ID, cmd->outfiles[i], cmd->pn);
 			else
-				error_msg(PERMISSION_DENIED, cmd->outfiles[i], cmd->program_name);
+				error_msg(PD, cmd->outfiles[i], cmd->pn);
 		}
 		else
 			close (fd);

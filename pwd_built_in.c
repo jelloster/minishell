@@ -19,7 +19,7 @@ int	pwd_built_in(char **msenvp, t_cmd *cmd)
 	i = 0;
 	if (cmd->args[1] && cmd->args[1][0] == '-')
 	{
-		write(2, cmd->program_name + 2, ft_strlen(cmd->program_name) - 2);
+		write(2, cmd->pn + 2, ft_strlen(cmd->pn) - 2);
 		write(2, ": pwd: arguments and options aren't supported\n", 46);
 		return (0);
 	}

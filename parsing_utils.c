@@ -61,7 +61,7 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 	cmd->pathed_cmd = NULL;
 	cmd->outfile_n = 0;
 	cmd->infile_n = 0;
-	cmd->program_name = ms->program_name;
+	cmd->pn = ms->program_name;
 	ms->parsed_cmds++;
 }
 

@@ -23,11 +23,11 @@ int	redirect_input(char *file, t_cmd *cmd)
 		if (access(file, R_OK) != 0)
 		{
 			if (errno == ENOENT)
-				error_msg(FILE_NOT_FOUND, file, cmd->program_name);
+				error_msg(FILE_NOT_FOUND, file, cmd->pn);
 			else if (stat(file, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-				error_msg(IS_DIRECTORY, file, cmd->program_name);
+				error_msg(IS_DIRECTORY, file, cmd->pn);
 			else if (errno == EACCES)
-				error_msg(PERMISSION_DENIED, file, cmd->program_name);
+				error_msg(PERMISSION_DENIED, file, cmd->pn);
 		}
 		return (0);
 	}
@@ -48,9 +48,9 @@ int	redirect_output(char *file, t_cmd *cmd)
 	if (fd == -1)
 	{
 		if (stat(file, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-			error_msg(IS_DIRECTORY, file, cmd->program_name);
+			error_msg(IS_DIRECTORY, file, cmd->pn);
 		else
-			error_msg(PERMISSION_DENIED, file, cmd->program_name);
+			error_msg(PERMISSION_DENIED, file, cmd->pn);
 		return (0);
 	}
 	dup2(fd, STDOUT_FILENO);
