@@ -47,6 +47,19 @@ char	**cmd_split(char const *s)
 	return (res_start);
 }
 
+static int	iterate_word(char *s, int *i)
+{
+	while (s[*i] && s[*i] != ' ' && s[*i] != '\t'
+		&& s[*i] != '|' && s[*i] != '>' && s[*i] != '<')
+	{
+		if (s[*i] == '\'' || s[*i] == '\"')
+			if (!iterate_quoted_word(s, i, s[*i]))
+				return (0);
+		(*i)++;
+	}
+	return (1);
+}
+
 /*
  * Function : cmd_count_words
  *
@@ -55,37 +68,10 @@ char	**cmd_split(char const *s)
  * Returns the count or -1 in case of unclosed quotes.
 */
 
-/*
 static int	cmd_count_words(char const *s)
 {
-	int		i;
-	int		count;
-
-	i = 0;
-	count = 1;
-	if (!s[i])
-		return (0);
-	while (s[i])
-	{
-		if (s[i] == '\'' || s[i] == '\"')
-		{
-			if (i > 0)
-				count++;
-			if (!iterate_quoted_word(s, &i, s[i]))
-				return (-1);
-		}
-		else if (i > 0 && s[i] != ' ' && s[i - 1] == ' ')
-			count++;
-		if (s[i])
-			i++;
-	}
-	return (count);
-} */
-
-static int	cmd_count_words(char const *s)
-{
-	int		i;
-	int		count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -93,14 +79,7 @@ static int	cmd_count_words(char const *s)
 		return (0);
 	while (s[i])
 	{
-		if (s[i] == '\'' || s[i] == '\"')
-		{
-			if (!iterate_quoted_word(s, &i, s[i]))
-				return (-1);
-			i++;
-			count++;
-		}
-		else if (s[i] == ' ' || s[i] == '\t')
+		if (s[i] == ' ' || s[i] == '\t')
 			i++;
 		else if (s[i] == '|' || s[i] == '>' || s[i] == '<')
 		{
@@ -110,16 +89,10 @@ static int	cmd_count_words(char const *s)
 		else
 		{
 			count++;
-			while (s[i] && s[i] != ' ' && s[i] != '\t' && s[i] != '|' && s[i] != '>' && s[i] != '<') // Stop at operators or spaces
-			{
-				if (s[i] == '\'' || s[i] == '\"')
-					if (!iterate_quoted_word(s, &i, s[i]))
-						return (-1);
-				i++;
-			}
+			if (!iterate_word((char *)s, &i))
+				return (-1);
 		}
 	}
-	printf("count : %d\n", count);
 	return (count);
 }
 

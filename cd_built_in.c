@@ -29,7 +29,7 @@ int	cd_built_in(char **args, t_ms *ms)
 	{
 		if (args[2])
 		{
-			write(STDERR_FILENO, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
+			write(STDERR_FILENO, ms->program_name + 2, ms->nlen);
 			write(STDERR_FILENO, ": cd: too many arguments\n", 25);
 		}
 		if (chdir(args[1]) == -1)

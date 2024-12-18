@@ -94,6 +94,7 @@ typedef struct s_ms
 	char		**paths;
 	char		*cmd_line;
 	t_cmd		*cmds;
+	int			nlen;
 	int			error;
 	int			cmd_n;
 	int			parsed_cmds;
