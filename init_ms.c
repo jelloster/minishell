@@ -28,6 +28,7 @@ int	init_ms(int ac, char *av[], char *envp[], t_ms *ms)
 		return (0);
 	if (!init_ms_struct(av, envp, ms))
 		return (0);
+	update_shlvl(ms, 1);
 	welcome_msg();
 	return (1);
 }
@@ -62,8 +63,26 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
  * (Welcome message defined in minishell.h)
 */
 
+void	update_shlvl(t_ms *ms, int sign)
+{
+	char	*shlvl_str;
+	int		shlvl;
+
+	shlvl_str = get_env_value(ms, "SHLVL", 5);
+	if (shlvl_str)
+		shlvl = ft_atoi(shlvl_str);
+	else
+		shlvl = 0;
+	if (shlvl < 0)
+	{
+		shlvl = 0;
+	}
+	shlvl += sign;
+	setenv_update("SHLVL", ft_itoa(shlvl), ms->envp);
+}
+
 static void	welcome_msg(void)
 {
 	clear_terminal();
-//	print_in_color(WELCOME_MSG, BLUE);
+	//print_in_color(WELCOME_MSG, BLUE);
 }

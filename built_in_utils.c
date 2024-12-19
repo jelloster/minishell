@@ -42,7 +42,10 @@ int	exe_built_in(t_cmd *cmd, t_ms *ms)
 	else if (!ft_strncmp(cmd->args[0], "env", 3))
 		ret = env_built_in(ms->envp, cmd);
 	else if (!ft_strncmp(cmd->args[0], "exit", 4))
+	{
+		update_shlvl(ms, -1);
 		exit_built_in(cmd, ms);
+	}
 	ms->ret_val = ret;
 	return (ret);
 }
