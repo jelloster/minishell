@@ -36,7 +36,7 @@ size_t	count_cmds(char **split)
 		i++;
 	}
 	if (pipe_count)
-		return! (pipe_count + 1);
+		return (pipe_count + 1);
 	else if (i == 0)
 		return (0);
 	else
@@ -54,6 +54,7 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 	cmd->envp = ms->envp;
 	cmd->inredir = NONE;
 	cmd->outredir = NONE;
+	cmd->args = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->infiles = NULL;
@@ -77,4 +78,13 @@ int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
 			return (0);
 	}
 	return (1);
+}
+
+
+t_cmd	*syntax_error(char **split, t_ms *ms)
+{
+	free_array_of_arrays(split);
+	write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
+	write(2, ": syntax error\n", 16);
+	return (NULL);
 }

@@ -36,14 +36,9 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		return (NULL);
 	}
 	if (!syntax_check(split_cmd_line))
-	{
-		free_array_of_arrays(split_cmd_line);
-		write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
-		write(2, ": syntax error\n", 16);
-		return (NULL);
-	}
+		return (syntax_error(split_cmd_line, ms));
 	ms->cmd_n = count_cmds(split_cmd_line);
-	cmds = malloc (ms->cmd_n * sizeof(t_cmd));
+	cmds = malloc ((ms->cmd_n) * sizeof(t_cmd));
 	if (!cmds)
 		return (free_array_of_arrays(split_cmd_line));
 	if (!init_cmds(cmds, split_cmd_line, ms))
@@ -66,7 +61,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 {
 	size_t	i;
 	size_t	j;
-	int	size;
+	int		size;
 
 	i = 0;
 	j = 0;
@@ -88,6 +83,24 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 	return (1);
 }
 
+static int	handle_pathed_cmd(t_cmd *cmd)
+{
+	char	*np;
+
+	cmd->pathed_cmd = ft_strdup(cmd->args[0]);
+	if (!cmd->pathed_cmd)
+		return (free_array_of_arrays(cmd->args), 0);
+	np = ft_strdup(cmd->args[0] + find_last(cmd->args[0], '/') + 1);
+	if (!np)
+	{
+		free (cmd->pathed_cmd);
+		return (free_array_of_arrays(cmd->args), 0);
+	}
+	free(cmd->args[0]);
+	cmd->args[0] = np;
+	return (1);
+}
+
 /*
  * Function: cmd_block
  *
@@ -96,13 +109,11 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 
 static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 {
-	char	*no_path_cmd;
-
+	init_cmd(cmd, ms);
 	cmd->args = malloc((size + 1) * sizeof(char *));
 	if (!cmd->args)
 		return (-1);
 	cmd->args[size] = NULL;
-	init_cmd(cmd, ms);
 	if (!copy_args_from_split(cmd, split, size))
 		return (-1);
 	if (check_for_redirections(cmd))
@@ -114,21 +125,8 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	}
 	else if (access(cmd->args[0], X_OK) == 0)
 	{
-		cmd->pathed_cmd = ft_strdup(cmd->args[0]);
-		if (!cmd->pathed_cmd)
-		{
-			free_array_of_arrays(cmd->args);
+		if (!handle_pathed_cmd(cmd))
 			return (-1);
-		}
-		no_path_cmd = ft_strdup(cmd->args[0] + find_last(cmd->args[0], '/') + 1);
-		if (!no_path_cmd)
-		{
-			free (cmd->pathed_cmd);
-			free_array_of_arrays(cmd->args);
-			return (-1);
-		}
-		free(cmd->args[0]);
-		cmd->args[0] = no_path_cmd;
 	}
 	else
 		return (extract_pathed_cmd(cmd, ms->paths));
@@ -148,9 +146,7 @@ int	extract_pathed_cmd(t_cmd *cmd, char **paths)
 	char	*slashed_cmd;
 
 	i = 0;
-	if (paths == NULL)
-		return (0);
-	if (cmd->args[0])
+	if (paths != NULL && cmd->args[0])
 		slashed_cmd = ft_strjoin("/", cmd->args[0]);
 	else
 		return (0);

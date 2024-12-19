@@ -230,6 +230,7 @@ int			exe_built_in(t_cmd *cmd, t_ms *ms);
 
 /* - Miscellaneous - */
 
+t_cmd	*syntax_error(char **split, t_ms *ms);
 //			error_utils.c
 void		err(t_ms *ms);
 
