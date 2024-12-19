@@ -152,9 +152,3 @@ void	print_shell_vars(t_shell_var *shell_vars, t_ms *ms)
 		current = current->next;
 	}
 }
-
-void	print_exported_vars(t_ms *ms, t_shell_var *shell_vars)
-{
-	print_env_vars(ms->envp);
-	print_shell_vars(shell_vars, ms);
-}

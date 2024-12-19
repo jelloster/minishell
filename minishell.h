@@ -195,6 +195,9 @@ int			free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
 void		*cmd_free_memory(char **res, char **res_start);
 void		*free_array_of_arrays(char **arr);
 
+//			env_sort.c
+void		print_exported_vars(t_ms *ms, t_shell_var *shell_vars);
+
 //			built_ins.c
 int			cd_built_in(char **args, t_ms *ms);
 int			echo_built_in(t_cmd *cmd, t_ms *ms, char **args);
@@ -215,7 +218,6 @@ void		remove_shell_var(t_shell_var **shell_vars, char *key);
 void		init_shell_vars(char **envp, t_shell_var **shell_vars);
 
 int			export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars);
-void		print_exported_vars(t_ms *ms, t_shell_var *shell_vars);
 void		print_shell_vars(t_shell_var *shell_vars, t_ms *ms);
 void		print_env_vars(char **msenvp);
 int			key_legit_check(char *arg);

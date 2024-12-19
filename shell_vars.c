@@ -61,27 +61,6 @@ t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key)
 	return (NULL);
 }
 
-void	init_shell_vars(char **envp, t_shell_var **shell_vars)
-{
-	int		i;
-	char	*equal_sign;
-	char	key[1024];
-	char	*value;
-
-	i = 0;
-	while (envp[i])
-	{
-		equal_sign = ft_strchr(envp[i], '=');
-		if (equal_sign)
-		{
-			ft_strlcpy(key, envp[i], equal_sign - envp[i] + 1);
-			value = equal_sign + 1;
-			add_shell_var(shell_vars, key, value); // Malloccaa vaikka kuinka monta eik arrayhyn
-		}
-		i++;
-	}
-}
-
 char	*get_key(char *envp)
 {
 	char	*val;
