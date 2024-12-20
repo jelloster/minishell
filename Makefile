@@ -40,6 +40,7 @@ SRC_FILES		:=	main.c			\
 				echo_utils.c		\
 				env_sort.c		\
 				error_msg.c		\
+				print_export.c	\
 
 # ------- PIPEX --------
 

@@ -77,7 +77,7 @@ static void	bubble_sort_env(char **env, int env_count)
 	}
 }
 
-static char	**sort_env(char **msenvp)
+char	**sort_env(char **msenvp)
 {
 	int		env_count;
 	char	**sorted_env;
@@ -89,16 +89,4 @@ static char	**sort_env(char **msenvp)
 	copy_env(sorted_env, msenvp, env_count);
 	bubble_sort_env(sorted_env, env_count);
 	return (sorted_env);
-}
-
-void	print_exported_vars(t_ms *ms, t_shell_var *shell_vars)
-{
-	char	**sorted_env;
-
-	sorted_env = sort_env(ms->envp);
-	if (!sorted_env)
-		return ;
-	print_env_vars(sorted_env);
-	free_array_of_arrays(sorted_env);
-	print_shell_vars(shell_vars, ms);
 }
