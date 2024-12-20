@@ -30,13 +30,6 @@
 # include <errno.h>
 # include <sys/stat.h>
 
-/*
-# include <string.h>      // strerror
-# include <termios.h>     // tcsetattr, tcgetattr
-# include <curses.h>      // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
-# include <sys/ioctl.h>   // ioctl
-*/
-
 // - HEADER FILES -
 
 # include "libft/inc/libft.h"
@@ -67,14 +60,14 @@ typedef struct s_cmd
 	char	*pathed_cmd;
 	char	*infile;
 	char	**infiles;
-	int	infile_n;
+	int		infile_n;
 	char	**outfiles;
-	int	outfile_n;
+	int		outfile_n;
 	char	*outfile;
 	char	**envp;
 	char	*pn;
-	int	o_i;
-	int	i_i;
+	int		o_i;
+	int		i_i;
 	t_redir	outredir;
 	t_redir	inredir;
 }	t_cmd;
@@ -183,8 +176,7 @@ int			update_history(t_ms *ms, char *cmd_line);
 int			handle_redirected_cmd(t_cmd *cmd, char **paths);
 int			check_for_redirections(t_cmd *cmd);
 
-
-int	has_quote_pair(char *s, char quote, int len);
+int			has_quote_pair(char *s, char quote, int len);
 
 //			heredoc_handle.c
 int			heredoc_write(const char *delim, t_cmd *cmd);
@@ -208,9 +200,8 @@ int			unset_built_in(char **args, t_ms *ms);
 int			setenv_update(const char *key, const char *value, char **envp);
 
 // testing built ins.c
-char	*get_env_value(t_ms *ms, const char *key, int custom_len);
-char	*free_on_error(char **split_words, char *result);
-
+char		*get_env_value(t_ms *ms, const char *key, int custom_len);
+char		*free_on_error(char **split_words, char *result);
 
 int			pwd_built_in(char **msenvp, t_cmd *cmd);
 int			env_built_in(char **msenvp, t_cmd *cmd);
@@ -223,9 +214,8 @@ void		print_shell_vars(t_shell_var *shell_vars, t_ms *ms);
 void		print_env_vars(char **msenvp);
 int			key_legit_check(char *arg);
 
-//			shell shit
-			t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
-			char	*get_key(char *envp);
+t_shell_var	*find_shell_var(t_shell_var *shell_vars, const char *key);
+char		*get_key(char *envp);
 
 //			built_in_utils.c
 int			is_built_in(const char *cmd);
@@ -233,7 +223,7 @@ int			exe_built_in(t_cmd *cmd, t_ms *ms);
 
 /* - Miscellaneous - */
 
-t_cmd	*syntax_error(char **split, t_ms *ms);
+t_cmd		*syntax_error(char **split, t_ms *ms);
 //			error_utils.c
 void		err(t_ms *ms);
 
@@ -251,20 +241,22 @@ void		handle_sigint(int signal);
 void		handle_sigquit(int signal);
 void		handle_signals(void);
 
-int		is_out_redirection(char *str, size_t len);
+int			is_out_redirection(char *str, size_t len);
 
 //			pipex/error_utils.c
 void		error_msg(int error, char *str, char *binary);
 void		print_and_clear_errorlog(void);
 
 int			find_last(char *str, char c);
-void	exit_built_in(t_cmd *cmd, t_ms *ms);
+void		exit_built_in(t_cmd *cmd, t_ms *ms);
 
-void	handle_squiggly(char *arg, int *j, int fd, t_ms *ms);
-int	handle_flag(char **args);
-int	malloc_for_redirs(t_cmd *cmd);
-void    signal_check(t_ms *ms);
+//			echo_built_in.c
+void		handle_squiggly(char *arg, int *j, int fd, t_ms *ms);
+int			handle_flag(char **args);
+int			malloc_for_redirs(t_cmd *cmd);
+void		signal_check(t_ms *ms);
 
-int	syntax_check(char **split);
+//			syntax_check.c
+int			syntax_check(char **split);
 
 #endif
