@@ -135,6 +135,8 @@ static int	arg_strlen(char *s)
 			quote_n += 2;
 		}
 	}
+	if (!ft_strncmp(s, "\"\"", 3))
+		return (0);
 	return (len - quote_n);
 }
 
