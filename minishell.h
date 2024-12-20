@@ -139,6 +139,7 @@ typedef enum e_color
 
 //			init_ms.c
 int			init_ms(int ac, char *av[], char *envp[], t_ms *ms);
+void		update_shlvl(t_ms *ms, int sign);
 
 //			envp_utils.c
 char		**extract_paths(char *envp[]);
