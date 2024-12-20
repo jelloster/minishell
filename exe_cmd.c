@@ -32,7 +32,7 @@ static void	complain_about_input_files(t_cmd *cmd)
 					error_msg(FNF, cmd->infiles[i], cmd->pn);
 				else if (stat(cmd->infiles[i], &statbuf) == 0
 					&& S_ISDIR(statbuf.st_mode))
-					error_msg(ID, cmd->infiles[i], cmd->pn); // doesn't work
+					error_msg(ID, cmd->infiles[i], cmd->pn);
 				else if (errno == EACCES)
 					error_msg(PD, cmd->infiles[i], cmd->pn);
 			}

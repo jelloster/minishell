@@ -73,7 +73,7 @@ int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
 	i = -1;
 	while (++i < (int)size)
 	{
-		cmd->args[i] = ft_strdup(split[i]); // leaks
+		cmd->args[i] = ft_strdup(split[i]);
 		if (!cmd->args[i])
 			return (0);
 	}
