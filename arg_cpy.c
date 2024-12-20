@@ -129,11 +129,10 @@ static int	arg_strlen(char *s)
 			len++;
 		else
 		{
-			quote = s[len];
+			quote = s[len++];
 			while (s[len] && s[len] != quote)
 				len++;
 			quote_n += 2;
-			len++;
 		}
 	}
 	return (len - quote_n);
