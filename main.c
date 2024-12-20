@@ -16,12 +16,6 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
 t_sig	g_sig;
 
-
-/*
- *Function: signal check
- * Signal was received, set signal received to = 0 and ms.ret_val to appropriate value
-*/
-
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
@@ -36,12 +30,12 @@ int	main(int ac, char *av[], char *envp[])
 		print_and_clear_errorlog();
 		ms.cmd_line = readline("$ ");
 		if (ms.cmd_line)
-			add_history(ms.cmd_line); // how to free this?
+			add_history(ms.cmd_line);
 		else
 			return (free_ms(&ms, ms.cmd_line, NULL, 0));
 		cmds = parse(ms.cmd_line, &ms);
 		if (cmds)
-			if(!exe_or_pipe(&ms, cmds)) // cannot return 0
+			if (!exe_or_pipe(&ms, cmds))
 				return (free_ms(&ms, ms.cmd_line, cmds, 1));
 		free(ms.cmd_line);
 	}
@@ -55,9 +49,8 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 
 	pid = fork();
 	if (pid == -1)
-		return(0);
+		return (0);
 	g_sig.child = 0;
-	// child process
 	if (pid == 0)
 	{
 		g_sig.child = 1;
@@ -68,7 +61,6 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 		free_ms(ms, ms->cmd_line, cmds, 1);
 		exit(ms->ret_val);
 	}
-	// parent downwards
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);
 	if (ms->temp_ret == 69)
