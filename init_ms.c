@@ -65,5 +65,6 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 static void	welcome_msg(void)
 {
 	clear_terminal();
+	printf("Hello jimi.\n");
 //	print_in_color(WELCOME_MSG, BLUE);
 }

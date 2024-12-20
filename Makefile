@@ -38,7 +38,8 @@ SRC_FILES		:=	main.c			\
 				exit_built_in.c		\
 				syntax_check.c		\
 				echo_utils.c		\
-				env_sort.c			\
+				env_sort.c		\
+				error_msg.c		\
 
 # ------- PIPEX --------
 

@@ -34,23 +34,12 @@ char	*get_env_value(t_ms *ms, const char *key, int custom_len)
 	return (NULL);
 }
 
-/*
-char	*free_on_error(char **split_words, char *result)
-{
-	free_array_of_arrays(split_words);
-	free(result);
-	return (NULL);
-}*/
-
 int	setenv_update(const char *key, const char *value, char **envp)
 {
 	int		i;
-	int		env_len;
-	size_t	key_len;
 	char	*temp;
 	char	*new_entry;
 
-	key_len = ft_strlen(key);
 	new_entry = ft_strjoin(key, "=");
 	if (!new_entry)
 		return (-1);
@@ -58,18 +47,17 @@ int	setenv_update(const char *key, const char *value, char **envp)
 	free(new_entry);
 	if (!temp)
 		return (-1);
-	i = 0;
-	while (envp[i])
+	i = -1;
+	while (envp[++i])
 	{
-		if (!ft_strncmp(envp[i], key, key_len) && envp[i][key_len] == '=')
+		if (!ft_strncmp(envp[i], key, ft_strlen(key))
+			&& envp[i][ft_strlen(key)] == '=')
 		{
 			envp[i] = temp;
 			return (0);
 		}
-		i++;
 	}
-	env_len = strstrlen(envp);
-	envp[env_len] = temp;
-	envp[env_len + 1] = NULL;
+	envp[strstrlen(envp)] = temp;
+	envp[strstrlen(envp) + 1] = NULL;
 	return (0);
 }
