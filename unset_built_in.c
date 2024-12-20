@@ -42,7 +42,7 @@ int	unset_built_in(char **args, t_ms *ms)
 
 	if (!args[1])
 	{
-		perror("unser");
+		perror("unset");
 		return (1);
 	}
 	i = 1;
