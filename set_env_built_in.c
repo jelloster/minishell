@@ -57,7 +57,7 @@ int	setenv_update(const char *key, const char *value, char **envp)
 			return (0);
 		}
 	}
-	envp[strstrlen(envp)] = temp;
-	envp[strstrlen(envp) + 1] = NULL;
+	envp[count_env(envp)] = temp;
+	envp[count_env(envp) + 1] = NULL;
 	return (0);
 }

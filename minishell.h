@@ -193,6 +193,7 @@ void		print_exported_vars(t_ms *ms, t_shell_var *shell_vars);
 
 //			env_sort.c
 char		**sort_env(char **msenvp);
+int			count_env(char **msenvp);
 
 //			built_ins.c
 int			cd_built_in(char **args, t_ms *ms);

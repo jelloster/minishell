@@ -22,7 +22,7 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-static void	copy_env(char **sorted_env, char **msenvp, int env_count)
+static int	copy_env(char **sorted_env, char **msenvp, int env_count)
 {
 	int	i;
 
@@ -36,14 +36,15 @@ static void	copy_env(char **sorted_env, char **msenvp, int env_count)
 			while (--i >= 0)
 				free(sorted_env[i]);
 			free(sorted_env);
-			return ;
+			return (0);
 		}
 		i++;
 	}
 	sorted_env[env_count] = NULL;
+	return (1);
 }
 
-static int	count_env(char **msenvp)
+int	count_env(char **msenvp)
 {
 	int	count;
 
@@ -86,7 +87,8 @@ char	**sort_env(char **msenvp)
 	sorted_env = malloc(sizeof(char *) * (env_count + 1));
 	if (!sorted_env)
 		return (NULL);
-	copy_env(sorted_env, msenvp, env_count);
+	if (!copy_env(sorted_env, msenvp, env_count))
+		return (NULL);
 	bubble_sort_env(sorted_env, env_count);
 	return (sorted_env);
 }
