@@ -15,7 +15,6 @@
 int	redirect_input(char *file, t_cmd *cmd)
 {
 	int	fd;
-	struct stat	statbuf;
 	
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -24,8 +23,6 @@ int	redirect_input(char *file, t_cmd *cmd)
 		{
 			if (errno == ENOENT)
 				error_msg(FILE_NOT_FOUND, file, cmd->pn);
-			else if (stat(file, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-				error_msg(IS_DIRECTORY, file, cmd->pn);
 			else if (errno == EACCES)
 				error_msg(PERMISSION_DENIED, file, cmd->pn);
 		}

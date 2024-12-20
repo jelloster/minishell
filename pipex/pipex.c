@@ -18,7 +18,6 @@ static int	free_and_ret(void *ptr, int ret);
 
 /*
  * Function : pipex
- *
  * Takes an array of cmd_n command structs (cmds) and executes them using pipes.
 */
 
@@ -26,31 +25,28 @@ static int	free_and_ret(void *ptr, int ret);
 
 int	pipex(t_cmd *cmds, t_ms *ms)
 {
-	int	i;
-	int	prev_pipe;
+	int		i;
+	int		prev_pipe;
 	pid_t	*pids;
-	prev_pipe = -1;
 
+	prev_pipe = -1;
 	pids = malloc(sizeof(pid_t) * ms->cmd_n);
 	if (!pids)
 		return (0);
 	i = 0;
 	while (i < ms->cmd_n)
 	{
-		if (i < ms->cmd_n && pipe(ms->fds) == -1)
+		if (pipe(ms->fds) == -1)
 			return (free_and_ret(pids, 0));
 		pids[i] = fork();
 		if (pids[i] == -1)
 			return (free_and_ret(pids, 0));
 		if (pids[i] == 0)
 			child_process(cmds[i], i, prev_pipe, ms);
-		// Close read end of previous pipe
 		if (prev_pipe != -1)
 			close(prev_pipe);
-		// Store current read end
 		if (i < ms->cmd_n - 1)
 			prev_pipe = ms->fds[0];
-		// Close write-end of the current pipe
 		if (i++ < ms->cmd_n - 1)
 			close(ms->fds[1]);
 	}
@@ -58,7 +54,7 @@ int	pipex(t_cmd *cmds, t_ms *ms)
 }
 
 static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
-{	
+{
 	if (i == 0)
 	{
 		if (cmd.infile && !redirect_input(cmd.infile, &cmd))
@@ -69,7 +65,6 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 	{
 		if (prev_pipe != -1)
 			dup2(prev_pipe, STDIN_FILENO);
-		//printf("Has outfile : %d\n.", cmd.outfile != NULL);
 		if (cmd.outfile && !redirect_output(cmd.outfile, &cmd))
 			exit(1);
 	}
