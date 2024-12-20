@@ -41,35 +41,41 @@ static int	count_env(char **msenvp)
 	return (count);
 }
 
-static char	**sort_env(char **msenvp)
+static void	bubble_sort_env(char **env, int env_count)
 {
 	int		i;
 	int		j;
 	char	*temp;
-	char	**sorted_env;
-	int		env_count;
 
-	env_count = count_env(msenvp);
-	sorted_env = malloc(sizeof(char *) * (env_count + 1));
-	if (!sorted_env)
-		return (NULL);
-	copy_env(sorted_env, msenvp, env_count);
 	i = 0;
 	while (i < env_count - 1)
 	{
 		j = 0;
 		while (j < env_count - i - 1)
 		{
-			if (ft_strcmp(sorted_env[j], sorted_env[j + 1]) > 0)
+			if (ft_strcmp(env[j], env[j + 1]) > 0)
 			{
-				temp = sorted_env[j];
-				sorted_env[j] = sorted_env[j + 1];
-				sorted_env[j + 1] = temp;
+				temp = env[j];
+				env[j] = env[j + 1];
+				env[j + 1] = temp;
 			}
 			j++;
 		}
 		i++;
 	}
+}
+
+static char	**sort_env(char **msenvp)
+{
+	int		env_count;
+	char	**sorted_env;
+
+	env_count = count_env(msenvp);
+	sorted_env = malloc(sizeof(char *) * (env_count + 1));
+	if (!sorted_env)
+		return (NULL);
+	copy_env(sorted_env, msenvp, env_count);
+	bubble_sort_env(sorted_env, env_count);
 	return (sorted_env);
 }
 
