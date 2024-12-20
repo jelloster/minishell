@@ -12,6 +12,30 @@
 
 #include "minishell.h"
 
+char **expand_envp(char **envp, int current_size, int extra_space)
+{
+    char **new_envp;
+    int i;
+
+    new_envp = malloc(sizeof(char *) * (current_size + extra_space + 1));
+    if (!new_envp)
+        return (NULL);
+    i = 0;
+    while (i < current_size)
+    {
+        new_envp[i] = envp[i];
+        i++;
+    }
+    while (i < current_size + extra_space)
+    {
+        new_envp[i] = NULL;
+        i++;
+    }
+    new_envp[current_size + extra_space] = NULL;
+    free(envp);
+    return (new_envp);
+}
+
 char	*get_env_value(t_ms *ms, const char *key, int custom_len)
 {
 	int		i;
@@ -53,6 +77,7 @@ int	setenv_update(const char *key, const char *value, char **envp)
 		if (!ft_strncmp(envp[i], key, ft_strlen(key))
 			&& envp[i][ft_strlen(key)] == '=')
 		{
+			free(envp[i]);
 			envp[i] = temp;
 			return (0);
 		}

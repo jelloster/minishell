@@ -49,6 +49,8 @@ int	count_env(char **msenvp)
 	int	count;
 
 	count = 0;
+	if (!msenvp)
+		return (0);
 	while (msenvp[count])
 		count++;
 	return (count);

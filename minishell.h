@@ -201,7 +201,7 @@ int			echo_built_in(t_cmd *cmd, t_ms *ms, char **args);
 void		dollar_check(t_ms *ms, char **args);
 int			unsetenv_manual(const char *key, char **envp);
 int			unset_built_in(char **args, t_ms *ms);
-int			setenv_update(const char *key, const char *value, char **envp);
+int			setenv_update(const char *key, const char *value, char **envp_ptr);
 
 // testing built ins.c
 char		*get_env_value(t_ms *ms, const char *key, int custom_len);
