@@ -15,7 +15,7 @@
 int	redirect_input(char *file, t_cmd *cmd)
 {
 	int	fd;
-	
+
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
@@ -35,9 +35,9 @@ int	redirect_input(char *file, t_cmd *cmd)
 
 int	redirect_output(char *file, t_cmd *cmd)
 {
-	int	fd;
+	int			fd;
 	struct stat	statbuf;
-	
+
 	if (cmd->outredir == REPLACE)
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	else

@@ -251,6 +251,8 @@ void		handle_sigint(int signal);
 void		handle_sigquit(int signal);
 void		handle_signals(void);
 
+int		is_out_redirection(char *str, size_t len);
+
 //			pipex/error_utils.c
 void		error_msg(int error, char *str, char *binary);
 void		print_and_clear_errorlog(void);

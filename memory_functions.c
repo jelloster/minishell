@@ -41,21 +41,6 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 	return (0);
 }
 
-/*
-void	free_shell_vars(t_shell_var *shell_var)
-{
-	int	i;
-
-	i = 0;
-	if (shell_var->key)
-		ft_memdel(&shell_var->key);
-	if (shell_var->value)
-		ft_memdel(&shell_var->value);
-	i++;
-	free (shell_var);
-	shell_var = NULL;
-}*/
-
 int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 {
 	if (ms->paths)

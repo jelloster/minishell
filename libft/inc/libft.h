@@ -88,5 +88,4 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 //		Personal additions
 size_t	count_char_str(char c, char *str);
 
-
 #endif

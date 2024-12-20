@@ -80,7 +80,6 @@ int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
 	return (1);
 }
 
-
 t_cmd	*syntax_error(char **split, t_ms *ms)
 {
 	free_array_of_arrays(split);

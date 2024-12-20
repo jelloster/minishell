@@ -13,8 +13,7 @@
 #include "minishell.h"
 
 static int	is_redirection(char *str, size_t len);
-static int	is_out_redirection(char *str, size_t len);
-static int assign_redirection_type(t_cmd *cmd, int len, int i);
+static int	assign_redirection_type(t_cmd *cmd, int len, int i);
 static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs);
 
 int	handle_redirected_cmd(t_cmd *cmd, char **paths)
@@ -34,8 +33,6 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 				return (0);
 		i++;
 	}
-	//if (redirs > 2)
-	//	return (0);
 	return (parse_redir_args(cmd, paths, cmd->infile_n + cmd->outfile_n));
 }
 
@@ -45,7 +42,7 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
  * - there are no 2 redirection symbols after each other
  * - there is only 1 redirection for output and input
  */
-static int assign_redirection_type(t_cmd *cmd, int len, int i)
+static int	assign_redirection_type(t_cmd *cmd, int len, int i)
 {
 	if (!ft_strncmp(">", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
@@ -60,84 +57,60 @@ static int assign_redirection_type(t_cmd *cmd, int len, int i)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 	{
 		cmd->inredir = STD_IN;
-		if	(!heredoc_write(cmd->args[i + 1], cmd))
-			return(0);
+		if (!heredoc_write(cmd->args[i + 1], cmd))
+			return (0);
 	}
 	else
 		return (0);
 	return (1);
 }
 
+static void	parse_redir_args_2(t_cmd *cmd, char **new_args, int *i, int *n_i)
+{
+	int	len;
+
+	while (cmd->args[*i])
+	{
+		len = ft_strlen(cmd->args[*i]);
+		if (is_redirection(cmd->args[*i], len))
+		{
+			if (is_out_redirection(cmd->args[*i], len))
+			{
+				cmd->outfiles[cmd->o_i++] = cmd->args[++(*i)];
+				cmd->outfile = cmd->args[*i];
+			}
+			else if (cmd->inredir != STD_IN)
+			{
+				cmd->infiles[cmd->i_i++] = cmd->args[++(*i)];
+				cmd->infile = cmd->args[*i];
+			}
+			else
+				(*i)++;
+			free (cmd->args[*i - 1]);
+			(*i)++;
+		}
+		else
+			new_args[(*n_i)++] = cmd->args[(*i)++];
+	}
+}
+
 // file always comes after the redir (unless std int??)
 static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
 {
 	char	**new_args;
-	int	i;
-	int	n_i;
-	int	len;
+	int		n_i;
+	int		i;
 
 	i = 0;
 	n_i = 0;
-
-	// Malloc for new args minus redirection symbols and files
 	new_args = malloc((strstrlen(cmd->args) - redirs * 2 + 1) * sizeof(char *));
 	if (!new_args)
 		return (0);
-
-	// Iterate through args
-	while (cmd->args[i])
-	{
-		len = ft_strlen(cmd->args[i]);
-
-		// If we come across a redirection symbol
-		if (is_redirection(cmd->args[i], len))
-		{
-			// Set the str after as the in/outfile
-			if (is_out_redirection(cmd->args[i], len))
-			{
-				cmd->outfiles[cmd->o_i++] = cmd->args[++i];
-				cmd->outfile = cmd->args[i];
-			}
-			else if (cmd->inredir != STD_IN)
-			{
-				cmd->infiles[cmd->i_i++] = cmd->args[++i];
-				cmd->infile = cmd->args[i];
-			}
-			else
-				i++;
-			// Free the symbol string
-			free (cmd->args[i - 1]);
-			i++;
-
-		}
-		// Otherwise just copy the string over
-		else
-			new_args[n_i++] = cmd->args[i++];
-	}
-	new_args[n_i] = NULL; // buffer overflow
+	parse_redir_args_2(cmd, new_args, &i, &n_i);
+	new_args[n_i] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;
 	return (extract_pathed_cmd(cmd, paths));
-}
-
-/*
- * Function : check_for_redirections
- *
- * Returns 1 if there is a redirection symbol in the args of the given cmd and
- * 0 otherwise.
-*/
-
-int	check_for_redirections(t_cmd *cmd)
-{
-	if (str_in_array_of_strs(">", cmd->args))
-		return (1);
-	else if (str_in_array_of_strs("<", cmd->args))
-		return (1);
-	else if (str_in_array_of_strs(">>", cmd->args))
-		return (1);
-	else if (str_in_array_of_strs("<<", cmd->args))
-		return (1);
-	return (0);
 }
 
 /*
@@ -155,19 +128,6 @@ static int	is_redirection(char *str, size_t len)
 	else if (!ft_strncmp(">>", str, len))
 		return (1);
 	else if (!ft_strncmp("<<", str, len))
-		return (1);
-	return (0);
-}
-
-/*
- * Function : is_out_redirection
- *
- * Returns 1 if the given string (str) is ">" or ">>", otherwise a 0.
-*/
-
-static int	is_out_redirection(char *str, size_t len)
-{
-	if (!ft_strncmp(">", str, len) || !ft_strncmp(">>", str, len))
 		return (1);
 	return (0);
 }

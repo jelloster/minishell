@@ -15,24 +15,31 @@
 static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms);
 static int	wait_and_close(pid_t *pids, int cmd_n);
 static int	free_and_ret(void *ptr, int ret);
+static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms);
 
 /*
  * Function : pipex
  * Takes an array of cmd_n command structs (cmds) and executes them using pipes.
 */
 
-// amount of pipes : ms->cmd_n - 1
-
 int	pipex(t_cmd *cmds, t_ms *ms)
 {
-	int		i;
-	int		prev_pipe;
 	pid_t	*pids;
 
-	prev_pipe = -1;
 	pids = malloc(sizeof(pid_t) * ms->cmd_n);
 	if (!pids)
 		return (0);
+	if (!iterate_cmds(cmds, pids, ms))
+		return (0);
+	return (wait_and_close(pids, ms->cmd_n));
+}
+
+static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms)
+{
+	int	i;
+	int	prev_pipe;
+
+	prev_pipe = -1;
 	i = 0;
 	while (i < ms->cmd_n)
 	{
@@ -42,7 +49,10 @@ int	pipex(t_cmd *cmds, t_ms *ms)
 		if (pids[i] == -1)
 			return (free_and_ret(pids, 0));
 		if (pids[i] == 0)
+		{
 			child_process(cmds[i], i, prev_pipe, ms);
+			exit(1);
+		}
 		if (prev_pipe != -1)
 			close(prev_pipe);
 		if (i < ms->cmd_n - 1)
@@ -50,7 +60,7 @@ int	pipex(t_cmd *cmds, t_ms *ms)
 		if (i++ < ms->cmd_n - 1)
 			close(ms->fds[1]);
 	}
-	return (wait_and_close(pids, ms->cmd_n));
+	return (1);
 }
 
 static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
@@ -58,7 +68,7 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 	if (i == 0)
 	{
 		if (cmd.infile && !redirect_input(cmd.infile, &cmd))
-			exit(1);
+			exit(1); //? free memory
 		dup2(ms->fds[1], STDOUT_FILENO);
 	}
 	else if (i == ms->cmd_n - 1)
@@ -80,7 +90,6 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 	close(ms->fds[1]);
 	if (exe_cmd(&cmd, ms) == 69)
 		exe_built_in(&cmd, ms);
-	exit(1);
 }
 
 static int	wait_and_close(pid_t *pids, int cmd_n)

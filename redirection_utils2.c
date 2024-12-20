@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_utils2.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 12:04:03 by motuomin          #+#    #+#             */
+/*   Updated: 2024/12/16 14:08:16 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	count_inredirs(t_cmd *cmd)
@@ -11,11 +23,45 @@ static int	count_inredirs(t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		len = ft_strlen(cmd->args[i]);
-		if (!ft_strncmp("<", cmd->args[i], len) || !ft_strncmp("<<", cmd->args[i], len))
+		if (!ft_strncmp("<", cmd->args[i], len)
+			|| !ft_strncmp("<<", cmd->args[i], len))
 			count++;
 		i++;
 	}
 	return (count);
+}
+
+/*
+ * Function : check_for_redirections
+ *
+ * Returns 1 if there is a redirection symbol in the args of the given cmd and
+ * 0 otherwise.
+*/
+
+int	check_for_redirections(t_cmd *cmd)
+{
+	if (str_in_array_of_strs(">", cmd->args))
+		return (1);
+	else if (str_in_array_of_strs("<", cmd->args))
+		return (1);
+	else if (str_in_array_of_strs(">>", cmd->args))
+		return (1);
+	else if (str_in_array_of_strs("<<", cmd->args))
+		return (1);
+	return (0);
+}
+
+/*
+ * Function : is_out_redirection
+ *
+ * Returns 1 if the given string (str) is ">" or ">>", otherwise a 0.
+*/
+
+int	is_out_redirection(char *str, size_t len)
+{
+	if (!ft_strncmp(">", str, len) || !ft_strncmp(">>", str, len))
+		return (1);
+	return (0);
 }
 
 static int	count_outredirs(t_cmd *cmd)
@@ -29,7 +75,8 @@ static int	count_outredirs(t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		len = ft_strlen(cmd->args[i]);
-		if (!ft_strncmp(">", cmd->args[i], len) || !ft_strncmp(">>", cmd->args[i], len))
+		if (!ft_strncmp(">", cmd->args[i], len)
+			|| !ft_strncmp(">>", cmd->args[i], len))
 			count++;
 		i++;
 	}
@@ -43,7 +90,6 @@ int	malloc_for_redirs(t_cmd *cmd)
 	if (!cmd->infiles)
 		return (-1);
 	cmd->infiles[cmd->infile_n] = NULL;
-
 	cmd->outfile_n = count_outredirs(cmd);
 	cmd->outfiles = malloc((cmd->outfile_n + 1) * sizeof(char *));
 	if (!cmd->outfiles)
@@ -55,28 +101,3 @@ int	malloc_for_redirs(t_cmd *cmd)
 	cmd->outfiles[cmd->outfile_n] = NULL;
 	return (1);
 }
-
-/*
-int	free_redirs(char **inf, char **outf)
-{
-	if (inf)
-	{
-		free_array_of_arrays(inf);
-		inf = NULL;
-	}
-	if (inr)
-	{
-		free(inr);
-		inr = NULL;
-	} 
-	if (outf)
-	{
-		free_array_of_arrays(outf);
-		outf = NULL;
-	}
-	if (outr)
-	{
-		free(outr);
-		inr = NULL;
-	}
-}*/
