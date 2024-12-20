@@ -16,10 +16,10 @@ void	add_shell_var(t_shell_var **shell_vars, char *key, char *value)
 {
 	t_shell_var	*new_var;
 
-	new_var = malloc(sizeof(t_shell_var)); // direct leak
+	new_var = malloc(sizeof(t_shell_var));
 	printf("ADDING SHELL VARS.\n");
 	new_var->key = ft_strdup(key);
-	new_var->value = ft_strdup(value); // leak
+	new_var->value = ft_strdup(value);
 	new_var->is_exported = 1;
 	new_var->next = *shell_vars;
 	*shell_vars = new_var;
@@ -75,8 +75,27 @@ char	*get_key(char *envp)
 		if (!key)
 			return (NULL);
 		ft_strlcpy(key, envp, key_len + 1);
-		return(key);
+		return (key);
 	}
 	else
 		return (NULL);
+}
+
+void	print_shell_vars(t_shell_var *shell_vars, t_ms *ms)
+{
+	t_shell_var	*current;
+
+	current = shell_vars;
+	while (current)
+	{
+		if (!get_env_value(ms, current->key, 0))
+		{
+			if (current->value)
+				ft_printf("declare -x %s=\"%s\"\n",
+					current->key, current->value);
+			else
+				ft_printf("declare -x %s\n", current->key);
+		}
+		current = current->next;
+	}
 }

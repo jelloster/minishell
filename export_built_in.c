@@ -19,7 +19,6 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	size_t	key_len;
 	char	*equal_sign;
 
-
 	printf("Handle key value\n");
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
@@ -38,14 +37,39 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	if (setenv_update(key, value, ms->envp) == -1)
 		return (-1);
 	remove_shell_var(shell_vars, key);
-	add_shell_var(shell_vars, key, value); // HERE
+	add_shell_var(shell_vars, key, value);
+	return (0);
+}
+
+static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
+{
+	char	*key;
+
+	key = get_key(arg);
+	if (!key)
+	{
+		perror("key malloc");
+		return (1);
+	}
+	if (!key_legit_check(key))
+	{
+		free(key);
+		return (0);
+	}
+	free(key);
+	if (ft_strchr(arg, '='))
+	{
+		if (handle_key_value(arg, ms, shell_vars) == -1)
+			ft_printf("export: failed to update `%s`\n", arg);
+	}
+	else if (!find_shell_var(*shell_vars, arg))
+		add_shell_var(shell_vars, arg, NULL);
 	return (0);
 }
 
 int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 {
-	int		i;
-	char	*key;
+	int	i;
 
 	if (!args[1])
 	{
@@ -55,36 +79,8 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 	i = 1;
 	while (args[i])
 	{
-		key = get_key(args[i]);
-		if (!key)
-		{
-			// add check werhn only KEY
-			perror("key malloc");
+		if (process_export(args[i], ms, shell_vars))
 			return (1);
-		}
-		else
-		{
-			if (!key_legit_check(key))
-			{
-				ft_printf("invalid key shit\n");
-				free(key);
-				i++;
-				continue ;
-			}
-			else
-			{
-				ft_printf("good key shit");
-				ft_printf("KEY %s\n", key);
-				free(key);
-			}
-		}
-		if (ft_strchr(args[i], '='))
-		{
-			if (handle_key_value(args[i], ms, shell_vars) == -1)
-				ft_printf("export: failed to update `%s`\n", args[i]);
-		}
-		else if (!find_shell_var(*shell_vars, args[i]))
-			add_shell_var(shell_vars, args[i], NULL); // HERE too
 		i++;
 	}
 	return (0);
@@ -92,21 +88,21 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 
 int	key_legit_check(char *arg)
 {
-	int i;
+	int	i;
 
 	if (!arg || (!((arg[0] >= 'a' && arg[0] <= 'z')
-		|| (arg[0] >= 'A' && arg[0] <= 'Z') || arg[0] == '_')))
+				|| (arg[0] >= 'A' && arg[0] <= 'Z') || arg[0] == '_')))
 		return (0);
 	i = 1;
 	while (arg[i])
 	{
 		if (!((arg[i] >= 'a' && arg[i] <= 'z')
-			|| (arg[i] >= 'A' && arg[i] <= 'Z')
-			|| (arg[i] >= '0' && arg[i] <= '9') || arg[i] == '_'))
+				|| (arg[i] >= 'A' && arg[i] <= 'Z')
+				|| (arg[i] >= '0' && arg[i] <= '9') || arg[i] == '_'))
 			return (0);
 		i++;
 	}
-	return (1);	
+	return (1);
 }
 
 void	print_env_vars(char **msenvp)
@@ -132,23 +128,5 @@ void	print_env_vars(char **msenvp)
 		else
 			ft_printf("declare -x %s\n", *msenvp);
 		msenvp++;
-	}
-}
-
-void	print_shell_vars(t_shell_var *shell_vars, t_ms *ms)
-{
-	t_shell_var	*current;
-
-	current = shell_vars;
-	while (current)
-	{
-		if (!get_env_value(ms, current->key, 0))
-		{
-			if (current->value)
-				ft_printf("declare -x %s=\"%s\"\n", current->key, current->value);
-			else
-				ft_printf("declare -x %s\n", current->key);
-		}
-		current = current->next;
 	}
 }

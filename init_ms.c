@@ -81,7 +81,7 @@ void	update_shlvl(t_ms *ms, int sign)
 	shlvl_str = ft_itoa(shlvl);
 	if (!shlvl)
 		return ;
-	setenv_update("SHLVL", shlvl_str, ms->envp); // leaks esim ku echo hi
+	setenv_update("SHLVL", shlvl_str, ms->envp);
 	free(shlvl_str);
 }
 

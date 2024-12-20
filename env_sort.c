@@ -10,9 +10,9 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-static void copy_env(char **sorted_env, char **msenvp, int env_count)
+static void	copy_env(char **sorted_env, char **msenvp, int env_count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < env_count)
@@ -33,7 +33,7 @@ static void copy_env(char **sorted_env, char **msenvp, int env_count)
 
 static int	count_env(char **msenvp)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (msenvp[count])
@@ -48,7 +48,7 @@ static char	**sort_env(char **msenvp)
 	char	*temp;
 	char	**sorted_env;
 	int		env_count;
-	
+
 	env_count = count_env(msenvp);
 	sorted_env = malloc(sizeof(char *) * (env_count + 1));
 	if (!sorted_env)
