@@ -15,6 +15,7 @@
 int	unsetenv_manual(const char *key, char **envp)
 {
 	int		i;
+	int		j;
 	size_t	key_len;
 
 	i = 0;
@@ -23,17 +24,19 @@ int	unsetenv_manual(const char *key, char **envp)
 	{
 		if (ft_strncmp(envp[i], key, key_len) == 0 && envp[i][key_len] == '=')
 		{
-			while (envp[i + 1])
+			free(envp[i]);
+			j = i;
+			while (envp[j + 1])
 			{
-				envp[i] = envp[i + 1];
-				i++;
+				envp[j] = envp[j + 1];
+				j++;
 			}
-			envp[i] = NULL;
+			envp[j] = NULL;
 			return (0);
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 int	unset_built_in(char **args, t_ms *ms)

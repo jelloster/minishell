@@ -12,30 +12,6 @@
 
 #include "minishell.h"
 
-char **expand_envp(char **envp, int current_size, int extra_space)
-{
-    char **new_envp;
-    int i;
-
-    new_envp = malloc(sizeof(char *) * (current_size + extra_space + 1));
-    if (!new_envp)
-        return (NULL);
-    i = 0;
-    while (i < current_size)
-    {
-        new_envp[i] = envp[i];
-        i++;
-    }
-    while (i < current_size + extra_space)
-    {
-        new_envp[i] = NULL;
-        i++;
-    }
-    new_envp[current_size + extra_space] = NULL;
-    free(envp);
-    return (new_envp);
-}
-
 char	*get_env_value(t_ms *ms, const char *key, int custom_len)
 {
 	int		i;
@@ -58,31 +34,69 @@ char	*get_env_value(t_ms *ms, const char *key, int custom_len)
 	return (NULL);
 }
 
-int	setenv_update(const char *key, const char *value, char **envp)
+static char	*create_new_entry(const char *key, const char *value)
 {
-	int		i;
 	char	*temp;
 	char	*new_entry;
 
 	new_entry = ft_strjoin(key, "=");
 	if (!new_entry)
-		return (-1);
+		return (NULL);
 	temp = ft_strjoin(new_entry, value);
 	free(new_entry);
+	return (temp);
+}
+
+static int	update_existing_entry(t_ms *ms, const char *key, char *temp)
+{
+	int	i;
+
+	i = 0;
+	while (ms->envp[i])
+	{
+		if (!ft_strncmp(ms->envp[i], key, ft_strlen(key))
+			&& ms->envp[i][ft_strlen(key)] == '=')
+		{
+			free(ms->envp[i]);
+			ms->envp[i] = temp;
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+static int	expand_and_add_entry(t_ms *ms, char *temp, int env_count)
+{
+	char	**new_envp;
+	int		i;
+
+	new_envp = allocate_and_copy_envp(ms->envp, env_count, 1);
+	if (!new_envp)
+	{
+		free(temp);
+		return (-1);
+	}
+	new_envp[env_count] = temp;
+	new_envp[env_count + 1] = NULL;
+	i = 0;
+	while (ms->envp[i])
+		free(ms->envp[i++]);
+	free(ms->envp);
+	ms->envp = new_envp;
+	return (0);
+}
+
+int	setenv_update(const char *key, const char *value, t_ms *ms)
+{
+	char	*temp;
+	int		env_count;
+
+	temp = create_new_entry(key, value);
 	if (!temp)
 		return (-1);
-	i = -1;
-	while (envp[++i])
-	{
-		if (!ft_strncmp(envp[i], key, ft_strlen(key))
-			&& envp[i][ft_strlen(key)] == '=')
-		{
-			free(envp[i]);
-			envp[i] = temp;
-			return (0);
-		}
-	}
-	envp[count_env(envp)] = temp;
-	envp[count_env(envp) + 1] = NULL;
-	return (0);
+	if (update_existing_entry(ms, key, temp))
+		return (0);
+	env_count = count_env(ms->envp);
+	return (expand_and_add_entry(ms, temp, env_count));
 }

@@ -39,20 +39,18 @@ int	init_ms(int ac, char *av[], char *envp[], t_ms *ms)
  * Fills the ms struct with basic info.
 */
 
-static char	**allocate_and_copy_envp(char *envp[])
+char	**allocate_and_copy_envp(char **envp, int current_size, int extra_space)
 {
-	int		env_count;
-	int		i;
 	char	**new_envp;
+	int		i;
 
-	env_count = count_env(envp);
-	new_envp = malloc(sizeof(char *) * (env_count + 1));
+	new_envp = malloc(sizeof(char *) * (current_size + extra_space + 1));
 	if (!new_envp)
 		return (NULL);
 	i = 0;
-	while (i < env_count)
+	while (i < current_size)
 	{
-		new_envp[i] = ft_strdup(envp[i]);
+		new_envp[i] = strdup(envp[i]);
 		if (!new_envp[i])
 		{
 			while (--i >= 0)
@@ -62,7 +60,9 @@ static char	**allocate_and_copy_envp(char *envp[])
 		}
 		i++;
 	}
-	new_envp[env_count] = NULL;
+	while (i < current_size + extra_space)
+		new_envp[i++] = NULL;
+	new_envp[current_size + extra_space] = NULL;
 	return (new_envp);
 }
 
@@ -70,7 +70,7 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 {
 	ms->program_name = av[0];
 	ms->nlen = ft_strlen(ms->program_name) - 2;
-	ms->envp = allocate_and_copy_envp(envp);
+	ms->envp = allocate_and_copy_envp(envp, count_env(envp), 0);
 	if (!ms->envp)
 		return (0);
 	ms->cmd_n = 0;
@@ -110,7 +110,7 @@ void	update_shlvl(t_ms *ms, int sign)
 	shlvl_str = ft_itoa(shlvl);
 	if (!shlvl)
 		return ;
-	setenv_update("SHLVL", shlvl_str, ms->envp);
+	setenv_update("SHLVL", shlvl_str, ms);
 	free(shlvl_str);
 }
 

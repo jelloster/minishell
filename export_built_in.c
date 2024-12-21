@@ -34,7 +34,7 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 		if (!value)
 			value = "";
 	}
-	if (setenv_update(key, value, ms->envp) == -1)
+	if (setenv_update(key, value, ms) == -1)
 		return (-1);
 	remove_shell_var(shell_vars, key);
 	add_shell_var(shell_vars, key, value);

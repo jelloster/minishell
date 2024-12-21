@@ -36,6 +36,6 @@ int	cd_built_in(char **args, t_ms *ms)
 			return (perror("cd"), 1);
 	}
 	if (getcwd(cwd, sizeof(cwd)))
-		setenv_update("PWD", cwd, ms->envp);
+		setenv_update("PWD", cwd, ms);
 	return (0);
 }

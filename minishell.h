@@ -133,6 +133,7 @@ typedef enum e_color
 //			init_ms.c
 int			init_ms(int ac, char *av[], char *envp[], t_ms *ms);
 void		update_shlvl(t_ms *ms, int sign);
+char		**allocate_and_copy_envp(char **envp, int size, int extra_space);
 
 //			envp_utils.c
 char		**extract_paths(char *envp[]);
@@ -201,7 +202,7 @@ int			echo_built_in(t_cmd *cmd, t_ms *ms, char **args);
 void		dollar_check(t_ms *ms, char **args);
 int			unsetenv_manual(const char *key, char **envp);
 int			unset_built_in(char **args, t_ms *ms);
-int			setenv_update(const char *key, const char *value, char **envp_ptr);
+int			setenv_update(const char *key, const char *value, t_ms *ms);
 
 // testing built ins.c
 char		*get_env_value(t_ms *ms, const char *key, int custom_len);
