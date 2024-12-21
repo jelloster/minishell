@@ -17,7 +17,6 @@ void	add_shell_var(t_shell_var **shell_vars, char *key, char *value)
 	t_shell_var	*new_var;
 
 	new_var = malloc(sizeof(t_shell_var));
-	printf("ADDING SHELL VARS.\n");
 	new_var->key = ft_strdup(key);
 	new_var->value = ft_strdup(value);
 	new_var->is_exported = 1;
@@ -67,6 +66,8 @@ char	*get_key(char *envp)
 	char	*key;
 	int		key_len;
 
+	if (!envp)
+		return (NULL);
 	val = ft_strchr(envp, '=');
 	if (val)
 	{
