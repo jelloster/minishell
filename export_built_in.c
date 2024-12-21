@@ -40,25 +40,42 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	return (0);
 }
 
+static int	handle_export_key(char *arg, char **key)
+{
+	if (arg[0] == '\0')
+	{
+		ft_printf("export: not a valid identifier\n");
+		return (1);
+	}
+	if (arg[0] == '-')
+	{
+		ft_printf("export: flags are not supported in minishell\n");
+		return (1);
+	}
+	*key = get_key(arg);
+	if (!(*key))
+	{
+		ft_printf("export: failed to retrieve key\n");
+		return (1);
+	}
+	if (!key_legit_check(*key))
+	{
+		ft_printf("export: not a valid identifier\n");
+		return (1);
+	}
+	return (0);
+}
+
 static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 {
 	char	*key;
 
-	key = get_key(arg);
-	if (!key)
+	if (handle_export_key(arg, &key))
 	{
-		if (arg[0] == '-')
-			ft_printf("Flags are not supported in minishell\n");
-		else
-			ft_printf("emty argument");
+		if (key)
+			free(key);
 		return (1);
 	}
-	if (!key_legit_check(key))
-	{
-		free(key);
-		return (0);
-	}
-	free(key);
 	if (ft_strchr(arg, '='))
 	{
 		if (handle_key_value(arg, ms, shell_vars) == -1)
@@ -66,9 +83,15 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	}
 	else if (!find_shell_var(*shell_vars, arg))
 	{
-		setenv_update(arg, NULL, ms);
+		if (setenv_update(arg, "", ms) == -1)
+		{
+			ft_printf("export: failed to update `%s`\n", arg);
+			free(key);
+			return (1);
+		}
 		add_shell_var(shell_vars, arg, "");
 	}
+	free(key);
 	return (0);
 }
 

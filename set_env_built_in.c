@@ -38,7 +38,7 @@ static char	*create_new_entry(const char *key, const char *value)
 {
 	char	*temp;
 	char	*new_entry;
-	
+
 	if (!value)
 	{
 		temp = ft_strdup(key);
@@ -98,7 +98,7 @@ int	setenv_update(const char *key, const char *value, t_ms *ms)
 {
 	char	*temp;
 	int		env_count;
-	
+
 	temp = create_new_entry(key, value);
 	if (!temp)
 		return (-1);

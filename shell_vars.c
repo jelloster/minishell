@@ -64,31 +64,25 @@ char	*get_key(char *envp)
 {
 	char	*val;
 	char	*key;
-	int		key_len;
 	int		i;
+	int		key_len;
 
 	val = ft_strchr(envp, '=');
 	if (val)
-	{
 		key_len = val - envp;
-		key = malloc(key_len + 1);
-		if (!key)
-			return (NULL);
-		ft_strlcpy(key, envp, key_len + 1);
-		return (key);
-	}
 	else
+		key_len = ft_strlen(envp);
+	key = malloc(key_len + 1);
+	if (!key)
+		return (NULL);
+	i = 0;
+	while (i < key_len)
 	{
-		i = 0;
-		key = malloc(ft_strlen(envp) + 1);
-		while (envp[i])
-		{
-			key[i] = envp[i];
-			i++;
-		}
-		key[i] = '\0';
-		return (key);
+		key[i] = envp[i];
+		i++;
 	}
+	key[i] = '\0';
+	return (key);
 }
 
 void	print_shell_vars(t_shell_var *shell_vars, t_ms *ms)
