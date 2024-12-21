@@ -19,7 +19,6 @@ static int	handle_key_value(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	size_t	key_len;
 	char	*equal_sign;
 
-	printf("Handle key value\n");
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
 		return (0);
@@ -48,7 +47,10 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	key = get_key(arg);
 	if (!key)
 	{
-		perror("key malloc");
+		if (arg[0] == '-')
+			ft_printf("Flags are not supported in minishell\n");
+		else
+			ft_printf("emty argument");
 		return (1);
 	}
 	if (!key_legit_check(key))
@@ -63,7 +65,10 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 			ft_printf("export: failed to update `%s`\n", arg);
 	}
 	else if (!find_shell_var(*shell_vars, arg))
-		add_shell_var(shell_vars, arg, NULL);
+	{
+		setenv_update(arg, NULL, ms);
+		add_shell_var(shell_vars, arg, "");
+	}
 	return (0);
 }
 

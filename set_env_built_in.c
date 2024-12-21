@@ -27,7 +27,7 @@ char	*get_env_value(t_ms *ms, const char *key, int custom_len)
 	while (ms->envp[i])
 	{
 		if (!ft_strncmp(ms->envp[i], key, key_len)
-			&& ms->envp[i][key_len] == '=')
+			&& (ms->envp[i][key_len] == '=' || ms->envp[i][key_len] == '\0'))
 			return (ms->envp[i] + key_len + 1);
 		i++;
 	}
@@ -38,7 +38,14 @@ static char	*create_new_entry(const char *key, const char *value)
 {
 	char	*temp;
 	char	*new_entry;
-
+	
+	if (!value)
+	{
+		temp = ft_strdup(key);
+		if (!temp)
+			return (NULL);
+		return (temp);
+	}
 	new_entry = ft_strjoin(key, "=");
 	if (!new_entry)
 		return (NULL);
@@ -91,7 +98,7 @@ int	setenv_update(const char *key, const char *value, t_ms *ms)
 {
 	char	*temp;
 	int		env_count;
-
+	
 	temp = create_new_entry(key, value);
 	if (!temp)
 		return (-1);
