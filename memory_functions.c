@@ -49,11 +49,11 @@ int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 		ms->paths = NULL;
 	}
 	if (cmds)
-	{
 		free_cmds(cmds, ms->parsed_cmds);
-	}
 	if (cmd_line)
 		ft_memdel(&cmd_line);
+	if (ms->envp)
+		free_array_of_arrays(ms->envp);
 	return (ret);
 }
 
