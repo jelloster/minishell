@@ -189,6 +189,7 @@ int			free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret);
 void		*cmd_free_memory(char **res, char **res_start);
 void		*free_array_of_arrays(char **arr);
 
+int			update_paths(t_ms *ms);
 //			print_export.c
 void		print_exported_vars(t_ms *ms, t_shell_var *shell_vars);
 
