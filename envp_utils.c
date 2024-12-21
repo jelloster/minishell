@@ -29,10 +29,25 @@ char	**extract_paths(char *envp[])
 	while (envp[i] != NULL && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (envp[i] == NULL)
-		return (NULL);
+	{
+		paths = malloc(sizeof(char *));
+		if (!paths)
+			return (NULL);
+		paths[0] = NULL;
+		return (paths);
+	}
 	path_env = envp[i] + 5;
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
 	return (paths);
+}
+
+int	update_paths(t_ms *ms)
+{
+	free_array_of_arrays(ms->paths);
+	ms->paths = extract_paths(ms->envp);
+	if (!ms->paths)
+		return (0);
+	return (1);
 }

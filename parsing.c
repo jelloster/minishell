@@ -65,6 +65,8 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 
 	i = 0;
 	j = 0;
+	if (!update_paths(ms))
+		return (0);
 	while (split[i])
 	{
 		if (!ft_strncmp(split[i], "|", ft_strlen(split[i]))
