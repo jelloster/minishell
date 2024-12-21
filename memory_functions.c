@@ -54,6 +54,8 @@ int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 		ft_memdel(&cmd_line);
 	if (ms->envp)
 		free_array_of_arrays(ms->envp);
+	if (ms->shell_vars)
+		free_shell_vars(&ms->shell_vars);
 	return (ret);
 }
 

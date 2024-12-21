@@ -41,6 +41,8 @@ SRC_FILES		:=	main.c			\
 				env_sort.c		\
 				error_msg.c		\
 				print_export.c	\
+				free_shell.c	\
+				handle_key_value.c	\
 
 # ------- PIPEX --------
 

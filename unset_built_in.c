@@ -22,7 +22,8 @@ int	unsetenv_manual(const char *key, char **envp)
 	key_len = ft_strlen(key);
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], key, key_len) == 0 && (envp[i][key_len] == '=' || envp[i][key_len] == '\0'))
+		if (ft_strncmp(envp[i], key, key_len) == 0 && (envp[i][key_len] == '='
+			|| envp[i][key_len] == '\0'))
 		{
 			free(envp[i]);
 			j = i;
