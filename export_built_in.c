@@ -50,7 +50,7 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 		if (arg[0] == '-')
 			ft_printf("Flags are not supported in minishell\n");
 		else
-			ft_printf("invalid export argument");
+			ft_printf("emty argument");
 		return (1);
 	}
 	if (!key_legit_check(key))
@@ -65,7 +65,10 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 			ft_printf("export: failed to update `%s`\n", arg);
 	}
 	else if (!find_shell_var(*shell_vars, arg))
-		add_shell_var(shell_vars, arg, NULL);
+	{
+		setenv_update(arg, NULL, ms);
+		add_shell_var(shell_vars, arg, "");
+	}
 	return (0);
 }
 

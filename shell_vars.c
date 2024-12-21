@@ -65,9 +65,8 @@ char	*get_key(char *envp)
 	char	*val;
 	char	*key;
 	int		key_len;
+	int		i;
 
-	if (!envp)
-		return (NULL);
 	val = ft_strchr(envp, '=');
 	if (val)
 	{
@@ -79,7 +78,17 @@ char	*get_key(char *envp)
 		return (key);
 	}
 	else
-		return (NULL);
+	{
+		i = 0;
+		key = malloc(ft_strlen(envp) + 1);
+		while (envp[i])
+		{
+			key[i] = envp[i];
+			i++;
+		}
+		key[i] = '\0';
+		return (key);
+	}
 }
 
 void	print_shell_vars(t_shell_var *shell_vars, t_ms *ms)
