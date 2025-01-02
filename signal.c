@@ -30,7 +30,8 @@ void	handle_signals(void)
 	sa_int.sa_flags = SA_RESTART;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-	sa_quit.sa_handler = handle_sigquit;
+
+	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);
 	sigaction(SIGQUIT, &sa_quit, NULL);
@@ -58,22 +59,8 @@ void	handle_sigint(int signal)
 	g_sig.sigint = 1;
 }
 
-/*
- * Handles Ctrl+\
-*/
-void	handle_sigquit(int signal)
-{
-	struct sigaction	act;
-
-	(void)signal;
-	memset(&act, 0, sizeof(act));
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
-	g_sig.sigquit = 1;
-}
-
 void	signal_check(t_ms *ms)
-{
+	{
 	if (g_sig.sigint)
 	{
 		ms->ret_val = 130;
