@@ -27,6 +27,7 @@ int	main(int ac, char *av[], char *envp[])
 	while (1)
 	{
 		waitpid(-1, NULL, 0);
+		g_sig.child = 0;
 		print_and_clear_errorlog();
 		ms.cmd_line = readline("$ ");
 		if (ms.cmd_line)
@@ -47,13 +48,12 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	int	pid;
 	int	status;
 
+	g_sig.child = 1;
 	pid = fork();
 	if (pid == -1)
 		return (0);
-	g_sig.child = 0;
 	if (pid == 0)
 	{
-		g_sig.child = 1;
 		if (ms->cmd_n == 1)
 			ms->ret_val = exe_cmd(cmds, ms);
 		else if (ms->cmd_n != 0)
