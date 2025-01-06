@@ -43,12 +43,27 @@ int	main(int ac, char *av[], char *envp[])
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
+static int	has_heredoc(t_ms *ms, t_cmd *cmds)
+{
+	int	i;
+
+	i = 0;
+	while (i < ms->cmd_n)
+	{
+		if (cmds[i].inredir == STD_IN)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 {
 	int	pid;
 	int	status;
 
-	g_sig.child = 1;
+	if (!has_heredoc(ms, cmds))
+		g_sig.child = 1;
 	pid = fork();
 	if (pid == -1)
 		return (0);

@@ -19,13 +19,25 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 
 	temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (temp_fd == -1)
-	{
-		perror("open write");
-		return (0);
-	}
+		return (perror("open write"), 0);
+	g_sig.in_heredoc = 1;
 	while (1)
-	{
+	{/*
+		if (g_sig.sigint)
+		{
+			close(temp_fd);
+			unlink(".heredoc_temp");
+			return (0);
+		}*/
 		line = readline("> ");
+		if (g_sig.sigint || !line)
+		{
+			close(temp_fd);
+			unlink(".heredoc_temp");
+			free(line);
+			g_sig.in_heredoc = 0;
+			return (0);
+		}
 		if (!line || strcmp(line, delim) == 0)
 		{
 			free(line);

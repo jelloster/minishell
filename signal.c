@@ -18,6 +18,7 @@ static void	sig_init(void)
 	g_sig.sigquit = 0;
 	g_sig.child = 0;
 	g_sig.exit_status = 0;
+	g_sig.in_heredoc = 0;
 }
 
 void	handle_signals(void)
@@ -27,10 +28,10 @@ void	handle_signals(void)
 
 	sig_init();
 	sa_int.sa_handler = handle_sigint;
-	sa_int.sa_flags = SA_RESTART;
+	//sa_int.sa_flags = SA_RESTART;
+	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigemptyset(&sa_quit.sa_mask);
@@ -43,7 +44,15 @@ void	handle_signals(void)
 void	handle_sigint(int signal)
 {
 	(void)signal;
-	if (!g_sig.child)
+	if (g_sig.in_heredoc)
+	{
+		printf("Heredoc handle");
+		printf("\n");
+		rl_done = 1;
+		g_sig.sigint = 1;
+		g_sig.in_heredoc = 0;
+	}
+	else if (!g_sig.child)
 	{
 		write(STDERR_FILENO, "\n", 1);
 		rl_replace_line("", 0);

@@ -22,7 +22,8 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 	int	len;
 
 	i = 0;
-	malloc_for_redirs(cmd);
+	if (malloc_for_redirs(cmd) == -1)
+		return (0);
 	cmd->o_i = 0;
 	cmd->i_i = 0;
 	while (cmd->args[i])

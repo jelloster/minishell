@@ -28,7 +28,7 @@ int	free_cmds(t_cmd *cmds, int cmd_n)
 			if (cmds[i].infile && !cmds[i].infiles)
 				ft_memdel(&cmds[i].infile);
 			if (cmds[i].infiles)
-				free_array_of_arrays(cmds[i].infiles);
+				free_array_of_arrays(cmds[i].infiles); // double free
 			if (cmds[i].outfile && !cmds[i].outfiles)
 				ft_memdel(&cmds[i].outfile);
 			if (cmds[i].outfiles)

@@ -103,6 +103,7 @@ typedef struct s_sig
 	int	sigquit;
 	int	exit_status;
 	int	child;
+	int	in_heredoc;
 }	t_sig;
 
 extern t_sig	g_sig;

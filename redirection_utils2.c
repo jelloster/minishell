@@ -85,11 +85,15 @@ static int	count_outredirs(t_cmd *cmd)
 
 int	malloc_for_redirs(t_cmd *cmd)
 {
+	int	i;
+
+	i = -1;
 	cmd->infile_n = count_inredirs(cmd);
 	cmd->infiles = malloc((cmd->infile_n + 1) * sizeof(char *));
 	if (!cmd->infiles)
 		return (-1);
-	cmd->infiles[cmd->infile_n] = NULL;
+	while (++i <= cmd->infile_n)
+		cmd->infiles[i] = NULL;
 	cmd->outfile_n = count_outredirs(cmd);
 	cmd->outfiles = malloc((cmd->outfile_n + 1) * sizeof(char *));
 	if (!cmd->outfiles)
