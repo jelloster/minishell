@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:38:20 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:38:00 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 	}
 	close(temp_fd);
 	cmd->inredir = STD_IN;
-	cmd->infile = ft_strdup(".heredoc_temp");
+	cmd->infile = ".heredoc_temp";
 	return (1);
 }
 
