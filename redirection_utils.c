@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:03 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 14:08:16 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:03:38 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	parse_redir_args_2(t_cmd *cmd, char **new_args, int *i, int *n_i)
 				cmd->infile = cmd->args[*i];
 			}
 			else
-				(*i)++;
+				free(cmd->args[++(*i)]);
 			free (cmd->args[*i - 1]);
 			(*i)++;
 		}
@@ -95,7 +95,6 @@ static void	parse_redir_args_2(t_cmd *cmd, char **new_args, int *i, int *n_i)
 	}
 }
 
-// file always comes after the redir (unless std int??)
 static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
 {
 	char	**new_args;
