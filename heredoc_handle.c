@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 19:52:59 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 20:09:05 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,33 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 			if (!line || strcmp(line, delim) == 0)
 			{
 				free(line);
-				return (0);
+				exit (0);
 			}
 			write(temp_fd, line, strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
 		}
 		close(temp_fd);
-		return (1);
+		exit (1);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
+		//printf("Child done\n");
 		cmd->inredir = STD_IN;
 		cmd->infile = ".heredoc_temp"; // ?
 		g_sig.in_heredoc = 0;
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
-            unlink(".heredoc_temp");
+		{
+			/*
+			if (status == 130)
+				printf("Signal???\n");
+			if (WIFEXITED(status) == 0)
+				printf("Exited with 0\nn");
+			printf("A\n"); */
+			if (access(".heredoc_temp", R_OK == 0))
+				unlink(".heredoc_temp");
+		}
 	}
 	return (1);
 }
