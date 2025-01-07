@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:49:03 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 15:57:05 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:21:30 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ void	handle_sigint(int signal)
 	(void)signal;
 	if (g_sig.in_heredoc)
 	{
-		printf("Heredoc handle");
 		printf("\n");
 		rl_done = 1;
+		rl_on_new_line();
 		g_sig.sigint = 1;
 		g_sig.in_heredoc = 0;
+		exit(130);
 	}
 	else if (!g_sig.child)
 	{

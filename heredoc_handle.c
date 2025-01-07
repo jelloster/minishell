@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/06 16:38:00 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/07 18:21:07 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,47 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 {
 	int		temp_fd;
 	char	*line;
+	int		pid;
+	int		status;
+	
 
-	temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (temp_fd == -1)
-		return (perror("open write"), 0);
-	g_sig.in_heredoc = 1;
-	while (1)
-	{/*
-		if (g_sig.sigint)
+	pid = fork();
+	if (pid == -1)
+		return (0);
+	if (pid == 0)
+	{
+		temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
+		if (temp_fd == -1)
+			return (perror("open write"), 0);
+		g_sig.in_heredoc = 1;
+		while (1)
 		{
-			close(temp_fd);
-			unlink(".heredoc_temp");
-			return (0);
-		}*/
-		line = readline("> ");
-		if (g_sig.sigint || !line)
-		{
-			close(temp_fd);
-			unlink(".heredoc_temp");
+			line = readline("> ");
+			if (g_sig.sigint || !line)
+			{
+				close(temp_fd);
+				unlink(".heredoc_temp");
+				free(line);
+				g_sig.in_heredoc = 0;
+				return (0);
+			}
+			if (!line || strcmp(line, delim) == 0)
+			{
+				free(line);
+				break ;
+			}
+			write(temp_fd, line, strlen(line));
+			write(temp_fd, "\n", 1);
 			free(line);
-			g_sig.in_heredoc = 0;
-			return (0);
 		}
-		if (!line || strcmp(line, delim) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(temp_fd, line, strlen(line));
-		write(temp_fd, "\n", 1);
-		free(line);
+		close(temp_fd);
 	}
-	close(temp_fd);
-	cmd->inredir = STD_IN;
-	cmd->infile = ".heredoc_temp";
+	else
+	{
+		waitpid(pid, &status, 0);
+		cmd->inredir = STD_IN;
+		cmd->infile = ".heredoc_temp"; // ?
+	}
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:38:20 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:21:13 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 		ms->ret_val = exe_built_in(cmds, ms);
 	else
 		ms->ret_val = ms->temp_ret;
+	unlink(".heredoc_temp");
 	free_cmds(cmds, ms->parsed_cmds);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/06 02:14:06 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/07 18:23:22 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,11 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	complain_about_input_files(cmd);
 	if (is_built_in(cmd->args[0]))
 		return (69);
-	if (cmd->inredir == INPUT && cmd->infile)
+	if (cmd->infile && (cmd->inredir == INPUT || cmd->inredir == STD_IN))
 		if (!redirect_input(cmd->infile, cmd))
 			return (0);
-	if (cmd->inredir == STD_IN && cmd->infile)
+	if (!cmd->args[0])
 	{
-		if (!redirect_input(cmd->infile, cmd))
-			return (0);
-		ms->ret_val = heredoc_print(cmd);
 		unlink(cmd->infile);
 		exit(ms->ret_val);
 	}

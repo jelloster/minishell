@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:06:53 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:36:58 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:37:21 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**allocate_and_copy_envp(char **envp, int current_size, int extra_space)
 	i = 0;
 	while (i < current_size)
 	{
-		new_envp[i] = strdup(envp[i]);
+		new_envp[i] = strdup(envp[i]); // still reachable (heredoc)?
 		if (!new_envp[i])
 		{
 			while (--i >= 0)
