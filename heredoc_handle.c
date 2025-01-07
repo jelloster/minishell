@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 18:21:07 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 19:52:59 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 	pid = fork();
 	if (pid == -1)
 		return (0);
+
+	// child
 	if (pid == 0)
 	{
 		temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
@@ -32,30 +34,26 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 		while (1)
 		{
 			line = readline("> ");
-			if (g_sig.sigint || !line)
-			{
-				close(temp_fd);
-				unlink(".heredoc_temp");
-				free(line);
-				g_sig.in_heredoc = 0;
-				return (0);
-			}
 			if (!line || strcmp(line, delim) == 0)
 			{
 				free(line);
-				break ;
+				return (0);
 			}
 			write(temp_fd, line, strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
 		}
 		close(temp_fd);
+		return (1);
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
 		cmd->inredir = STD_IN;
 		cmd->infile = ".heredoc_temp"; // ?
+		g_sig.in_heredoc = 0;
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+            unlink(".heredoc_temp");
 	}
 	return (1);
 }
