@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:49:03 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 18:21:30 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 21:41:59 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	sig_init(void)
 	g_sig.child = 0;
 	g_sig.exit_status = 0;
 	g_sig.in_heredoc = 0;
+	g_sig.im_heredoc = 0;
 }
 
 void	handle_signals(void)
@@ -28,7 +29,6 @@ void	handle_signals(void)
 
 	sig_init();
 	sa_int.sa_handler = handle_sigint;
-	//sa_int.sa_flags = SA_RESTART;
 	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
@@ -44,29 +44,28 @@ void	handle_signals(void)
 void	handle_sigint(int signal)
 {
 	(void)signal;
-	if (g_sig.in_heredoc)
+	g_sig.sigint = 1;
+	if (g_sig.in_heredoc && g_sig.im_heredoc)
 	{
-		printf("\n");
-		rl_done = 1;
-		rl_on_new_line();
-		g_sig.sigint = 1;
-		g_sig.in_heredoc = 0;
+		g_sig.exit_status = 130;
+		write(STDERR_FILENO, "\n", 1);
 		exit(130);
 	}
+	else if (g_sig.in_heredoc)
+		g_sig.exit_status = 130;
 	else if (!g_sig.child)
 	{
 		write(STDERR_FILENO, "\n", 1);
+		g_sig.exit_status = 1;
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_sig.exit_status = 1;
 	}
 	else
 	{
 		printf("\n");
 		g_sig.exit_status = 130;
 	}
-	g_sig.sigint = 1;
 }
 
 void	signal_check(t_ms *ms)

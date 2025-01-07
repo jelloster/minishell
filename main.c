@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 20:03:27 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 21:43:14 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,12 @@ int	main(int ac, char *av[], char *envp[])
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
-static int	has_heredoc(t_ms *ms, t_cmd *cmds)
-{
-	int	i;
-
-	i = 0;
-	while (i < ms->cmd_n)
-	{
-		if (cmds[i].inredir == STD_IN)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 {
 	int	pid;
 	int	status;
 
-	if (!has_heredoc(ms, cmds))
-		g_sig.child = 1;
+	g_sig.child = 1;
 	pid = fork();
 	if (pid == -1)
 		return (0);
@@ -84,6 +69,5 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 		ms->ret_val = ms->temp_ret;
 	if (access(".heredoc_temp", R_OK == 0))
 		unlink(".heredoc_temp");
-	free_cmds(cmds, ms->parsed_cmds);
-	return (1);
+	return (free_cmds(cmds, ms->parsed_cmds), 1);
 }

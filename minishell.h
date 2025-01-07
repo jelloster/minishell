@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:10:11 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 21:27:39 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ typedef struct s_sig
 	int	exit_status;
 	int	child;
 	int	in_heredoc;
+	int	im_heredoc;
+	int	wait;
 }	t_sig;
 
 extern t_sig	g_sig;
