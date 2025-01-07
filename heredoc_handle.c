@@ -6,13 +6,13 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 21:43:33 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:24:19 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	heredoc_write(const char *delim, t_cmd *cmd)
+int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 {
 	int		temp_fd;
 	char	*line;
@@ -34,17 +34,19 @@ int	heredoc_write(const char *delim, t_cmd *cmd)
 		while (1)
 		{
 			line = readline("> ");
-			if (!line || strcmp(line, delim) == 0)
+			if (!line || ft_strncmp(line, delim, ft_strlen(delim)) == 0)
 			{
 				free(line);
-				exit (0);
+				free(ms->split);
+				exit(free_ms(ms, ms->cmd_line, cmd, 0));
 			}
 			write(temp_fd, line, strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
 		}
 		close(temp_fd);
-		exit (1);
+		free(ms->split);
+		exit(free_ms(ms, ms->cmd_line, cmd, 1));
 	}
 	else
 	{

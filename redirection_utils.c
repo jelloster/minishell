@@ -6,17 +6,17 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:03 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/06 18:03:38 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:12:25 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	is_redirection(char *str, size_t len);
-static int	assign_redirection_type(t_cmd *cmd, int len, int i);
+static int	assign_redirection_type(t_ms *ms, t_cmd *cmd, int len, int i);
 static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs);
 
-int	handle_redirected_cmd(t_cmd *cmd, char **paths)
+int	handle_redirected_cmd(t_ms *ms, t_cmd *cmd, char **paths)
 {
 	int	i;
 	int	len;
@@ -30,7 +30,7 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
 	{
 		len = ft_strlen(cmd->args[i]);
 		if (is_redirection(cmd->args[i], len))
-			if (!assign_redirection_type(cmd, len, i))
+			if (!assign_redirection_type(ms, cmd, len, i))
 				return (0);
 		i++;
 	}
@@ -43,7 +43,7 @@ int	handle_redirected_cmd(t_cmd *cmd, char **paths)
  * - there are no 2 redirection symbols after each other
  * - there is only 1 redirection for output and input
  */
-static int	assign_redirection_type(t_cmd *cmd, int len, int i)
+static int	assign_redirection_type(t_ms *ms, t_cmd *cmd, int len, int i)
 {
 	if (!ft_strncmp(">", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
@@ -58,7 +58,7 @@ static int	assign_redirection_type(t_cmd *cmd, int len, int i)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 	{
 		cmd->inredir = STD_IN;
-		if (!heredoc_write(cmd->args[i + 1], cmd))
+		if (!heredoc_write(cmd->args[i + 1], ms, cmd))
 			return (0);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 21:27:39 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:22:23 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_ms
 	int			ret_val;
 	int			temp_ret;
 	int			fds[2];
+	char		**split;
 	t_shell_var	*shell_vars;
 }	t_ms;
 
@@ -177,13 +178,13 @@ int			redirect_output(char *file, t_cmd *cmd);
 int			update_history(t_ms *ms, char *cmd_line);
 
 //			redirection_utils.c
-int			handle_redirected_cmd(t_cmd *cmd, char **paths);
+int			handle_redirected_cmd(t_ms *ms, t_cmd *cmd, char **paths);
 int			check_for_redirections(t_cmd *cmd);
 
 int			has_quote_pair(char *s, char quote, int len);
 
 //			heredoc_handle.c
-int			heredoc_write(const char *delim, t_cmd *cmd);
+int			heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd);
 int			heredoc_print(t_cmd *cmd);
 
 //			memory_functions.c

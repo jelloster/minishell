@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 15:50:35 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:25:18 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 		write(2, ": unclosed quotes\n", 18);
 		return (NULL);
 	}
+	ms->split = split_cmd_line;
 	if (!syntax_check(split_cmd_line))
 		return (syntax_error(split_cmd_line, ms));
 	ms->cmd_n = count_cmds(split_cmd_line);
@@ -119,7 +120,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (!copy_args_from_split(cmd, split, size))
 		return (-1);
 	if (check_for_redirections(cmd))
-		return (handle_redirected_cmd(cmd, ms->paths));
+		return (handle_redirected_cmd(ms, cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
 	{
 		cmd->pathed_cmd = cmd->args[0];
