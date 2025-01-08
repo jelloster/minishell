@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:35 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 14:08:00 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:40:48 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms)
 		if (pids[i] == 0)
 		{
 			child_process(cmds[i], i, prev_pipe, ms);
-			exit(1);
+			exit(free_ms(ms, ms->cmd_line, cmds, free_and_ret(pids, 1)));
 		}
 		if (prev_pipe != -1)
 			close(prev_pipe);
@@ -68,7 +68,7 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 	if (i == 0)
 	{
 		if (cmd.infile && !redirect_input(cmd.infile, &cmd))
-			exit(1);
+			exit(free_ms(ms, ms->cmd_line, ms->cmds, 1));
 		dup2(ms->fds[1], STDOUT_FILENO);
 	}
 	else if (i == ms->cmd_n - 1)
@@ -76,7 +76,7 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 		if (prev_pipe != -1)
 			dup2(prev_pipe, STDIN_FILENO);
 		if (cmd.outfile && !redirect_output(cmd.outfile, &cmd))
-			exit(1);
+			exit(free_ms(ms, ms->cmd_line, ms->cmds, 1));
 	}
 	else
 	{
