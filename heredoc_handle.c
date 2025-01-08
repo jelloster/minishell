@@ -37,16 +37,13 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 			if (!line || ft_strncmp(line, delim, ft_strlen(delim)) == 0)
 			{
 				free(line);
-				free(ms->split);
-				exit(free_ms(ms, ms->cmd_line, cmd, 0));
+				free_array_of_arrays(ms->split);
+				exit(free_ms(ms, ms->cmd_line, cmd, 1));
 			}
 			write(temp_fd, line, strlen(line));
 			write(temp_fd, "\n", 1);
 			free(line);
 		}
-		close(temp_fd);
-		free(ms->split);
-		exit(free_ms(ms, ms->cmd_line, cmd, 1));
 	}
 	else
 	{
@@ -58,27 +55,5 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 			if (access(".heredoc_temp", R_OK == 0))
 				unlink(".heredoc_temp");
 	}
-	return (1);
-}
-
-int	heredoc_print(t_cmd *cmd)
-{
-	int		fd;
-	char	*line;
-
-	fd = open(cmd->infile, O_RDONLY);
-	if (fd == -1)
-	{
-		perror("open print");
-		return (0);
-	}
-	line = get_next_line(fd);
-	while (line)
-	{
-		ft_printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (1);
+	return (WEXITSTATUS(status));
 }

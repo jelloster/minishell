@@ -25,27 +25,25 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms);
 t_cmd	*parse(char *cmd_line, t_ms *ms)
 {
 	t_cmd	*cmds;
-	char	**split_cmd_line;
 
 	ms->parsed_cmds = 0;
-	split_cmd_line = cmd_split(cmd_line);
-	if (!split_cmd_line)
+	ms->split = cmd_split(cmd_line);
+	if (!ms->split)
 	{
 		write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
 		write(2, ": unclosed quotes\n", 18);
 		return (NULL);
 	}
-	ms->split = split_cmd_line;
-	if (!syntax_check(split_cmd_line))
-		return (syntax_error(split_cmd_line, ms));
-	ms->cmd_n = count_cmds(split_cmd_line);
+	if (!syntax_check(ms->split))
+		return (syntax_error(ms->split, ms));
+	ms->cmd_n = count_cmds(ms->split);
 	cmds = malloc ((ms->cmd_n) * sizeof(t_cmd));
 	if (!cmds)
-		return (free_array_of_arrays(split_cmd_line));
-	if (!init_cmds(cmds, split_cmd_line, ms))
+		return (free_array_of_arrays(ms->split));
+	if (!init_cmds(cmds, ms->split, ms))
 	{
 		free_cmds(cmds, ms->parsed_cmds);
-		return (free_array_of_arrays(split_cmd_line));
+		return (free_array_of_arrays(ms->split));
 	}
 	ms->cmds = cmds;
 	return (cmds);
