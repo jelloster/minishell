@@ -80,8 +80,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	{
 		if (cmd->infile && access(".heredoc_temp", R_OK) == 0)
 			unlink(cmd->infile);
-		return(ms->ret_val);
-		//return(execve("/bin/true", (char *[]) {"/bin/true", NULL}, ms->envp),ms->ret_val);
+		return (ms->ret_val);
 	}
 	if (cmd->outfile)
 		if (!redirect_output(cmd->outfile, cmd))

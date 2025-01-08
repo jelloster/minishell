@@ -12,12 +12,36 @@
 
 #include "minishell.h"
 
-int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
+static int	child_process(const char *delim, t_ms *ms, t_cmd *cmd)
 {
 	int		temp_fd;
 	char	*line;
-	int		pid;
-	int		status;
+
+	g_sig.im_heredoc = 1;
+	temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (temp_fd == -1)
+		return (perror("open write"), 0);
+	g_sig.in_heredoc = 1;
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strncmp(line, delim, ft_strlen(delim)) == 0)
+		{
+			free(line);
+			free_array_of_arrays(ms->split);
+			exit(free_ms(ms, ms->cmd_line, cmd, 1));
+		}
+		write(temp_fd, line, strlen(line));
+		write(temp_fd, "\n", 1);
+		free(line);
+	}
+	return (1);
+}
+
+int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
+{
+	int	pid;
+	int	status;
 
 	pid = fork();
 	if (pid == -1)
@@ -27,24 +51,8 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 	g_sig.im_heredoc = 0;
 	if (pid == 0)
 	{
-		g_sig.im_heredoc = 1;
-		temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
-		if (temp_fd == -1)
-			return (perror("open write"), 0);
-		g_sig.in_heredoc = 1;
-		while (1)
-		{
-			line = readline("> ");
-			if (!line || ft_strncmp(line, delim, ft_strlen(delim)) == 0)
-			{
-				free(line);
-				free_array_of_arrays(ms->split);
-				exit(free_ms(ms, ms->cmd_line, cmd, 1));
-			}
-			write(temp_fd, line, strlen(line));
-			write(temp_fd, "\n", 1);
-			free(line);
-		}
+		if (!child_process(delim, ms, cmd))
+			return (0);
 	}
 	else
 	{
@@ -52,7 +60,7 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 		cmd->inredir = STD_IN;
 		cmd->infile = ".heredoc_temp";
 		g_sig.in_heredoc = 0;
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 0) // unitialized values
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 			if (access(".heredoc_temp", R_OK == 0))
 				unlink(".heredoc_temp");
 	}

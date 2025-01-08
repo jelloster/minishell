@@ -68,7 +68,7 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 	if (i == 0)
 	{
 		if (cmd.infile && !redirect_input(cmd.infile, &cmd))
-			exit(1); //? free memory
+			exit(1);
 		dup2(ms->fds[1], STDOUT_FILENO);
 	}
 	else if (i == ms->cmd_n - 1)

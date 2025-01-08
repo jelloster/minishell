@@ -50,7 +50,7 @@ char	**allocate_and_copy_envp(char **envp, int current_size, int extra_space)
 	i = 0;
 	while (i < current_size)
 	{
-		new_envp[i] = ft_strdup(envp[i]); // still reachable (heredoc)?
+		new_envp[i] = ft_strdup(envp[i]);
 		if (!new_envp[i])
 		{
 			while (--i >= 0)

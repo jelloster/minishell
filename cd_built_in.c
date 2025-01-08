@@ -17,7 +17,7 @@ int	cd_built_in(char **args, t_ms *ms)
 	char	cwd[1024];
 	char	*home;
 
-	if (!args[1])
+	if (!args[1] || ft_strncmp(args[1], "~", 2) == 0)
 	{
 		home = getenv("HOME");
 		if (!home)
