@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 14:27:52 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/08 18:03:56 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	{
 		if (cmd->infile && access(".heredoc_temp", R_OK) == 0)
 			unlink(cmd->infile);
-		return (ms->ret_val);
 	}
 	if (cmd->outfile)
 		if (!redirect_output(cmd->outfile, cmd))
