@@ -86,7 +86,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 	if (cmd->outfile)
 		if (!redirect_output(cmd->outfile, cmd))
 			return (0);
-	if (access(cmd->pathed_cmd, X_OK) == 0)
+	if (cmd->pathed_cmd && access(cmd->pathed_cmd, X_OK) == 0)
 		return (execve(cmd->pathed_cmd, cmd->args, ms->envp), 2);
 	else
 		return (error_msg(CNF, cmd->args[0], ms->program_name), 127);

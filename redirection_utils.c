@@ -58,7 +58,7 @@ static int	assign_redirection_type(t_ms *ms, t_cmd *cmd, int len, int i)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 	{
 		cmd->inredir = STD_IN;
-		if (!heredoc_write(cmd->args[i + 1], ms, cmd))
+		if (!heredoc_write(cmd->args[i + 1], ms, cmd)) //?
 			return (0);
 	}
 	else
