@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 12:24:29 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:33:11 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:12:50 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ static int	handle_export_key(char *arg, char **key)
 	if (arg[0] == '\0')
 	{
 		ft_printf("export: not a valid identifier\n");
-		return (1);
-	}
-	if (arg[0] == '-')
-	{
-		ft_printf("export: flags are not supported in minishell\n");
 		return (1);
 	}
 	*key = get_key(arg);
@@ -75,6 +70,11 @@ int	export_built_in(char **args, t_ms *ms, t_shell_var **shell_vars)
 	{
 		print_exported_vars(ms, *shell_vars);
 		return (0);
+	}
+	if (args[1][0] == '-')
+	{
+		ft_printf("export: flags are not supported in minishell\n");
+		return (1);
 	}
 	i = 1;
 	while (args[i])
