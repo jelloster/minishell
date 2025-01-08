@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 12:17:05 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:37:50 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/09 00:13:50 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	add_shell_var(t_shell_var **shell_vars, char *key, char *value)
 {
 	t_shell_var	*new_var;
 
-	new_var = malloc(sizeof(t_shell_var));
+	new_var = malloc(sizeof(t_shell_var)); // malloc check!!
 	new_var->key = ft_strdup(key);
 	new_var->value = ft_strdup(value);
 	new_var->is_exported = 1;
