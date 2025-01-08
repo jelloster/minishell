@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 21:43:14 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/08 22:27:43 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
 t_sig	g_sig;
 
+static void	init_terminal_set(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		exit(EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		exit(EXIT_FAILURE);
+}
+
 int	main(int ac, char *av[], char *envp[])
 {
 	t_ms	ms;
@@ -24,11 +35,13 @@ int	main(int ac, char *av[], char *envp[])
 	handle_signals();
 	if (!init_ms(ac, av, envp, &ms))
 		return (1);
+	init_terminal_set();
 	while (1)
 	{
 		waitpid(-1, NULL, 0);
 		g_sig.child = 0;
 		print_and_clear_errorlog();
+		signal(SIGQUIT, SIG_IGN);
 		ms.cmd_line = readline("$ ");
 		if (ms.cmd_line)
 			add_history(ms.cmd_line);

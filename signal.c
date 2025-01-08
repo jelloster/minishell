@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 11:49:03 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 21:41:59 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/08 22:27:54 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,9 @@ static void	sig_init(void)
 
 void	handle_signals(void)
 {
-	struct sigaction	sa_int;
-	struct sigaction	sa_quit;
-
 	sig_init();
-	sa_int.sa_handler = handle_sigint;
-	sa_int.sa_flags = 0;
-	sigemptyset(&sa_int.sa_mask);
-	sigaction(SIGINT, &sa_int, NULL);
-	sa_quit.sa_handler = SIG_IGN;
-	sa_quit.sa_flags = 0;
-	sigemptyset(&sa_quit.sa_mask);
-	sigaction(SIGQUIT, &sa_quit, NULL);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 /*
@@ -43,7 +34,8 @@ void	handle_signals(void)
 */
 void	handle_sigint(int signal)
 {
-	(void)signal;
+	if (signal != SIGINT)
+		return ;
 	g_sig.sigint = 1;
 	if (g_sig.in_heredoc && g_sig.im_heredoc)
 	{

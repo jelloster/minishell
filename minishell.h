@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 23:22:23 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/08 22:27:27 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <signal.h>
 # include <errno.h>
 # include <sys/stat.h>
+# include <termio.h>
 
 // - HEADER FILES -
 
@@ -254,7 +255,7 @@ int			strstrlen(char **strs);
 
 //			signal.c
 void		handle_sigint(int signal);
-void		handle_sigquit(int signal);
+//void		handle_sigquit(int signal);
 void		handle_signals(void);
 
 int			is_out_redirection(char *str, size_t len);
