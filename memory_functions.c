@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:07:31 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 21:42:27 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/08 16:44:52 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int	free_ms(t_ms *ms, char *cmd_line, t_cmd *cmds, int ret)
 	if (cmd_line)
 		ft_memdel(&cmd_line);
 	if (ms->envp)
+	{
 		free_array_of_arrays(ms->envp);
+		ms->envp = NULL;
+	}
 	if (ms->shell_vars)
 		free_shell_vars(&ms->shell_vars);
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 23:25:18 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/08 17:38:32 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 
 	i = 0;
 	j = 0;
+	ms->cmds = cmds;
 	if (!update_paths(ms))
 		return (0);
 	while (split[i])

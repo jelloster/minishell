@@ -6,13 +6,13 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 23:24:19 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/08 17:39:13 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	child_process(const char *delim, t_ms *ms, t_cmd *cmd)
+static int	child_process(const char *delim, t_ms *ms)
 {
 	int		temp_fd;
 	char	*line;
@@ -29,7 +29,7 @@ static int	child_process(const char *delim, t_ms *ms, t_cmd *cmd)
 		{
 			free(line);
 			free_array_of_arrays(ms->split);
-			exit(free_ms(ms, ms->cmd_line, cmd, 1));
+			exit(free_ms(ms, ms->cmd_line, ms->cmds, 1));
 		}
 		write(temp_fd, line, strlen(line));
 		write(temp_fd, "\n", 1);
@@ -51,7 +51,7 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 	g_sig.im_heredoc = 0;
 	if (pid == 0)
 	{
-		if (!child_process(delim, ms, cmd))
+		if (!child_process(delim, ms))
 			return (0);
 	}
 	else
