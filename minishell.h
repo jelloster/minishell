@@ -278,4 +278,7 @@ int			syntax_check(char **split);
 
 void		delete_error_log(void);
 
+//			dollarquestion.c
+void		dollarquestion(t_ms *ms, t_cmd *cmd);
+
 #endif
