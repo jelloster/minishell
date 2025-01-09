@@ -12,16 +12,19 @@
 
 #include "minishell.h"
 
-void	add_shell_var(t_shell_var **shell_vars, char *key, char *value)
+int	add_shell_var(t_shell_var **shell_vars, char *key, char *value)
 {
 	t_shell_var	*new_var;
 
-	new_var = malloc(sizeof(t_shell_var)); // malloc check!!
+	new_var = malloc(sizeof(t_shell_var));
+	if (!new_var)
+		return (0);
 	new_var->key = ft_strdup(key);
 	new_var->value = ft_strdup(value);
 	new_var->is_exported = 1;
 	new_var->next = *shell_vars;
 	*shell_vars = new_var;
+	return (1);
 }
 
 void	remove_shell_var(t_shell_var **shell_vars, char *key)

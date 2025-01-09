@@ -28,6 +28,7 @@ int	init_ms(int ac, char *av[], char *envp[], t_ms *ms)
 		return (0);
 	if (!init_ms_struct(av, envp, ms))
 		return (0);
+	delete_error_log();
 	update_shlvl(ms, 1);
 	welcome_msg();
 	return (1);

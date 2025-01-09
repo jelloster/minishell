@@ -14,9 +14,12 @@
 
 static int	setup_error_log(int *original_fd, int *t_fd)
 {
-	*t_fd = open("/tmp/error_log.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	*t_fd = open(".error_log", O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*t_fd == -1)
+	{
+		perror("Failed to open/create error log");
 		return (0);
+	}
 	*original_fd = dup(STDERR_FILENO);
 	if (*original_fd == -1)
 	{
@@ -76,13 +79,19 @@ void	error_msg(int error, char *str, char *binary)
 	close(original_fd);
 }
 
+void	delete_error_log(void)
+{
+	if (access(".error_log", R_OK == 0))
+		unlink(".error_log");
+}
+
 void	print_and_clear_errorlog(void)
 {
 	int		fd;
 	char	buffer[1024];
 	size_t	bytes_read;
 
-	fd = open("/tmp/error_log.txt", O_RDONLY);
+	fd = open(".error_log", O_RDONLY);
 	if (fd == -1)
 		return ;
 	bytes_read = read(fd, buffer, sizeof(buffer));
@@ -93,8 +102,5 @@ void	print_and_clear_errorlog(void)
 		bytes_read = read(fd, buffer, sizeof(buffer));
 	}
 	close(fd);
-	fd = open("/tmp/error_log.txt", O_WRONLY | O_TRUNC);
-	if (fd == -1)
-		return ;
-	close (fd);
+	unlink(".error_log");
 }

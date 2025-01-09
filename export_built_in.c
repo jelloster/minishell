@@ -53,10 +53,10 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 		if (setenv_update(arg, "", ms) == -1)
 		{
 			ft_printf("export: failed to update `%s`\n", arg);
-			free(key);
-			return (1);
+			return (free(key), 1);
 		}
-		add_shell_var(shell_vars, arg, "");
+		if (!add_shell_var(shell_vars, arg, ""))
+			return (1);
 	}
 	free(key);
 	return (0);

@@ -222,7 +222,7 @@ char		*free_on_error(char **split_words, char *result);
 
 int			pwd_built_in(char **msenvp, t_cmd *cmd);
 int			env_built_in(char **msenvp, t_cmd *cmd);
-void		add_shell_var(t_shell_var **shell_vars, char *key, char *value);
+int			add_shell_var(t_shell_var **shell_vars, char *key, char *value);
 void		remove_shell_var(t_shell_var **shell_vars, char *key);
 void		init_shell_vars(char **envp, t_shell_var **shell_vars);
 
@@ -275,5 +275,7 @@ void		signal_check(t_ms *ms);
 
 //			syntax_check.c
 int			syntax_check(char **split);
+
+void		delete_error_log(void);
 
 #endif

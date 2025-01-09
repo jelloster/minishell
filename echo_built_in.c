@@ -15,7 +15,7 @@
 static int	dollar_value_print(t_ms *ms, char *arg, int fd)
 {
 	char	*output;
-	
+
 	if (arg[1] == '?')
 	{
 		ft_printf("%d", ms->ret_val);
