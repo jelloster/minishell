@@ -14,21 +14,17 @@
 
 static int	dollar_value_print(t_ms *ms, char *arg, int fd)
 {
-	int		i;
 	char	*output;
-
-	i = 0;
+	
 	if (arg[1] == '?')
 	{
 		ft_printf("%d", ms->ret_val);
 		return (2);
 	}
-	while (arg[i] && arg[i] != ' ' && (i == 0 || ft_isalnum(arg[i])))
-		i++;
-	output = get_env_value(ms, arg + 1, i - 1);
+	output = get_env_value(ms, arg + 1, ft_strlen(arg) - 1);
 	if (output)
 		ft_putstr_fd(output, fd);
-	return (i);
+	return (ft_strlen(arg));
 }
 
 static int	handle_io(int *fd, t_cmd *cmd)
