@@ -33,9 +33,9 @@ int	main(int ac, char *av[], char *envp[])
 	t_cmd	*cmds;
 
 	handle_signals();
+	init_terminal_set();
 	if (!init_ms(ac, av, envp, &ms))
 		return (1);
-	init_terminal_set();
 	while (1)
 	{
 		waitpid(-1, NULL, 0);
