@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollarquestion.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
+/*   Updated: 2025/01/08 22:27:43 by motuomin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	dollarquestion(t_ms *ms, t_cmd *cmd)
 {
 	int		i;
 	char	*dol_val;
-	
+
 	i = 0;
 	while (cmd->args[i])
 	{
