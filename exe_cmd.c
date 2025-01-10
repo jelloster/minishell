@@ -15,29 +15,28 @@
 static void	complain_about_input_files(t_cmd *cmd)
 {
 	int			fd;
-	struct stat	statbuf;
 	int			i;
 
 	i = -1;
 	if (cmd->infile_n <= 1)
 		return ;
+	fd = -1;
 	while (++i < cmd->infile_n - 1)
 	{
-		fd = open(cmd->infiles[i], O_RDONLY);
-		if (fd == -1)
+		if (cmd->infiles[i])
+			fd = open(cmd->infiles[i], O_RDONLY);
+		if (fd == -1 && cmd->infiles[i])
 		{
 			if (access(cmd->infiles[i], R_OK) != 0)
 			{
 				if (errno == ENOENT)
 					error_msg(FNF, cmd->infiles[i], cmd->pn);
-				else if (stat(cmd->infiles[i], &statbuf) == 0
-					&& S_ISDIR(statbuf.st_mode))
-					error_msg(ID, cmd->infiles[i], cmd->pn);
 				else if (errno == EACCES)
 					error_msg(PD, cmd->infiles[i], cmd->pn);
 			}
 		}
-		close(fd);
+		if (cmd->infiles[i] && fd != -1)
+			close(fd);
 	}
 }
 

@@ -80,7 +80,7 @@ static void	parse_redir_args_2(t_cmd *cmd, char **new_args, int *i, int *n_i)
 				cmd->outfiles[cmd->o_i++] = cmd->args[++(*i)];
 				cmd->outfile = cmd->args[*i];
 			}
-			else if (cmd->inredir != STD_IN)
+			else if (cmd->inredir != STD_IN) // this
 			{
 				cmd->infiles[cmd->i_i++] = cmd->args[++(*i)];
 				cmd->infile = cmd->args[*i];
