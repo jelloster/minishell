@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/11 11:05:34 by jelloster        ###   ########.fr       */
+/*   Updated: 2025/01/11 16:58:50 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,7 @@ typedef struct s_ms
 	t_shell_var	*shell_vars;
 }	t_ms;
 
-typedef struct s_sig
-{
-	int	sigint;
-	int	sigquit;
-	int	exit_status;
-	int	child;
-	int	in_heredoc;
-	int	im_heredoc;
-	int	wait;
-}	t_sig;
-
-extern t_sig	g_sig;
+extern 	int g_sig;
 
 typedef enum e_color
 {
@@ -272,7 +261,6 @@ void		exit_built_in(t_cmd *cmd, t_ms *ms);
 void		handle_squiggly(char *arg, int *j, int fd, t_ms *ms);
 int			handle_flag(char **args);
 int			malloc_for_redirs(t_cmd *cmd);
-void		signal_check(t_ms *ms);
 
 //			syntax_check.c
 int			syntax_check(char **split);
@@ -284,5 +272,7 @@ void		dollarquestion(t_ms *ms, t_cmd *cmd);
 void		free_cmd(t_cmd *cmds, int i);
 void		setup_inredir_arr(t_cmd *cmd);
 int			is_redirection(char *str, size_t len);
+
+void		sigint_child(int signal);
 
 #endif

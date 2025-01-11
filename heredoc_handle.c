@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 17:55:08 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/11 17:06:13 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ static int	child_process(const char *delim, t_ms *ms)
 	int		temp_fd;
 	char	*line;
 
-	g_sig.im_heredoc = 1;
+	//g_sig.im_heredoc = 1;
 	temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (temp_fd == -1)
 		return (perror("open write"), 0);
-	g_sig.in_heredoc = 1;
+	//g_sig.in_heredoc = 1;
+	signal(SIGINT, sigint_child);
 	while (1)
 	{
 		line = readline("> ");
@@ -47,8 +48,9 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 	if (pid == -1)
 		return (0);
 	status = 0;
-	g_sig.in_heredoc = 1;
-	g_sig.im_heredoc = 0;
+	//g_sig.in_heredoc = 1;
+	//g_sig.im_heredoc = 0;
+	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
 	{
 		if (!child_process(delim, ms))
@@ -59,7 +61,7 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 		waitpid(pid, &status, 0);
 		cmd->inredir = STD_IN;
 		cmd->infile = ".heredoc_temp";
-		g_sig.in_heredoc = 0;
+		//g_sig.in_heredoc = 0;
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 			if (access(".heredoc_temp", R_OK == 0))
 				unlink(".heredoc_temp");

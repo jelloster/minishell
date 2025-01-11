@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 11:53:22 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 12:27:32 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/11 17:16:21 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms, char **args)
 {
 	int	fd;
 
-	signal_check(ms);
+	printf("Sig : %d\n", g_sig);
 	if (!handle_io(&fd, cmd))
 		return (1);
 	iterate_args(args, fd, ms);

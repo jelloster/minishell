@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 22:27:43 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/11 17:16:14 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
-t_sig	g_sig;
+int	g_sig;
 
 static void	init_terminal_set(void)
 {
@@ -32,16 +32,14 @@ int	main(int ac, char *av[], char *envp[])
 	t_ms	ms;
 	t_cmd	*cmds;
 
-	handle_signals();
 	init_terminal_set();
 	if (!init_ms(ac, av, envp, &ms))
 		return (1);
 	while (1)
 	{
 		waitpid(-1, NULL, 0);
-		g_sig.child = 0;
 		print_and_clear_errorlog();
-		signal(SIGQUIT, SIG_IGN);
+		handle_signals();
 		ms.cmd_line = readline("$ ");
 		if (ms.cmd_line)
 			add_history(ms.cmd_line);
@@ -53,6 +51,7 @@ int	main(int ac, char *av[], char *envp[])
 				return (free_ms(&ms, ms.cmd_line, cmds, 1));
 		free(ms.cmd_line);
 	}
+
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
@@ -61,18 +60,23 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	int	pid;
 	int	status;
 
-	g_sig.child = 1;
 	pid = fork();
 	if (pid == -1)
 		return (0);
 	if (pid == 0)
 	{
+		signal(SIGINT, sigint_child);
 		if (ms->cmd_n == 1)
 			ms->ret_val = exe_cmd(cmds, ms);
 		else if (ms->cmd_n != 0)
 			ms->ret_val = pipex(cmds, ms);
 		free_ms(ms, ms->cmd_line, cmds, 1);
 		exit(ms->ret_val);
+	}
+	if (g_sig == SIGINT)
+	{
+		printf("set ret val to 130\n");
+		ms->ret_val = 130;
 	}
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);
