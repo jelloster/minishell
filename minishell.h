@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 22:27:27 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/11 11:05:34 by jelloster        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_cmd
 	int		i_i;
 	t_redir	outredir;
 	t_redir	inredir;
+	t_redir	*inredirs;
 }	t_cmd;
 
 typedef struct s_shell_var
@@ -280,5 +281,8 @@ void		delete_error_log(void);
 
 //			dollarquestion.c
 void		dollarquestion(t_ms *ms, t_cmd *cmd);
+void		free_cmd(t_cmd *cmds, int i);
+void		setup_inredir_arr(t_cmd *cmd);
+int			is_redirection(char *str, size_t len);
 
 #endif

@@ -21,6 +21,7 @@ SRC_FILES		:=	main.c			\
 				parsing_utils.c		\
 				redirection_utils.c	\
 				memory_functions.c	\
+				memory_functions2.c	\
 				arg_cpy.c		\
 				heredoc_handle.c	\
 				built_in_utils.c	\

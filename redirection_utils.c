@@ -6,13 +6,12 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:03 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 23:12:25 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/11 11:05:53 by jelloster        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_redirection(char *str, size_t len);
 static int	assign_redirection_type(t_ms *ms, t_cmd *cmd, int len, int i);
 static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs);
 
@@ -80,7 +79,7 @@ static void	parse_redir_args_2(t_cmd *cmd, char **new_args, int *i, int *n_i)
 				cmd->outfiles[cmd->o_i++] = cmd->args[++(*i)];
 				cmd->outfile = cmd->args[*i];
 			}
-			else if (cmd->inredir != STD_IN) // this
+			else if (cmd->inredir != STD_IN)
 			{
 				cmd->infiles[cmd->i_i++] = cmd->args[++(*i)];
 				cmd->infile = cmd->args[*i];
@@ -106,6 +105,7 @@ static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
 	new_args = malloc((strstrlen(cmd->args) - redirs * 2 + 1) * sizeof(char *));
 	if (!new_args)
 		return (0);
+	setup_inredir_arr(cmd);
 	parse_redir_args_2(cmd, new_args, &i, &n_i);
 	new_args[n_i] = NULL;
 	free(cmd->args);
@@ -119,7 +119,7 @@ static int	parse_redir_args(t_cmd *cmd, char **paths, int redirs)
  * Returns 1 if the given string (str) of size (len) is a redirection symbol
  * and 0 if it isn't.
 */
-static int	is_redirection(char *str, size_t len)
+int	is_redirection(char *str, size_t len)
 {
 	if (!ft_strncmp(">", str, len))
 		return (1);

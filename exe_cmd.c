@@ -23,9 +23,9 @@ static void	complain_about_input_files(t_cmd *cmd)
 	fd = -1;
 	while (++i < cmd->infile_n - 1)
 	{
-		if (cmd->infiles[i])
+		if (cmd->infiles[i] && cmd->inredirs[i] != STD_IN)
 			fd = open(cmd->infiles[i], O_RDONLY);
-		if (fd == -1 && cmd->infiles[i])
+		if (fd == -1 && cmd->infiles[i] && cmd->inredirs[i] != STD_IN)
 		{
 			if (access(cmd->infiles[i], R_OK) != 0)
 			{

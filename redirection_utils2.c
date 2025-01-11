@@ -92,6 +92,9 @@ int	malloc_for_redirs(t_cmd *cmd)
 	cmd->infiles = malloc((cmd->infile_n + 1) * sizeof(char *));
 	if (!cmd->infiles)
 		return (-1);
+	cmd->inredirs = malloc((cmd->infile_n + 1) * sizeof(t_redir));
+	if (!cmd->inredirs)
+		return (free(cmd->infiles), -1);
 	while (++i <= cmd->infile_n)
 		cmd->infiles[i] = NULL;
 	cmd->outfile_n = count_outredirs(cmd);
@@ -100,8 +103,10 @@ int	malloc_for_redirs(t_cmd *cmd)
 	{
 		free_array_of_arrays(cmd->infiles);
 		cmd->infiles = NULL;
-		return (-1);
+		return (free(cmd->infiles), -1);
 	}
-	cmd->outfiles[cmd->outfile_n] = NULL;
+	i = -1;
+	while (++i <= cmd->outfile_n)
+		cmd->outfiles[i] = NULL;
 	return (1);
 }

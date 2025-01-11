@@ -53,6 +53,7 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 {
 	cmd->envp = ms->envp;
 	cmd->inredir = NONE;
+	cmd->inredirs = NULL;
 	cmd->outredir = NONE;
 	cmd->args = NULL;
 	cmd->infile = NULL;
