@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 13:01:56 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:09:25 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/11 16:40:17 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	exit_built_in(t_cmd *cmd, t_ms *ms)
 			write(2, ": exit: too many arguments\n", 27);
 			exit (free_ms(ms, NULL, ms->cmds, 2));
 		}
-		else if (ft_isdigit_str(cmd->args[1]))
+		else if (ft_isdigit_str(cmd->args[1]) && ft_strlen(cmd->args[1]) < 20)
 			exit (free_ms(ms, NULL, ms->cmds, ft_atoi(cmd->args[1])));
 		else
 		{
