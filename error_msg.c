@@ -20,13 +20,13 @@ static int	setup_error_log(int *original_fd, int *t_fd)
 		perror("Failed to open/create error log");
 		return (0);
 	}
-	*original_fd = dup(STDERR_FILENO);
+	*original_fd = dup(STDOUT_FILENO);
 	if (*original_fd == -1)
 	{
 		close(*t_fd);
 		return (0);
 	}
-	if (dup2(*t_fd, STDERR_FILENO) == -1)
+	if (dup2(*t_fd, STDOUT_FILENO) == -1)
 	{
 		close(*t_fd);
 		close(*original_fd);
@@ -38,24 +38,24 @@ static int	setup_error_log(int *original_fd, int *t_fd)
 static void	write_error_msg(int error, char *str)
 {
 	if (str && error != PERMISSION_DENIED && error != IS_DIRECTORY)
-		ft_putstr_fd(str, STDERR_FILENO);
+		printf("%s", str);
 	if (error == FILE_NOT_FOUND)
-		ft_putstr_fd(": No such file or directory", STDERR_FILENO);
+		printf(": No such file or directory");
 	else if (error == COMMAND_NOT_FOUND)
-		ft_putstr_fd(": command not found", STDERR_FILENO);
+		printf(": command not found");
 	else if (error == PERMISSION_DENIED)
 	{
-		ft_putstr_fd("permission denied: ", STDERR_FILENO);
+		printf("permission denied: ");
 		if (str)
-			ft_putstr_fd(str, STDERR_FILENO);
+			printf("%s", str);
 	}
 	else if (error == IS_DIRECTORY)
 	{
-		ft_putstr_fd("is a directory: ", STDERR_FILENO);
+		printf("is a directory: ");
 		if (str)
-			ft_putstr_fd(str, STDERR_FILENO);
+			printf("%s", str);
 	}
-	ft_putstr_fd("\n", STDERR_FILENO);
+	printf("\n");
 }
 
 void	error_msg(int error, char *str, char *binary)
@@ -70,10 +70,10 @@ void	error_msg(int error, char *str, char *binary)
 		b = binary + ((ft_strrchr(binary, '/') + 1) - binary);
 	else
 		b = binary;
-	ft_putstr_fd(b, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
+	printf("%s", b);
+	printf(": ");
 	write_error_msg(error, str);
-	if (dup2(original_fd, STDERR_FILENO) == -1)
+	if (dup2(original_fd, STDOUT_FILENO) == -1)
 		perror("Failed to reset stderr");
 	close(temp_fd);
 	close(original_fd);
