@@ -14,8 +14,6 @@
 
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
-int	g_sig;
-
 static void	init_terminal_set(void)
 {
 	struct termios	term;
