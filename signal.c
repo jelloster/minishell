@@ -25,7 +25,6 @@ void	handle_sigint(int signal)
 {
 	if (signal != SIGINT)
 		return ;
-	g_sig = signal;
 	write(STDERR_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -36,7 +35,6 @@ void	sigint_child(int signal)
 {
 	if (signal != SIGINT)
 		return ;
-	g_sig = signal;
 	printf("\n");
 	exit(130);
 }
