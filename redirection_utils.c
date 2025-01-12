@@ -44,6 +44,8 @@ int	handle_redirected_cmd(t_ms *ms, t_cmd *cmd, char **paths)
  */
 static int	assign_redirection_type(t_ms *ms, t_cmd *cmd, int len, int i)
 {
+	int	temp;
+
 	if (!ft_strncmp(">", cmd->args[i], len)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 		cmd->outredir = REPLACE;
@@ -57,8 +59,11 @@ static int	assign_redirection_type(t_ms *ms, t_cmd *cmd, int len, int i)
 		&& cmd->args[i + 1] && !is_redirection(cmd->args[i + 1], len))
 	{
 		cmd->inredir = STD_IN;
-		if (!heredoc_write(cmd->args[i + 1], ms, cmd))
+		temp = heredoc_write(cmd->args[i + 1], ms, cmd);
+		if (!temp)
 			return (0);
+		if (temp == 130)
+			ms->ret_val = 130;
 	}
 	else
 		return (0);

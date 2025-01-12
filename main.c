@@ -51,7 +51,6 @@ int	main(int ac, char *av[], char *envp[])
 				return (free_ms(&ms, ms.cmd_line, cmds, 1));
 		free(ms.cmd_line);
 	}
-
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
@@ -72,11 +71,6 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 			ms->ret_val = pipex(cmds, ms);
 		free_ms(ms, ms->cmd_line, cmds, 1);
 		exit(ms->ret_val);
-	}
-	if (g_sig == SIGINT)
-	{
-		printf("set ret val to 130\n");
-		ms->ret_val = 130;
 	}
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);

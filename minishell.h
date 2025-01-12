@@ -100,7 +100,7 @@ typedef struct s_ms
 	t_shell_var	*shell_vars;
 }	t_ms;
 
-extern 	int g_sig;
+extern int	g_sig;
 
 typedef enum e_color
 {

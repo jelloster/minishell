@@ -78,7 +78,6 @@ int	echo_built_in(t_cmd *cmd, t_ms *ms, char **args)
 {
 	int	fd;
 
-	printf("Sig : %d\n", g_sig);
 	if (!handle_io(&fd, cmd))
 		return (1);
 	iterate_args(args, fd, ms);
