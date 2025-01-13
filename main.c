@@ -14,6 +14,8 @@
 
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds);
 
+int	g_sig;
+
 static void	init_terminal_set(void)
 {
 	struct termios	term;
@@ -52,6 +54,16 @@ int	main(int ac, char *av[], char *envp[])
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
+void	set_ret_val(t_ms *ms)
+{
+	if (ms->temp_ret == 69)
+		ms->ret_val = exe_built_in(cmds, ms);
+	else
+		ms->ret_val = ms->temp_ret;
+	if (g_sig == SIGINT)
+		ms->ret_val = 130;
+}
+
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 {
 	int	pid;
@@ -60,6 +72,7 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	pid = fork();
 	if (pid == -1)
 		return (0);
+	signal(SIGINT, sigint_aftercat);
 	if (pid == 0)
 	{
 		signal(SIGINT, sigint_child);
@@ -72,10 +85,7 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	}
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);
-	if (ms->temp_ret == 69)
-		ms->ret_val = exe_built_in(cmds, ms);
-	else
-		ms->ret_val = ms->temp_ret;
+	set_ret_val(ms);
 	if (access(".heredoc_temp", R_OK == 0))
 		unlink(".heredoc_temp");
 	return (free_cmds(cmds, ms->parsed_cmds), 1);

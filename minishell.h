@@ -119,6 +119,8 @@ typedef enum e_color
 # define PD PERMISSION_DENIED
 # define ID IS_DIRECTORY
 
+extern int	g_sig;
+
 /* --- FUNCTION PROTOTYPES --- */
 
 /* - Minishell initialization - */
@@ -272,5 +274,6 @@ void		setup_inredir_arr(t_cmd *cmd);
 int			is_redirection(char *str, size_t len);
 
 void		sigint_child(int signal);
+void		sigint_aftercat(int signal);
 
 #endif
