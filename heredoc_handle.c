@@ -40,14 +40,21 @@ static int	child_process(const char *delim, t_ms *ms)
 	return (1);
 }
 
-static void	parent_process(t_cmd *cmd, int pid, int *status)
+static void	parent_process(t_ms *ms, t_cmd *cmd, int pid, int *status)
 {
 	int		child_pid;
 	char	*hd_name;
 
 	child_pid = (int)waitpid(pid, status, 0);
 	hd_name = ft_itoa(child_pid);
+	if (!hd_name)
+		exit(free_ms(ms, ms->cmd_line, ms->cmds, 1));
 	cmd->inredir = STD_IN;
+	if (cmd->infile)
+	{
+		unlink(cmd->infile);
+		free(cmd->infile);
+	}
 	cmd->infile = hd_name;
 	if (WIFEXITED(*status) && WEXITSTATUS(*status) == 0)
 		if (access(hd_name, R_OK == 0))
@@ -70,6 +77,6 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 			return (0);
 	}
 	else
-		parent_process(cmd, pid, &status);
+		parent_process(ms, cmd, pid, &status);
 	return (WEXITSTATUS(status));
 }
