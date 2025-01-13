@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 12:59:54 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 13:57:34 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,20 @@ int	main(int ac, char *av[], char *envp[])
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
+void	update_sig_ret_val(t_ms *ms)
+{
+	if (g_sig == SIGINT)
+		ms->ret_val = 130;
+	g_sig = 0;
+}
+
 void	set_ret_val(t_ms *ms, t_cmd *cmds)
 {
 	if (ms->temp_ret == 69)
 		ms->ret_val = exe_built_in(cmds, ms);
 	else
 		ms->ret_val = ms->temp_ret;
-	if (g_sig == SIGINT)
-		ms->ret_val = 130;
+	update_sig_ret_val(ms);
 }
 
 static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
@@ -69,6 +75,7 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	int	pid;
 	int	status;
 
+	update_sig_ret_val(ms);
 	pid = fork();
 	if (pid == -1)
 		return (0);
