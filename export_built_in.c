@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 12:24:29 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 19:12:50 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/13 13:06:58 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,6 @@ static int	process_export(char *arg, t_ms *ms, t_shell_var **shell_vars)
 	}
 	else if (!find_shell_var(*shell_vars, arg))
 	{
-		/*if (setenv_update(arg, "", ms) == -1)
-		{
-			ft_printf("export: failed to update `%s`\n", arg);
-			return (free(key), 1);
-		}*/
 		if (!add_shell_var(shell_vars, arg, ""))
 			return (1);
 	}

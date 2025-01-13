@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/11 17:16:14 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 12:59:54 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int ac, char *av[], char *envp[])
 	return (free_ms(&ms, NULL, cmds, 0));
 }
 
-void	set_ret_val(t_ms *ms)
+void	set_ret_val(t_ms *ms, t_cmd *cmds)
 {
 	if (ms->temp_ret == 69)
 		ms->ret_val = exe_built_in(cmds, ms);
@@ -85,10 +85,8 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	}
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);
-	set_ret_val(ms);
+	set_ret_val(ms, cmds);
 	if (access(".heredoc_temp", R_OK == 0))
 		unlink(".heredoc_temp");
-	if (cmds->infile)
-		free(cmds->infile);
 	return (free_cmds(cmds, ms->parsed_cmds), 1);
 }

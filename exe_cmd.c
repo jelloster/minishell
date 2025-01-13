@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 22:35:24 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/13 13:09:40 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	create_output_files(t_cmd *cmd)
 	int			i;
 
 	i = 0;
+	complain_about_input_files(cmd);
 	if (cmd->outfile_n <= 1)
 		return ;
 	while (i < cmd->outfile_n - 1)
@@ -69,7 +70,6 @@ static void	create_output_files(t_cmd *cmd)
 int	exe_cmd(t_cmd *cmd, t_ms *ms)
 {
 	create_output_files(cmd);
-	complain_about_input_files(cmd);
 	if (is_built_in(cmd->args[0]))
 		return (69);
 	if (cmd->infile && (cmd->inredir == INPUT || cmd->inredir == STD_IN))
@@ -77,7 +77,6 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 			return (0);
 	if (cmd->inredir == STD_IN)
 	{
-
 		if (cmd->infile && access(cmd->infile, R_OK) == 0)
 			unlink(cmd->infile);
 		free(cmd->infile);

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/11 17:06:13 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 13:04:37 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,29 @@ static int	child_process(const char *delim, t_ms *ms)
 	return (1);
 }
 
-int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
+static void	parent_process(t_cmd *cmd, int pid, int *status)
 {
-	int		pid;
-	int		status;
 	int		child_pid;
 	char	*hd_name;
 
+	child_pid = (int)waitpid(pid, status, 0);
+	hd_name = ft_itoa(child_pid);
+	cmd->inredir = STD_IN;
+	cmd->infile = hd_name;
+	if (WIFEXITED(*status) && WEXITSTATUS(*status) == 0)
+		if (access(hd_name, R_OK == 0))
+			unlink(hd_name);
+}
+
+int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
+{
+	int		status;
+	int		pid;
+
+	status = 0;
 	pid = fork();
 	if (pid == -1)
 		return (0);
-	status = 0;
 	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
 	{
@@ -58,14 +70,6 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 			return (0);
 	}
 	else
-	{
-		child_pid = (int)waitpid(pid, &status, 0);
-		hd_name = ft_itoa(child_pid);
-		cmd->inredir = STD_IN;
-		cmd->infile = hd_name;
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
-			if (access(hd_name, R_OK == 0))
-				unlink(hd_name);
-	}
+		parent_process(cmd, pid, &status);
 	return (WEXITSTATUS(status));
 }
