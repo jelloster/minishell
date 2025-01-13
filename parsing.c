@@ -121,11 +121,8 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (check_for_redirections(cmd))
 		return (handle_redirected_cmd(ms, cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
-	{
-		cmd->pathed_cmd = cmd->args[0];
-		return (1);
-	}
-	else if (access(cmd->args[0], X_OK) == 0)
+		return (cmd->pathed_cmd = cmd->args[0], 1);
+	else if (access(cmd->args[0], X_OK) == 0 || ft_strlen(cmd->args[0]) == 0)
 	{
 		if (!handle_pathed_cmd(cmd))
 			return (-1);
