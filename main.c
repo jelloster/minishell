@@ -88,5 +88,7 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	set_ret_val(ms);
 	if (access(".heredoc_temp", R_OK == 0))
 		unlink(".heredoc_temp");
+	if (cmds->infile)
+		free(cmds->infile);
 	return (free_cmds(cmds, ms->parsed_cmds), 1);
 }

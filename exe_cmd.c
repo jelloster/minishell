@@ -77,8 +77,10 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 			return (0);
 	if (cmd->inredir == STD_IN)
 	{
-		if (cmd->infile && access(".heredoc_temp", R_OK) == 0)
+
+		if (cmd->infile && access(cmd->infile, R_OK) == 0)
 			unlink(cmd->infile);
+		free(cmd->infile);
 		if (!cmd->args[0])
 			return (ms->ret_val);
 	}

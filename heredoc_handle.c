@@ -16,8 +16,11 @@ static int	child_process(const char *delim, t_ms *ms)
 {
 	int		temp_fd;
 	char	*line;
+	char	*heredoc_name;
 
-	temp_fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	heredoc_name = ft_itoa((int)getpid());
+	temp_fd = open(heredoc_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	free(heredoc_name);
 	if (temp_fd == -1)
 		return (perror("open write"), 0);
 	signal(SIGINT, sigint_child);
@@ -39,9 +42,11 @@ static int	child_process(const char *delim, t_ms *ms)
 
 int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 {
-	int	pid;
-	int	status;
-
+	int		pid;
+	int		status;
+	int		child_pid;
+	char	*hd_name;
+	
 	pid = fork();
 	if (pid == -1)
 		return (0);
@@ -54,12 +59,13 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
+		child_pid = (int)waitpid(pid, &status, 0);
+		hd_name = ft_itoa(child_pid);
 		cmd->inredir = STD_IN;
-		cmd->infile = ".heredoc_temp";
+		cmd->infile = hd_name;
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
-			if (access(".heredoc_temp", R_OK == 0))
-				unlink(".heredoc_temp");
+			if (access(hd_name, R_OK == 0))
+				unlink(hd_name);
 	}
 	return (WEXITSTATUS(status));
 }
