@@ -46,7 +46,7 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 	int		status;
 	int		child_pid;
 	char	*hd_name;
-	
+
 	pid = fork();
 	if (pid == -1)
 		return (0);
