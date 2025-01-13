@@ -18,7 +18,7 @@ static int	child_process(const char *delim, t_ms *ms)
 	char	*line;
 	char	*heredoc_name;
 
-	heredoc_name = ft_itoa((int)getpid()); // add malloccheck
+	heredoc_name = ft_itoa((int)getpid());
 	temp_fd = open(heredoc_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	free(heredoc_name);
 	if (temp_fd == -1)
@@ -63,12 +63,9 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 		hd_name = ft_itoa(child_pid);
 		cmd->inredir = STD_IN;
 		cmd->infile = hd_name;
-		//if (!cmd->infile)
-			//freeshit
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 			if (access(hd_name, R_OK == 0))
 				unlink(hd_name);
-		free(hd_name);
 	}
 	return (WEXITSTATUS(status));
 }
