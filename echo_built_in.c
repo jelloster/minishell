@@ -12,21 +12,6 @@
 
 #include "minishell.h"
 
-static int	dollar_value_print(t_ms *ms, char *arg, int fd)
-{
-	char	*output;
-
-	if (arg[1] == '?')
-	{
-		ft_printf("%d", ms->ret_val);
-		return (2);
-	}
-	output = get_env_value(ms, arg + 1, ft_strlen(arg) - 1);
-	if (output)
-		ft_putstr_fd(output, fd);
-	return (ft_strlen(arg));
-}
-
 static int	handle_io(int *fd, t_cmd *cmd)
 {
 	*fd = STDOUT_FILENO;
@@ -56,17 +41,12 @@ static void	iterate_args(char **args, int fd, t_ms *ms)
 		j = 0;
 		while (args[i][j])
 		{
-			if (args[i][j] == '$')
-				j += dollar_value_print(ms, &args[i][j], fd);
-			else
-			{
-				if (args[i][j] == '\xFF')
-					args[i][j] = '$';
-				handle_squiggly(args[i], &j, fd, ms);
-				write(fd, &args[i][j], 1);
-				if (args[i][j])
-					j++;
-			}
+			if (args[i][j] == '\xFF')
+				args[i][j] = '$';
+			handle_squiggly(args[i], &j, fd, ms);
+			write(fd, &args[i][j], 1);
+			if (args[i][j])
+				j++;
 		}
 		if (args[i + 1] && ft_strlen(args[i]) != 0)
 			ft_putstr_fd(" ", fd);

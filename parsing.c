@@ -116,7 +116,7 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[size] = NULL;
-	if (!copy_args_from_split(cmd, split, size))
+	if (!c_a_f_p(cmd, split, size, ms))
 		return (-1);
 	if (check_for_redirections(cmd))
 		return (handle_redirected_cmd(ms, cmd, ms->paths));

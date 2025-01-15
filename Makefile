@@ -45,6 +45,7 @@ SRC_FILES		:=	main.c			\
 				free_shell.c	\
 				handle_key_value.c	\
 				dollarquestion.c	\
+				expand.c		\
 
 # ------- PIPEX --------
 
