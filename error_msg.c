@@ -40,7 +40,7 @@ static void	write_error_msg(int error, char *str)
 	int	i;
 
 	i = -1;
-	while (str &&  str[++i])
+	while (str && str[++i])
 		if (str[i] == '\xFF')
 			str[i] = '$';
 	if (str && error != PERMISSION_DENIED && error != IS_DIRECTORY)

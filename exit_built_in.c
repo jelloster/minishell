@@ -28,7 +28,7 @@ static int	ft_isdigit_str(char *str)
 
 void	exit_built_in(t_cmd *cmd, t_ms *ms)
 {
-	printf("exit\n");
+	ft_printf("exit\n");
 	if (!cmd->args[1])
 		exit (free_ms(ms, NULL, ms->cmds, ms->ret_val));
 	else
@@ -39,11 +39,15 @@ void	exit_built_in(t_cmd *cmd, t_ms *ms)
 			write(2, ": exit: too many arguments\n", 27);
 		}
 		else if (ft_isdigit_str(cmd->args[1]) && ft_strlen(cmd->args[1]) < 20)
+		{
+			update_shlvl(ms, -1);
 			exit (free_ms(ms, NULL, ms->cmds, ft_atoi(cmd->args[1])));
+		}
 		else
 		{
 			write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
 			write(2, ": exit: numeric argument required\n", 34);
+			update_shlvl(ms, -1);
 			exit (free_ms(ms, NULL, ms->cmds, 2));
 		}
 	}
