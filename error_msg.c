@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 13:38:20 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/15 19:32:50 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	write_error_msg(int error, char *str)
 	int	i;
 
 	i = -1;
-	while (str[++i])
+	while (str &&  str[++i])
 		if (str[i] == '\xFF')
 			str[i] = '$';
 	if (str && error != PERMISSION_DENIED && error != IS_DIRECTORY)
