@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 13:57:34 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 19:18:00 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int ac, char *av[], char *envp[])
 		return (1);
 	while (1)
 	{
+		ms.dont = 0;
 		waitpid(-1, NULL, 0);
 		print_and_clear_errorlog();
 		handle_signals();
@@ -82,6 +83,7 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	signal(SIGINT, sigint_aftercat);
 	if (pid == 0)
 	{
+		remove_sigint_heredoc(cmds, ms);
 		signal(SIGINT, sigint_child);
 		if (ms->cmd_n == 1)
 			ms->ret_val = exe_cmd(cmds, ms);
@@ -93,7 +95,5 @@ static int	exe_or_pipe(t_ms *ms, t_cmd *cmds)
 	waitpid(pid, &status, 0);
 	ms->temp_ret = WEXITSTATUS(status);
 	set_ret_val(ms, cmds);
-	if (access(".heredoc_temp", R_OK == 0))
-		unlink(".heredoc_temp");
 	return (free_cmds(cmds, ms->parsed_cmds), 1);
 }

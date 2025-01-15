@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:06:53 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 23:22:53 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/13 16:46:34 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ static int	init_ms_struct(char *av[], char *envp[], t_ms *ms)
 	ms->error = 0;
 	ms->parsed_cmds = 0;
 	ms->ret_val = 0;
+	ms->dont = 0;
 	ms->cmds = NULL;
 	ms->paths = extract_paths(envp);
 	ms->shell_vars = NULL;

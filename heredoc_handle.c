@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 13:04:37 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:04:14 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	child_process(const char *delim, t_ms *ms)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strncmp(line, delim, ft_strlen(delim)) == 0)
+		if (!line || ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
 		{
 			free(line);
 			free_array_of_arrays(ms->split);
@@ -40,7 +40,7 @@ static int	child_process(const char *delim, t_ms *ms)
 	return (1);
 }
 
-static void	parent_process(t_cmd *cmd, int pid, int *status)
+static void	parent_process(t_ms *ms, t_cmd *cmd, int pid, int *status)
 {
 	int		child_pid;
 	char	*hd_name;
@@ -52,6 +52,8 @@ static void	parent_process(t_cmd *cmd, int pid, int *status)
 	if (WIFEXITED(*status) && WEXITSTATUS(*status) == 0)
 		if (access(hd_name, R_OK == 0))
 			unlink(hd_name);
+	if (WEXITSTATUS(*status) == 130)
+		ms->dont = 1;
 }
 
 int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
@@ -70,6 +72,6 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 			return (0);
 	}
 	else
-		parent_process(cmd, pid, &status);
+		parent_process(ms, cmd, pid, &status);
 	return (WEXITSTATUS(status));
 }

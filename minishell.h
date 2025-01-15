@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/11 16:58:50 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 19:12:47 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct s_ms
 	int			temp_ret;
 	int			fds[2];
 	char		**split;
+	int			dont;
 	t_shell_var	*shell_vars;
 }	t_ms;
 
@@ -275,5 +276,7 @@ int			is_redirection(char *str, size_t len);
 
 void		sigint_child(int signal);
 void		sigint_aftercat(int signal);
+
+void		remove_sigint_heredoc(t_cmd *cmds, t_ms *ms);
 
 #endif

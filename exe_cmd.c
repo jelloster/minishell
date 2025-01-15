@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 14:02:50 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:26:36 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,11 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 		return (69);
 	if (cmd->infile && (cmd->inredir == INPUT || cmd->inredir == STD_IN))
 		if (!redirect_input(cmd->infile, cmd))
-			return (0);
+			return (1);
 	if (cmd->inredir == STD_IN)
 	{
 		if (cmd->infile && access(cmd->infile, R_OK) == 0)
 			unlink(cmd->infile);
-		ft_memdel(&cmd->infile);
 		if (!cmd->args[0])
 			return (ms->ret_val);
 	}

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:01:01 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:27:10 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:05:43 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		extract_command(t_cmd *cmd);
 int		write_to_pipe(t_cmd cmd, int *fd, t_ms *ms);
 int		read_and_write(t_cmd cmd, int fd_r, int fd_w, t_ms *ms);
 int		read_from_pipe(t_cmd cmd, int fd, t_ms *ms);
+int		wait_and_close(pid_t *pids, int cmd_n);
 
 //	str_utils.c
 size_t	strlen_mod(char const *s, char c);

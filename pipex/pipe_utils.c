@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:47:35 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 14:38:34 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 17:05:22 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,23 @@ int	redirect_output(char *file, t_cmd *cmd)
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (1);
+}
+
+int	wait_and_close(pid_t *pids, int cmd_n)
+{
+	int	exit_status;
+	int	last_status;
+	int	i;
+
+	i = 0;
+	last_status = 0;
+	while (i < cmd_n)
+	{
+		waitpid(pids[i], &exit_status, 0);
+		if (WIFEXITED(exit_status))
+			last_status = WEXITSTATUS(exit_status);
+		i++;
+	}
+	free(pids);
+	return (last_status);
 }

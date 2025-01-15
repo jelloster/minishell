@@ -6,15 +6,13 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:50:35 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 15:40:48 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:49:40 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms);
-static int	wait_and_close(pid_t *pids, int cmd_n);
-static int	free_and_ret(void *ptr, int ret);
+static int	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms);
 static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms);
 
 /*
@@ -34,24 +32,33 @@ int	pipex(t_cmd *cmds, t_ms *ms)
 	return (wait_and_close(pids, ms->cmd_n));
 }
 
+static int	forkyforky(t_ms *ms, pid_t *pids, int i)
+{
+	if (pipe(ms->fds) == -1)
+		return (free(pids), 0);
+	pids[i] = fork();
+	if (pids[i] == -1)
+		return (free(pids), 0);
+	return (1);
+}
+
 static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms)
 {
 	int	i;
 	int	prev_pipe;
+	int	ret;
 
 	prev_pipe = -1;
 	i = 0;
 	while (i < ms->cmd_n)
 	{
-		if (pipe(ms->fds) == -1)
-			return (free_and_ret(pids, 0));
-		pids[i] = fork();
-		if (pids[i] == -1)
-			return (free_and_ret(pids, 0));
+		if (!forkyforky(ms, pids, i))
+			return (0);
 		if (pids[i] == 0)
 		{
-			child_process(cmds[i], i, prev_pipe, ms);
-			exit(free_ms(ms, ms->cmd_line, cmds, free_and_ret(pids, 1)));
+			free(pids);
+			ret = child_process(cmds[i], i, prev_pipe, ms);
+			exit(free_ms(ms, ms->cmd_line, cmds, ret));
 		}
 		if (prev_pipe != -1)
 			close(prev_pipe);
@@ -63,7 +70,7 @@ static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms)
 	return (1);
 }
 
-static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
+static void	pipe_stuff(int i, int prev_pipe, t_cmd cmd, t_ms *ms)
 {
 	if (i == 0)
 	{
@@ -84,35 +91,19 @@ static void	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
 			dup2(prev_pipe, STDIN_FILENO);
 		dup2(ms->fds[1], STDOUT_FILENO);
 	}
+}
+
+static int	child_process(t_cmd cmd, int i, int prev_pipe, t_ms *ms)
+{
+	int	ret;
+
+	pipe_stuff(i, prev_pipe, cmd, ms);
 	if (prev_pipe != -1)
 		close(prev_pipe);
 	close(ms->fds[0]);
 	close(ms->fds[1]);
-	if (exe_cmd(&cmd, ms) == 69)
-		exe_built_in(&cmd, ms);
-}
-
-static int	wait_and_close(pid_t *pids, int cmd_n)
-{
-	int	exit_status;
-	int	last_status;
-	int	i;
-
-	i = 0;
-	last_status = 0;
-	while (i < cmd_n)
-	{
-		waitpid(pids[i], &exit_status, 0);
-		if (WIFEXITED(exit_status))
-			last_status = WEXITSTATUS(exit_status);
-		i++;
-	}
-	free(pids);
-	return (last_status);
-}
-
-static int	free_and_ret(void *ptr, int ret)
-{
-	free (ptr);
+	ret = exe_cmd(&cmd, ms);
+	if (ret == 69)
+		return (exe_built_in(&cmd, ms));
 	return (ret);
 }
