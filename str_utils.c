@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:59:36 by motuomin          #+#    #+#             */
-/*   Updated: 2024/11/04 16:21:52 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:55:58 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,14 @@ int	strstrlen(char **strs)
 		while (strs[len])
 			len++;
 	return (len);
+}
+
+int	strlen_specialchar(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && ft_isalnum(s[i]))
+		i++;
+	return (i);
 }

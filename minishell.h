@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 19:12:47 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:20:23 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,5 +280,6 @@ int			expand(t_cmd *cmds, t_ms *ms);
 int			expand_args(t_cmd *cmd, t_ms *ms);
 
 void		remove_sigint_heredoc(t_cmd *cmds, t_ms *ms);
+int			strlen_specialchar(char *s);
 
 #endif

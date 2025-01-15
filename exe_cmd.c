@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 18:26:36 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:21:15 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,7 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 		if (!redirect_output(cmd->outfile, cmd))
 			return (0);
 	if (cmd->pathed_cmd && access(cmd->pathed_cmd, X_OK) == 0)
-	{
-		dollarquestion(ms, cmd);
 		return (execve(cmd->pathed_cmd, cmd->args, ms->envp), 2);
-	}
 	else
 		return (error_msg(CNF, cmd->args[0], ms->program_name), 127);
 	exit (0);
