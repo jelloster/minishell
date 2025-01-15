@@ -116,16 +116,13 @@ static int	cmd_block(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 	if (!cmd->args)
 		return (-1);
 	cmd->args[size] = NULL;
-	if (!copy_args_from_split(cmd, split, size))
+	if (!c_a_f_p(cmd, split, size, ms))
 		return (-1);
 	if (check_for_redirections(cmd))
 		return (handle_redirected_cmd(ms, cmd, ms->paths));
 	else if (is_built_in(cmd->args[0]))
-	{
-		cmd->pathed_cmd = cmd->args[0];
-		return (1);
-	}
-	else if (access(cmd->args[0], X_OK) == 0)
+		return (cmd->pathed_cmd = cmd->args[0], 1);
+	else if (access(cmd->args[0], X_OK) == 0 || ft_strlen(cmd->args[0]) == 0)
 	{
 		if (!handle_pathed_cmd(cmd))
 			return (-1);

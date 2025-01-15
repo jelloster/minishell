@@ -37,6 +37,12 @@ static int	setup_error_log(int *original_fd, int *t_fd)
 
 static void	write_error_msg(int error, char *str)
 {
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		if (str[i] == '\xFF')
+			str[i] = '$';
 	if (str && error != PERMISSION_DENIED && error != IS_DIRECTORY)
 		printf("%s", str);
 	if (error == FILE_NOT_FOUND)

@@ -144,7 +144,7 @@ int			extract_pathed_cmd(t_cmd *cmd, char **paths);
 size_t		count_cmds(char **split);
 int			free_n_exit(char *p_cmd, char *s_cmd, char **args, int ret);
 void		init_cmd(t_cmd *cmd, t_ms *ms);
-int			copy_args_from_split(t_cmd *cmd, char **split, size_t size);
+int			c_a_f_p(t_cmd *cmd, char **split, size_t size, t_ms *ms);
 
 //			arg_cpy.c
 char		*arg_cpy(char **res, char const **s, char **r_s);
@@ -276,6 +276,8 @@ int			is_redirection(char *str, size_t len);
 
 void		sigint_child(int signal);
 void		sigint_aftercat(int signal);
+int			expand(t_cmd *cmds, t_ms *ms);
+int			expand_args(t_cmd *cmd, t_ms *ms);
 
 void		remove_sigint_heredoc(t_cmd *cmds, t_ms *ms);
 

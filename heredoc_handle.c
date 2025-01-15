@@ -47,7 +47,14 @@ static void	parent_process(t_ms *ms, t_cmd *cmd, int pid, int *status)
 
 	child_pid = (int)waitpid(pid, status, 0);
 	hd_name = ft_itoa(child_pid);
+	if (!hd_name)
+		exit(free_ms(ms, ms->cmd_line, ms->cmds, 1));
 	cmd->inredir = STD_IN;
+	if (cmd->infile)
+	{
+		unlink(cmd->infile);
+		free(cmd->infile);
+	}
 	cmd->infile = hd_name;
 	if (WIFEXITED(*status) && WEXITSTATUS(*status) == 0)
 		if (access(hd_name, R_OK == 0))

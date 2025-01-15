@@ -67,7 +67,7 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 	ms->parsed_cmds++;
 }
 
-int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
+int	c_a_f_p(t_cmd *cmd, char **split, size_t size, t_ms *ms)
 {
 	int	i;
 
@@ -78,6 +78,8 @@ int	copy_args_from_split(t_cmd *cmd, char **split, size_t size)
 		if (!cmd->args[i])
 			return (0);
 	}
+	if (!expand_args(cmd, ms))
+		return (0);
 	return (1);
 }
 
