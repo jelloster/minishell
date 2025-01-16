@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:51:43 by motuomin          #+#    #+#             */
-/*   Updated: 2024/04/22 16:16:45 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:02:53 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	len = 0;
-	while (s[len] != '\0')
-	{
+	while (s && s[len] != '\0')
 		len++;
-	}
 	return (len);
 }

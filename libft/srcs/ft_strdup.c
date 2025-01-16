@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 09:21:49 by motuomin          #+#    #+#             */
-/*   Updated: 2024/04/22 16:09:51 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:06:05 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strdup(const char *s1)
 	ptr = malloc((ft_strlen(s1) + 1) * sizeof(char));
 	if (!ptr)
 		return (NULL);
-	while (s1[i] != '\0')
+	while (s1 && s1[i] != '\0')
 	{
 		ptr[i] = s1[i];
 		i++;

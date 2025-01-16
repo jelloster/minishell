@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/08 17:38:32 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/16 14:31:38 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	init_cmds(t_cmd *cmds, char **split, t_ms *ms)
 		return (0);
 	while (split[i])
 	{
-		if (!ft_strncmp(split[i], "|", ft_strlen(split[i]))
+		if (!ft_strncmp(split[i], "|", 2)
 			|| !split[i + 1])
 		{
 			size = i - j + (split[i + 1] == NULL);
