@@ -281,5 +281,6 @@ int			expand_args(t_cmd *cmd, t_ms *ms);
 
 void		remove_sigint_heredoc(t_cmd *cmds, t_ms *ms);
 int			strlen_specialchar(char *s);
+void		update_sig_ret_val(t_ms *ms);
 
 #endif

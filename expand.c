@@ -22,6 +22,7 @@ int	expand_args(t_cmd *cmd, t_ms *ms)
 	int	y;
 
 	j = -1;
+	update_sig_ret_val(ms);
 	while (cmd->args[++j])
 	{
 		y = -1;
