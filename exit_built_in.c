@@ -30,7 +30,10 @@ void	exit_built_in(t_cmd *cmd, t_ms *ms)
 {
 	ft_printf("exit\n");
 	if (!cmd->args[1])
+	{
+		update_shlvl(ms, -1);
 		exit (free_ms(ms, NULL, ms->cmds, ms->ret_val));
+	}
 	else
 	{
 		if (cmd->args[2])
