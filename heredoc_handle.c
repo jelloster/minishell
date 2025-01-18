@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/13 17:04:14 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:19:06 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	parent_process(t_ms *ms, t_cmd *cmd, int pid, int *status)
 		free(cmd->infile);
 	}
 	cmd->infile = hd_name;
+	cmd->hd = 1;
 	if (WIFEXITED(*status) && WEXITSTATUS(*status) == 0)
 		if (access(hd_name, R_OK == 0))
 			unlink(hd_name);

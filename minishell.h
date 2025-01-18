@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/15 17:20:23 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:24:27 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_cmd
 	char	*pn;
 	int		o_i;
 	int		i_i;
+	int		hd;
 	t_redir	outredir;
 	t_redir	inredir;
 	t_redir	*inredirs;

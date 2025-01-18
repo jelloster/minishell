@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:03 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/11 11:05:53 by jelloster        ###   ########.fr       */
+/*   Updated: 2025/01/18 16:30:06 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,13 @@ static void	parse_redir_args_2(t_cmd *cmd, char **new_args, int *i, int *n_i)
 			}
 			else if (cmd->inredir != STD_IN)
 			{
+				if (cmd->hd)
+				{
+					unlink(cmd->infile);
+					free(cmd->infile);
+					cmd->infile = NULL;
+					cmd->hd = 0;
+				}
 				cmd->infiles[cmd->i_i++] = cmd->args[++(*i)];
 				cmd->infile = cmd->args[*i];
 			}

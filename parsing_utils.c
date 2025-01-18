@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/07 21:42:13 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/18 16:18:41 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	init_cmd(t_cmd *cmd, t_ms *ms)
 	cmd->pathed_cmd = NULL;
 	cmd->outfile_n = 0;
 	cmd->infile_n = 0;
+	cmd->hd = 0;
 	cmd->pn = ms->program_name;
 	ms->parsed_cmds++;
 }
