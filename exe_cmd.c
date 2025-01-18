@@ -53,7 +53,7 @@ static void	create_output_files(t_cmd *cmd)
 	while (i < cmd->outfile_n - 1)
 	{
 		fd = -1;
-		if (cmd->outfiles[i] && access(cmd->outfiles[i], W_OK) == 0)
+		if (cmd->outfiles[i])
 			fd = open(cmd->outfiles[i], O_WRONLY | O_CREAT | O_APPEND, 0664);
 		if (fd == -1)
 		{
