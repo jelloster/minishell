@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/18 16:19:06 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/18 16:40:43 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,17 @@ int	heredoc_write(const char *delim, t_ms *ms, t_cmd *cmd)
 	else
 		parent_process(ms, cmd, pid, &status);
 	return (WEXITSTATUS(status));
+}
+
+void	here_doc_file_thing(t_cmd *cmd, int *i)
+{
+	if (cmd->hd)
+	{
+		unlink(cmd->infile);
+		free(cmd->infile);
+		cmd->infile = NULL;
+		cmd->hd = 0;
+	}
+	cmd->infiles[cmd->i_i++] = cmd->args[++(*i)];
+	cmd->infile = cmd->args[*i];
 }

@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/18 16:24:27 by jkarhu           ###   ########.fr       */
+/*   Updated: 2025/01/18 16:40:58 by motuomin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,5 +283,6 @@ int			expand_args(t_cmd *cmd, t_ms *ms);
 void		remove_sigint_heredoc(t_cmd *cmds, t_ms *ms);
 int			strlen_specialchar(char *s);
 void		update_sig_ret_val(t_ms *ms);
+void		here_doc_file_thing(t_cmd *cmd, int *i);
 
 #endif
