@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:11:59 by motuomin          #+#    #+#             */
-/*   Updated: 2024/12/16 15:50:35 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:25:30 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ static char	*copy_symbol(char const **s)
 	else if (!ft_strncmp(*s, "<", 1))
 		str = ft_strdup ("<");
 	*s += ft_strlen(str);
+	if (**s == '|' || **s == '>' || **s == '<')
+	{
+		free (str);
+		return (NULL);
+	}
 	return (str);
 }
 

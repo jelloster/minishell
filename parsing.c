@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 16:13:56 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/16 14:31:38 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/18 14:27:32 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_cmd	*parse(char *cmd_line, t_ms *ms)
 	if (!ms->split)
 	{
 		write(2, ms->program_name + 2, ft_strlen(ms->program_name) - 2);
-		write(2, ": unclosed quotes\n", 18);
+		write(2, ": syntax error\n", 15);
 		return (NULL);
 	}
 	if (!syntax_check(ms->split))
