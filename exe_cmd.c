@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/15 15:21:15 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/18 13:47:46 by jkarhu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ static void	create_output_files(t_cmd *cmd)
 		return ;
 	while (i < cmd->outfile_n - 1)
 	{
-		fd = open(cmd->outfiles[i], O_WRONLY | O_CREAT | O_APPEND, 0664);
+		fd = -1;
+		if (cmd->outfiles[i] && access(cmd->outfiles[i], W_OK) == 0)
+			fd = open(cmd->outfiles[i], O_WRONLY | O_CREAT | O_APPEND, 0664);
 		if (fd == -1)
 		{
 			if (stat(cmd->outfiles[i], &statbuf) == 0
