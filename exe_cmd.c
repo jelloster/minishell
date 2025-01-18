@@ -71,6 +71,8 @@ static void	create_output_files(t_cmd *cmd)
 
 int	exe_cmd(t_cmd *cmd, t_ms *ms)
 {
+	struct stat	path_stat;
+
 	create_output_files(cmd);
 	if (is_built_in(cmd->args[0]))
 		return (69);
@@ -84,12 +86,14 @@ int	exe_cmd(t_cmd *cmd, t_ms *ms)
 		if (!cmd->args[0])
 			return (ms->ret_val);
 	}
-	if (cmd->outfile)
-		if (!redirect_output(cmd->outfile, cmd))
-			return (0);
+	if (cmd->outfile && !redirect_output(cmd->outfile, cmd))
+		return (0);
 	if (cmd->pathed_cmd && access(cmd->pathed_cmd, X_OK) == 0)
+	{
+		if (!stat(cmd->pathed_cmd, &path_stat) && S_ISDIR(path_stat.st_mode))
+			return (error_msg(ID, cmd->args[0], ms->program_name), 127);
 		return (execve(cmd->pathed_cmd, cmd->args, ms->envp), 2);
+	}
 	else
 		return (error_msg(CNF, cmd->args[0], ms->program_name), 127);
-	exit (0);
 }
