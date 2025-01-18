@@ -49,8 +49,8 @@ static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms)
 	int	ret;
 
 	prev_pipe = -1;
-	i = 0;
-	while (i < ms->cmd_n)
+	i = -1;
+	while (++i < ms->cmd_n)
 	{
 		if (!forkyforky(ms, pids, i))
 			return (0);
@@ -64,8 +64,9 @@ static int	iterate_cmds(t_cmd *cmds, pid_t *pids, t_ms *ms)
 			close(prev_pipe);
 		if (i < ms->cmd_n - 1)
 			prev_pipe = ms->fds[0];
-		if (i++ < ms->cmd_n - 1)
-			close(ms->fds[1]);
+		else
+			close(ms->fds[0]);
+		close(ms->fds[1]);
 	}
 	return (1);
 }
