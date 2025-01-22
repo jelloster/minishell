@@ -6,7 +6,7 @@
 /*   By: motuomin <motuomin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:46:38 by motuomin          #+#    #+#             */
-/*   Updated: 2025/01/20 17:34:42 by motuomin         ###   ########.fr       */
+/*   Updated: 2025/01/22 11:31:38 by jelloster        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	expand_args(t_cmd *cmd, t_ms *ms)
 		y = -1;
 		while (cmd->args[j][++y])
 		{
-			if (cmd->args[j][y] == '$' && ft_isalnum(cmd->args[j][y + 1]))
+			if (cmd->args[j][y] == '$' 
+				&& (ft_isalnum(cmd->args[j][y + 1]) 
+				|| cmd->args[j][y + 1] == '?'))
 			{
 				y++;
 				if (!c_n_r(cmd, j, y, ms))
