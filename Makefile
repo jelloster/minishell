@@ -1,69 +1,80 @@
+# --------- NAME ------------
+
+NAME		:=	minishell
+
 # ----------FLAGS------------
 
-FLAGS			:=	-Wall -Wextra -Werror
-DEBUG_FLAGS		:=	-g
+FLAGS		:=	-Wall -Wextra -Werror
+DEBUG_FLAGS	:=	-g
 SANITIZE_FLAGS	:=	-g -fsanitize=address
 
 # ------- COMPILER ----------
 
-CC				:=	cc
+CC		:=	cc
 
 # ------ SOURCE FILES -------
 
-SRC_FILES		:=	main.c			\
-				parsing.c		\
-				envp_utils.c		\
-				cmd_split.c		\
-				str_utils.c		\
-				print_utils.c		\
-				init_ms.c		\
-				exe_cmd.c		\
-				parsing_utils.c		\
-				redirection_utils.c	\
-				memory_functions.c	\
-				memory_functions2.c	\
-				arg_cpy.c		\
-				heredoc_handle.c	\
-				built_in_utils.c	\
-				signal.c		\
-				find_last.c		\
-				redirection_utils2.c	\
-				cd_built_in.c		\
-				unset_built_in.c	\
-				echo_built_in.c		\
-				set_env_built_in.c	\
-				shell_vars.c		\
-				pwd_built_in.c		\
-				env_built_in.c		\
-				export_built_in.c	\
-				exit_built_in.c		\
-				syntax_check.c		\
-				echo_utils.c		\
-				env_sort.c		\
-				error_msg.c		\
-				print_export.c	\
-				free_shell.c	\
-				handle_key_value.c	\
-				main_utils.c	\
-				expand.c		\
+SRC_PATH	:=	./srcs/
+SRC_FILES	:=	main.c			\
+			parsing.c		\
+			envp_utils.c		\
+			cmd_split.c		\
+			str_utils.c		\
+			print_utils.c		\
+			init_ms.c		\
+			exe_cmd.c		\
+			parsing_utils.c		\
+			redirection_utils.c	\
+			memory_functions.c	\
+			memory_functions2.c	\
+			arg_cpy.c		\
+			heredoc_handle.c	\
+			built_in_utils.c	\
+			signal.c		\
+			find_last.c		\
+			redirection_utils2.c	\
+			cd_built_in.c		\
+			unset_built_in.c	\
+			echo_built_in.c		\
+			set_env_built_in.c	\
+			shell_vars.c		\
+			pwd_built_in.c		\
+			env_built_in.c		\
+			export_built_in.c	\
+			exit_built_in.c		\
+			syntax_check.c		\
+			echo_utils.c		\
+			env_sort.c		\
+			error_msg.c		\
+			print_export.c		\
+			free_shell.c		\
+			handle_key_value.c	\
+			main_utils.c		\
+			expand.c		\
+
+SRC_FILES	:=	$(addprefix $(SRC_PATH), $(SRC_FILES))
 
 # ------- PIPEX --------
 
-PIPEX_PATH		:=	./pipex/
-PIPEX_FILES		:=	awk_split.c	\
-				error_utils.c	\
-				pipex.c		\
-				pipe_utils.c	\
+PIPEX_PATH	:=	./pipex/
+PIPEX_FILES	:=	awk_split.c		\
+			error_utils.c		\
+			pipex.c			\
+			pipe_utils.c		\
 
-PIPEX_SRC		:=	$(addprefix $(PIPEX_PATH), $(PIPEX_FILES))
-PIPEX_OBJ		:=	$(PIPEX_SRC:.c=.o)
+PIPEX_SRC	:=	$(addprefix $(PIPEX_PATH), $(PIPEX_FILES))
 
+# ---- OBJECT FILES ----
 
-OBJ_FILES		:=	$(SRC_FILES:.c=.o) $(PIPEX_OBJ)
-NAME			:=	minishell
-LIBFT			:=	libft/libft.a
+OBJ_FILES	:=	$(SRC_FILES:.c=.o) $(PIPEX_SRC:.c=.o)
 
-HEADERS			:=	-I libft/inc -I/usr/include/readline
+# -------- LIBFT --------
+
+LIBFT		:=	libft/libft.a
+
+# ------- HEADERS -------
+
+HEADERS		:=	-I libft/inc -I /usr/include/readline
 
 # -------------RULES--------------
 

@@ -22,7 +22,7 @@
 # include "../libft/inc/libft.h"
 # include <errno.h>
 
-# include "../minishell.h"
+# include "../../inc/minishell.h"
 
 /*
 typedef enum e_error_code
