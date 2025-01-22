@@ -1,6 +1,8 @@
-# Minishell
+# 𖦹 Minishell 𖦹
 
 Minishell is an interactive command interpreter mimicing the behavior of the widely used shell implementation, bash.
+
+![Minishell Example](images/minishell.gif)
 
 ## Project topics
 - Pipes
